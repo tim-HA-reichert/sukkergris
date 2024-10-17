@@ -9,8 +9,6 @@ import { messageHandler } from "./messageHandler.js";
 
 const groupKey = "LDDFEU28"; //Dette er vår gruppekode
 
-//Her en test kommentar
-
 
 const urlMap = {
     categoryURL: "https://sukkergris.onrender.com/webshop/testdummy/categories",
