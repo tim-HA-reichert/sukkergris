@@ -7,7 +7,7 @@ import { CategoryModel, DummyModel } from "./models.js";
 import { errorHandler } from "./error_handler.js";
 import { messageHandler } from "./messageHandler.js";
 
-const groupKey = "LDDFEU28";
+const groupKey = "LDDFEU28"; //Dette er vår gruppekode
 
 
 const urlMap = {
