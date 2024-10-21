@@ -12,8 +12,7 @@ const imgKey = "GFTPOE21";
 
 const urlMap = {
     categoryURL: "https://sukkergris.onrender.com/webshop/categories",
-    dummyURL: "https://sukkergris.onrender.com/webshop/categories",
-    
+    dummyURL: "https://sukkergris.onrender.com/webshop/products"
     // add more URL' here...
 }
 
@@ -57,6 +56,7 @@ export async function getDummiesByCategory(category) {
     try {
 
         const data = await fetchData(url);
+        console.log(data);
         //convert from server API-data to app model-data
         const dummyList = data.map(function(value) {            
             const dummyObj = {
