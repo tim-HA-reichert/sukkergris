@@ -37,10 +37,8 @@ export class CategoryListView extends HTMLElement {
             this.listContainer.appendChild(theDiv);
 
             theDiv.addEventListener('click', evt => {
-
                 const theEvent = new CustomEvent("categoryselect", {composed: true, bubbles:true, detail: value});
                 this.dispatchEvent(theEvent);
-                
             });
             
         } //end for-loop

@@ -8,7 +8,6 @@ export class CategoryModel {
 
     //----------------------------------------
     update(obj) {
-
         this.categoryID = obj.categoryID;
         this.categoryName = obj.categoryName;
         this.description = obj.description;        

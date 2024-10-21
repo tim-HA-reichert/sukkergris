@@ -8,11 +8,11 @@ import { errorHandler } from "./error_handler.js";
 import { messageHandler } from "./messageHandler.js";
 
 const groupKey = "LDDFEU28"; //Dette er vår gruppekode
-
+const imgKey = "GFTPOE21";
 
 const urlMap = {
-    categoryURL: "https://sukkergris.onrender.com/webshop/testdummy/categories",
-    dummyURL: "https://sukkergris.onrender.com/webshop/testdummy/products",
+    categoryURL: "https://sukkergris.onrender.com/webshop/categories",
+    dummyURL: "https://sukkergris.onrender.com/webshop/categories",
     
     // add more URL' here...
 }
@@ -27,6 +27,7 @@ export async function getCategories() {
     try {
 
         const data = await fetchData(url);
+        console.log(data);
 
         //convert from server API-data to app model-data
         const categoryList = data.map(function(value) {            
@@ -56,7 +57,6 @@ export async function getDummiesByCategory(category) {
     try {
 
         const data = await fetchData(url);
-
         //convert from server API-data to app model-data
         const dummyList = data.map(function(value) {            
             const dummyObj = {
@@ -71,9 +71,8 @@ export async function getDummiesByCategory(category) {
             };
             return new DummyModel(dummyObj);
         });
-
-        return dummyList; //return the promise        
         
+        return dummyList; //return the promise        
     } catch (error) {
         errorHandler(error);
     }    
