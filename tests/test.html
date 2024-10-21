@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>tests</title>
+</head>
+<body>
+    
+<script>
+
+const groupKey = "LDDFEU28"; //Dette er vår gruppekode
+
+
+const urlMap = {
+    categoryURL: "https://sukkergris.onrender.com/webshop/categories"
+}
+
+async function fetchCategories(url, config) {
+try {
+
+    const url = urlMap.categoryURL + "?key=" + groupKey;
+    const response = await fetch(url, config);
+    const data = await response.json();
+
+    console.log(data);
+
+    if (!response.ok && data) {
+        throw new Error("Something went wrong. Check the 'error.cause' object", { cause: data });
+    }
+
+    return Promise.resolve(data); //returns a resolved promise with data
+
+} catch (error) {
+
+    return Promise.reject(error); //returns a rejected promise with error-info
+
+}
+}
+
+fetchCategories(urlMap);
+
+</script>
+
+</body>
+</html>
