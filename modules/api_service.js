@@ -10,6 +10,7 @@ import { messageHandler } from "./messageHandler.js";
 const groupKey = "LDDFEU28"; //Dette er vår gruppekode
 const imgKey = "GFTPOE21";
 
+
 const urlMap = {
     categoryURL: "https://sukkergris.onrender.com/webshop/categories",
     dummyURL: "https://sukkergris.onrender.com/webshop/products"
@@ -26,7 +27,6 @@ export async function getCategories() {
     try {
 
         const data = await fetchData(url);
-        console.log(data);
 
         //convert from server API-data to app model-data
         const categoryList = data.map(function(value) {            
@@ -50,15 +50,26 @@ export async function getCategories() {
 // return a list (array) of dummy-products based on category
 //----------------------------------------------------------
 export async function getDummiesByCategory(category) {
-
     const url = urlMap.dummyURL + "?key=" + groupKey + "&category_id=" + category;    
-
+        //Category er et tall, som er lik categoryID til eventListener i category_list_view.js
+        
+    
     try {
 
         const data = await fetchData(url);
-        console.log(data);
+        //data er en liste med sjokolade. Ufiltrert liste. 
+        for(let id of data){
+        if(id.category_id === category){
+            console.log(id);
+            //Printer ut riktig sjokolade basert på id. 
+            //neste steg: filtrer hva som printer til HTML
+        }
+    } 
+         
+  
         //convert from server API-data to app model-data
-        const dummyList = data.map(function(value) {            
+        const dummyList = data.map(function(value) {        
+   
             const dummyObj = {
                 dummyID: value.id,
                 dummyName: value.name,
@@ -72,7 +83,8 @@ export async function getDummiesByCategory(category) {
             return new DummyModel(dummyObj);
         });
         
-        return dummyList; //return the promise        
+        return dummyList; //return the promise    
+
     } catch (error) {
         errorHandler(error);
     }    
