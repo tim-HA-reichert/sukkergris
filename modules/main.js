@@ -17,6 +17,7 @@ import * as api from "./api_service.js";
 import { CategoryListView } from "./views/category_list_view.js";
 import { ChocolateListView } from "./views/dummy_list_view.js";
 import { AddDummyFormView } from "./views/add_dummy_form_view.js";
+import { DetailedProductView } from "./views/detailed_product_view.js";
 
 const viewContainer = document.getElementById('viewContainer');
 const btnShowCategoriesView = document.getElementById('btnShowCategories');
@@ -27,6 +28,7 @@ const searchBar = document.getElementById("searchBar");
 
 const categoryListView = new CategoryListView();
 const chocolateListView = new ChocolateListView();
+const detailedProductView = new DetailedProductView();
 const addDummyFormView = new AddDummyFormView();
 
 
@@ -44,11 +46,21 @@ categoryListView.addEventListener('categoryselect', function (evt) {
     viewContainer.appendChild(chocolateListView);
 });
 
-//----------------------------------------------
+//---------------------------------------------- AddEventListener for Home knapp
 btnShowCategoriesView.addEventListener('click', function (evt) {
-
+    
     viewContainer.innerHTML = "";
     viewContainer.appendChild(categoryListView);
+    
+});
+
+//---------------------------------------------- AddEventListener for trykking av spesefikk sjokolade
+chocolateListView.addEventListener('chocolateselect', function (evt) {    
+    const detailProductPromise = api.getChocolateDetails(evt.detail.chocoID);
+    detailedProductView.refresh(detailProductPromise);
+    
+    viewContainer.innerHTML = "";
+    viewContainer.appendChild(detailedProductView);
 
 });
 

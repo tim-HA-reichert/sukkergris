@@ -13,7 +13,8 @@ const imgKey = "GFTPOE21";
 
 const urlMap = {
     categoryURL: "https://sukkergris.onrender.com/webshop/categories",
-    chosenCategoryURL: "https://sukkergris.onrender.com/webshop/products"
+    chosenCategoryURL: "https://sukkergris.onrender.com/webshop/products",
+    chosenProductURL: "https://sukkergris.onrender.com/webshop/products"
     // add more URL' here...
 }
 
@@ -29,7 +30,7 @@ export async function getCategories() {
         const data = await fetchData(url);
 
         //convert from server API-data to app model-data
-        const categoryList = data.map(function(value) {            
+        const categoryList = data.map(function (value) {
             const catergoryObj = {
                 categoryID: value.id,
                 categoryName: value.category_name,
@@ -39,10 +40,10 @@ export async function getCategories() {
         });
 
         return categoryList; //return the promise       
-        
+
     } catch (error) {
         errorHandler(error);
-    }    
+    }
 
 }
 
@@ -50,36 +51,76 @@ export async function getCategories() {
 // return a list (array) of dummy-products based on category
 //----------------------------------------------------------
 export async function getChocolateByCategory(category) {
-    const url = urlMap.chosenCategoryURL + "?key=" + groupKey + "&category_id=" + category;    
-        //Category er et tall, som er lik categoryID til eventListener i category_list_view.js
-        
-    
+    const url = urlMap.chosenCategoryURL + "?key=" + groupKey + "&category_id=" + category;
+    //Category er et tall, som er lik categoryID til eventListener i category_list_view.js
+
+
     try {
         const data = await fetchData(url);
         //data er en liste med sjokolade. Ufiltrert liste. 
-        
+
         const chosenCat = [];
 
-        for(let chocoCat of data){
-            if(chocoCat.category_id === category){
-            const chocoObj = {
-                chocoID: chocoCat.id,
-                chocoName: chocoCat.name,
-                categoryID: chocoCat.category_id,
-                description: chocoCat.description,
-                details: chocoCat.details,
-                thumb: chocoCat.thumb,
-                price: chocoCat.price
-            };
-            //fikk hjelp av chatGPT for .push og chosenCat array. 
+        for (let chocoCat of data) {
+            if (chocoCat.category_id === category) {
+                const chocoObj = {
+                    chocoID: chocoCat.id,
+                    chocoName: chocoCat.name,
+                    categoryID: chocoCat.category_id,
+                    description: chocoCat.description,
+                    details: chocoCat.details,
+                    thumb: chocoCat.thumb,
+                    price: chocoCat.price
+                };
+                //fikk hjelp av chatGPT for .push og chosenCat array. 
                 chosenCat.push(new DummyModel(chocoObj));
-                }; 
-            }; 
-            return chosenCat;
+            };
+        };
+        return chosenCat;
 
     } catch (error) {
         errorHandler(error);
-    }    
+    }
+}
+//----------------------------------------------------------
+// return details about chosen chocolate
+//----------------------------------------------------------
+export async function getChocolateDetails(chosenChocolateID) {
+    const url = urlMap.chosenProductURL + "?id=" + chosenChocolateID + "&key=" + groupKey;
+
+    try {
+        const data = await fetchData(url);
+
+        for (let chocoDet of data) {
+            let chocoObj = {
+
+                chocoID: chocoDet.id,
+                categoryID: chocoDet.category_id,
+                chocoName: chocoDet.name,
+                categoryName: chocoDet.category_name,
+                description: chocoDet.description,
+                image: "https://sukkergris.onrender.com/images/" + imgKey + "/large/" + chocoDet.image,
+                thumb: chocoDet.thumb,
+                price: chocoDet.price,
+                heading: chocoDet.heading,
+                discount: chocoDet.discount,
+                stock: chocoDet.stock,
+                expected_shipped: chocoDet.expected_shipped,
+                rating: chocoDet.rating
+                //fikk hjelp av chatGPT for .push og chosenCat array. 
+            };
+
+            if(chocoObj.stock == 0) {
+                chocoObj.stock = "not in stock"
+            }
+
+            return new DummyModel(chocoObj);
+        };
+        //     return chosenCat;
+
+    } catch (error) {
+        errorHandler(error);
+    }
 }
 
 //----------------------------------------------------------
@@ -88,7 +129,7 @@ export async function getChocolateByCategory(category) {
 export async function getDummyById(id) {
 
     const url = urlMap.chosenCategoryURL + "?key=" + groupKey + "&id=" + id;
-    
+
     //more code here...
 }
 
@@ -98,7 +139,7 @@ export async function getDummyById(id) {
 export async function getAllDummies() {
 
     const url = urlMap.chosenCategoryURL + "?key=" + groupKey;
-    
+
     //more code here...
 }
 
@@ -117,13 +158,13 @@ export async function addDummy(formDataObj) {
             method: "POST",
             body: formDataObj
         }
-    
+
         const result = await fetchData(url, cfg);
         messageHandler(result);
-        
+
     } catch (error) {
         errorHandler(error);
-    }   
+    }
 }
 
 
