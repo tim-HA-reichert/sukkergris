@@ -15,7 +15,7 @@
 
 import * as api from "./api_service.js";
 import { CategoryListView } from "./views/category_list_view.js";
-import { DummyListView } from "./views/dummy_list_view.js";
+import { ChocolateListView } from "./views/dummy_list_view.js";
 import { AddDummyFormView } from "./views/add_dummy_form_view.js";
 
 const viewContainer = document.getElementById('viewContainer');
@@ -26,7 +26,7 @@ const searchBtn = document.getElementById("searchBtn");
 const searchBar = document.getElementById("searchBar");
 
 const categoryListView = new CategoryListView();
-const dummyListView = new DummyListView();
+const chocolateListView = new ChocolateListView();
 const addDummyFormView = new AddDummyFormView();
 
 
@@ -38,11 +38,10 @@ viewContainer.appendChild(categoryListView);
 
 //-----------------------------------------------
 categoryListView.addEventListener('categoryselect', function (evt) {    
-    const dummyProductPromise = api.getChocolateByCategory(evt.detail.categoryID);
-    dummyListView.refresh(dummyProductPromise);
+    const chocolateProductPromise = api.getChocolateByCategory(evt.detail.categoryID);
+    chocolateListView.refresh(chocolateProductPromise);
     viewContainer.innerHTML = "";
-    viewContainer.appendChild(dummyListView);
-
+    viewContainer.appendChild(chocolateListView);
 });
 
 //----------------------------------------------
