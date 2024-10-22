@@ -76,25 +76,7 @@ export async function getChocolateByCategory(category) {
                 }; 
             }; 
             return chosenCat;
-/*          
-        //convert from server API-data to app model-data
-        const dummyList = data.map(function(value) {        
-   
-            const dummyObj = {
-                dummyID: value.id,
-                dummyName: value.name,
-                categoryID: value.category_id,
-                description: value.description,
-                details: value.details,
-                thumb: value.thumb,
-                price: value.price
 
-            };
-            //return new DummyModel(dummyObj);
-        });
-        
-        return  dummyList; //return the promise    
-*/
     } catch (error) {
         errorHandler(error);
     }    
