@@ -49,7 +49,7 @@ export async function getCategories() {
 //----------------------------------------------------------
 // return a list (array) of dummy-products based on category
 //----------------------------------------------------------
-export async function getDummiesByCategory(category) {
+export async function getChocolateByCategory(category) {
     const url = urlMap.chosenCategoryURL + "?key=" + groupKey + "&category_id=" + category;    
         //Category er et tall, som er lik categoryID til eventListener i category_list_view.js
         
@@ -62,9 +62,6 @@ export async function getDummiesByCategory(category) {
 
         for(let chocoCat of data){
             if(chocoCat.category_id === category){
-            //Printer ut riktig sjokolade basert på id. 
-            //neste steg: filtrer hva som printer til HTML
-
             const chocoObj = {
                 chocoID: chocoCat.id,
                 chocoName: chocoCat.name,
@@ -108,7 +105,7 @@ export async function getDummiesByCategory(category) {
 //----------------------------------------------------------
 export async function getDummyById(id) {
 
-    const url = urlMap.dummyURL + "?key=" + groupKey + "&id=" + id;
+    const url = urlMap.chosenCategoryURL + "?key=" + groupKey + "&id=" + id;
     
     //more code here...
 }
@@ -118,7 +115,7 @@ export async function getDummyById(id) {
 //----------------------------------------------------------
 export async function getAllDummies() {
 
-    const url = urlMap.dummyURL + "?key=" + groupKey;
+    const url = urlMap.chosenCategoryURL + "?key=" + groupKey;
     
     //more code here...
 }
@@ -128,7 +125,7 @@ export async function getAllDummies() {
 //----------------------------------------------------------
 export async function addDummy(formDataObj) {
 
-    const url = urlMap.dummyURL + "?key=" + groupKey;
+    const url = urlMap.chosenCategoryURL + "?key=" + groupKey;
 
     console.log(formDataObj.get("name"));
 
@@ -144,10 +141,7 @@ export async function addDummy(formDataObj) {
         
     } catch (error) {
         errorHandler(error);
-    }
-    
-    
-    
+    }   
 }
 
 
