@@ -39,7 +39,6 @@ export class DetailedProductView extends HTMLElement {
             theDiv.addEventListener('click', evt => {
                 const theEvent = new CustomEvent("dummyselect", {composed: true, bubbles:true, detail: value});
                 this.dispatchEvent(theEvent);
-                console.log("detailed Product View");
             });
 
         } //end for-loop
