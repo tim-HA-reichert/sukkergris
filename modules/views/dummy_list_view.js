@@ -20,10 +20,9 @@ export class DummyListView extends HTMLElement {
 
     //---------------------------------------
     async refresh(dataPromise) {        
-        
-        const data = await dataPromise; //wait for the promise to be resolved
-
         this.listContainer.innerHTML = "";
+
+        const data = await dataPromise; //wait for the promise to be resolved
 
         for (let value of data) {
 
