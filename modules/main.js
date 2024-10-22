@@ -22,6 +22,9 @@ const viewContainer = document.getElementById('viewContainer');
 const btnShowCategoriesView = document.getElementById('btnShowCategories');
 const btnShowCreateDummyView = document.getElementById('btnShowCreateDummy');
 
+const searchBtn = document.getElementById("searchBtn");
+const searchBar = document.getElementById("searchBar");
+
 const categoryListView = new CategoryListView();
 const dummyListView = new DummyListView();
 const addDummyFormView = new AddDummyFormView();
@@ -35,8 +38,7 @@ viewContainer.appendChild(categoryListView);
 
 //-----------------------------------------------
 categoryListView.addEventListener('categoryselect', function (evt) {    
-
-    const dummyProductPromise = api.getDummiesByCategory(evt.detail.categoryID);
+    const dummyProductPromise = api.getChocolateByCategory(evt.detail.categoryID);
     dummyListView.refresh(dummyProductPromise);
     viewContainer.innerHTML = "";
     viewContainer.appendChild(dummyListView);
@@ -63,4 +65,11 @@ btnShowCreateDummyView.addEventListener('click', function(evt) {
 addDummyFormView.addEventListener("add-dummy", function(evt) {    
     
     api.addDummy(evt.detail)
-})
+});
+
+
+//----------------------------------------------
+searchBtn.addEventListener("click", function(evt){
+    evt.preventDefault();
+    const searchValue = searchBar.value;
+});
