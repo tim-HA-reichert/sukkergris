@@ -13,7 +13,7 @@ const imgKey = "GFTPOE21";
 
 const urlMap = {
     categoryURL: "https://sukkergris.onrender.com/webshop/categories",
-    dummyURL: "https://sukkergris.onrender.com/webshop/products"
+    chosenCategoryURL: "https://sukkergris.onrender.com/webshop/products"
     // add more URL' here...
 }
 
@@ -50,23 +50,37 @@ export async function getCategories() {
 // return a list (array) of dummy-products based on category
 //----------------------------------------------------------
 export async function getDummiesByCategory(category) {
-    const url = urlMap.dummyURL + "?key=" + groupKey + "&category_id=" + category;    
+    const url = urlMap.chosenCategoryURL + "?key=" + groupKey + "&category_id=" + category;    
         //Category er et tall, som er lik categoryID til eventListener i category_list_view.js
         
     
     try {
-
         const data = await fetchData(url);
         //data er en liste med sjokolade. Ufiltrert liste. 
-        for(let id of data){
-        if(id.category_id === category){
-            console.log(id);
+        
+        const chosenCat = [];
+
+        for(let chocoCat of data){
+            if(chocoCat.category_id === category){
+                console.log(chocoCat);
             //Printer ut riktig sjokolade basert på id. 
             //neste steg: filtrer hva som printer til HTML
-        }
-    } 
-         
-  
+
+            const chocoObj = {
+                chocoID: chocoCat.id,
+                chocoName: chocoCat.name,
+                categoryID: chocoCat.category_id,
+                description: chocoCat.description,
+                details: chocoCat.details,
+                thumb: chocoCat.thumb,
+                price: chocoCat.price
+            };
+            //fikk hjelp av chatGPT for .push og chosenCat array. 
+                chosenCat.push(new DummyModel(chocoObj));
+                }; 
+            }; 
+            return chosenCat;
+/*          
         //convert from server API-data to app model-data
         const dummyList = data.map(function(value) {        
    
@@ -80,11 +94,11 @@ export async function getDummiesByCategory(category) {
                 price: value.price
 
             };
-            return new DummyModel(dummyObj);
+            //return new DummyModel(dummyObj);
         });
         
-        return dummyList; //return the promise    
-
+        return  dummyList; //return the promise    
+*/
     } catch (error) {
         errorHandler(error);
     }    

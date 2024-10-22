@@ -27,9 +27,9 @@ export class DummyModel {
 
          //check for valid values, santizing etc. can happen here.
 
-        this.dummyID = obj.dummyID;
+        this.chocoID = obj.chocoID;
         this.categoryID = obj.categoryID;
-        this.dummyName = obj.dummyName;
+        this.chocoName = obj.chocoName;
         this.details = obj.details;        
         this.description = obj.description;        
         this.thumb = obj.thumb;
