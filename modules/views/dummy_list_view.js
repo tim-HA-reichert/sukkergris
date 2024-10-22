@@ -6,7 +6,7 @@ const html = `
 
 
 //===================================================
-export class DummyListView extends HTMLElement {    
+export class ChocolateListView extends HTMLElement {    
     
     //---------------------------------------
     constructor() {
@@ -36,9 +36,8 @@ export class DummyListView extends HTMLElement {
             this.listContainer.appendChild(theDiv);
 
             theDiv.addEventListener('click', evt => {
-                const theEvent = new CustomEvent("dummyselect", {composed: true, bubbles:true, detail: value});
-                this.dispatchEvent(theEvent);
-                console.log(evt);
+                const chocolateDetailEvent = new CustomEvent("chocolateselect", {composed: true, bubbles:true, detail: value});
+                this.dispatchEvent(chocolateDetailEvent);
             });
 
         } //end for-loop
@@ -47,4 +46,4 @@ export class DummyListView extends HTMLElement {
 } //end of class
 
 
-customElements.define("dummy-list-view", DummyListView);
+customElements.define("chocolate-list-view", ChocolateListView);

@@ -25,7 +25,7 @@ export class DetailedProductView extends HTMLElement {
 
         this.listContainer.innerHTML = "";
 
-/*         for (let value of data) {
+        for (let value of data) {
 
             const theDiv = document.createElement("div");
             theDiv.innerHTML = `
@@ -39,10 +39,10 @@ export class DetailedProductView extends HTMLElement {
             theDiv.addEventListener('click', evt => {
                 const theEvent = new CustomEvent("dummyselect", {composed: true, bubbles:true, detail: value});
                 this.dispatchEvent(theEvent);
-                
+                console.log("detailed Product View");
             });
 
-        } //end for-loop */
+        } //end for-loop
     }
 
 } //end of class
