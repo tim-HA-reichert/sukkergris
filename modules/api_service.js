@@ -62,7 +62,6 @@ export async function getChocolateByCategory(category) {
 
         for(let chocoCat of data){
             if(chocoCat.category_id === category){
-
             const chocoObj = {
                 chocoID: chocoCat.id,
                 chocoName: chocoCat.name,
