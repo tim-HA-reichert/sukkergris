@@ -38,8 +38,8 @@ viewContainer.appendChild(categoryListView);
 
 //-----------------------------------------------
 categoryListView.addEventListener('categoryselect', function (evt) {    
-    const chocolateProductPromise = api.getChocolateByCategory(evt.detail.categoryID);
-    chocolateListView.refresh(chocolateProductPromise);
+    const chocolateCategoryPromise = api.getChocolateByCategory(evt.detail.categoryID);
+    chocolateListView.refresh(chocolateCategoryPromise);
     viewContainer.innerHTML = "";
     viewContainer.appendChild(chocolateListView);
 });
@@ -71,4 +71,8 @@ addDummyFormView.addEventListener("add-dummy", function(evt) {
 searchBtn.addEventListener("click", function(evt){
     evt.preventDefault();
     const searchValue = searchBar.value;
+    const searchBarPromise = api.getChocolateBySearch(searchValue);
+    chocolateListView.refresh(searchBarPromise);
+    viewContainer.innerHTML = "";
+    viewContainer.appendChild(chocolateListView);
 });
