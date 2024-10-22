@@ -62,7 +62,6 @@ export async function getDummiesByCategory(category) {
 
         for(let chocoCat of data){
             if(chocoCat.category_id === category){
-                console.log(chocoCat);
             //Printer ut riktig sjokolade basert på id. 
             //neste steg: filtrer hva som printer til HTML
 
