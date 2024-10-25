@@ -46,7 +46,6 @@ categoryListView.addEventListener('categoryselect', function (evt) {
 
 //----------------------------------------------
 btnShowCategoriesView.addEventListener('click', function (evt) {
-
     viewContainer.innerHTML = "";
     viewContainer.appendChild(categoryListView);
 
@@ -54,7 +53,6 @@ btnShowCategoriesView.addEventListener('click', function (evt) {
 
 //----------------------------------------------
 btnShowCreateDummyView.addEventListener('click', function(evt) {
-
     viewContainer.innerHTML = "";
     viewContainer.appendChild(addDummyFormView);
 
@@ -62,7 +60,6 @@ btnShowCreateDummyView.addEventListener('click', function(evt) {
 
 //----------------------------------------------
 addDummyFormView.addEventListener("add-dummy", function(evt) {    
-    
     api.addDummy(evt.detail)
 });
 

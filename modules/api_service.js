@@ -3,6 +3,7 @@
 //----------------------------------------------------------
 
 import { fetchData } from "./utilities.js";
+import { createBasicAuthString } from "./utilities.js";
 import { CategoryModel, DummyModel } from "./models.js";
 import { errorHandler } from "./error_handler.js";
 import { messageHandler } from "./messageHandler.js";
@@ -13,8 +14,8 @@ const imgKey = "GFTPOE21";
 
 const urlMap = {
     categoryURL: "https://sukkergris.onrender.com/webshop/categories",
-    chosenCategoryURL: "https://sukkergris.onrender.com/webshop/products"
-    // add more URL' here...
+    chosenCategoryURL: "https://sukkergris.onrender.com/webshop/products",
+    adminLoginURL: "https://sukkergris.onrender.com/users/adminlogin"
 }
 
 //----------------------------------------------------------
@@ -129,7 +130,8 @@ export async function addDummy(formDataObj) {
 
 
 //----------------------------------------------------------
-//Add more service functions here...
+// return chocolates based on search-bar 
+//----------------------------------------------------------
 
 export async function getChocolateBySearch(searchValue){
     //Use value from searchbar to filter chocolates. 
@@ -141,8 +143,8 @@ export async function getChocolateBySearch(searchValue){
             const chosenCat = [];
 
             /*
-            Chatgpt hjalp oss med denne. Den returnerer en tom array, siden funksjonen forventer en 
-            array med innhold. Dette sier tydelig ifra når det ikke er noen treff eller match.  
+            Chatgpt hjalp oss med denne. Den returnerer en tom array, funksjonen forventer en 
+            array med innhold. Dette sier tydelig ifra til programmet når det ikke er noen treff eller match.  
             */
             if (searchValue.length <= 2) {
                 messageHandler("Please enter more than 2 characters for the search.");
@@ -180,3 +182,46 @@ export async function getChocolateBySearch(searchValue){
         }
         
     }
+
+//----------------------------------------------------------
+// admin log-in
+//----------------------------------------------------------
+
+export async function logIn(aForm){
+
+    const url = urlMap.adminLoginURL + "?key=" + groupKey;
+
+    try{
+
+        const loginCred = {
+            username: aForm.get("username"),
+            password: aForm.get("password"),
+        }
+    
+       const authString = createBasicAuthString(loginCred.username, loginCred.password);
+
+        const cfg = {
+            method: "POST",
+            headers:{
+                "authorization": authString
+            }
+        }
+
+        const result = await fetchData(url, cfg);
+        messageHandler(result);
+
+    } catch(error){
+        errorHandler(error);
+    }
+}
+
+//----------------------------------------------------------
+// admin control panel
+//----------------------------------------------------------
+
+export async function adminControlPanel(){
+    
+
+
+
+}
