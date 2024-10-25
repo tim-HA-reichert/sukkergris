@@ -20,12 +20,6 @@ const html = `
     </div>   
 `;
 
-const html2 = `
-
-    <h2> Choose what to administrate </h2>
-
-`;
-
 
 export class LoginView extends HTMLElement {
     //---------------------------------------
@@ -64,7 +58,9 @@ export class LoginView extends HTMLElement {
 
             this.contentWrapper.appendChild(theDiv);
 
-        } 
+        } else {
+            return
+        }
 
     }
 

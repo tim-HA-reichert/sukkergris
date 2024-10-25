@@ -210,6 +210,10 @@ export async function logIn(aForm){
         const result = await fetchData(url, cfg);
         messageHandler(result);
 
+         
+        return result.logindata.superuser;
+
+
     } catch(error){
         errorHandler(error);
     }
@@ -219,9 +223,9 @@ export async function logIn(aForm){
 // admin control panel
 //----------------------------------------------------------
 
-export async function adminControlPanel(){
-    
-
-
-
+//Returnerer en boolean
+//Gir undefined hvis bruker skriver feil passord
+export async function isSuper(aForm) {
+    const isSuperUser = await logIn(aForm); 
+    return isSuperUser;
 }

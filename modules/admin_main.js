@@ -14,13 +14,12 @@ viewContainer.appendChild(loginView);
 
 
 //log in as admin-----------------------------------
-loginView.addEventListener("log-in", function(evt){
-    api.logIn(evt.detail);
 
-    //Trying to empty view-container
-    //Need to find a way to transfer boolean into refresh function. 
-    /* Alternative: add boolean to "adminControlPanel" function in api.service.js
-        then use loginView.refresh(adminControlPanel)
-    */
-    loginView.refresh(true);
+//Hjelp av GPT for async function. 
+loginView.addEventListener("log-in", async function(evt){
+    // Wait for the result from logIn to get isSuper
+    const isSuper = await api.logIn(evt.detail);
+
+    // Refresh view based on the isSuper boolean value
+    loginView.refresh(isSuper);
 });
