@@ -1,5 +1,4 @@
 
-
 // fetch wrapper function -----------------------------------
 export async function fetchData(url, config) {
 
@@ -20,13 +19,13 @@ export async function fetchData(url, config) {
     }
 }
 
+
 // basic authentication -------------------------------------
 export function createBasicAuthString(username, password) {
     let combinedStr = username + ":" + password;
     let b64Str = btoa(combinedStr);
-    return "basic " + b64Str; //return the basic authentication string
+    return "basic " + b64Str; 
 }
-
 
 //-----------------------------------------------------------
 // more utility-functions here if needed...
