@@ -19,33 +19,34 @@ export class DetailedProductView extends HTMLElement {
     }
 
     //---------------------------------------
-    async refresh(dataPromise) {
+    async refresh(dataPromise) { // DataPromise er et class object med item.
 
-        const data = await dataPromise; //wait for the promise to be resolved
-
-        console.log(data);
+        const itemObject = await dataPromise; //wait for the promise to be resolved
         this.listContainer.innerHTML = "";
         const theDiv = document.createElement("div");
         theDiv.innerHTML = `
-                <h1>${data.chocoName}</h1>
-                <h3>${data.heading}</h3>
-                <h3>${data.categoryName}</h3>
-                <img src="${data.image}">
+                <h1>${itemObject.chocoName}</h1>
+                <h3>${itemObject.heading}</h3>
+                <h3>${itemObject.categoryName}</h3>
+                <img src="${itemObject.image}">
                 <h1> HUSK discount </h1>
-                <h3>${data.description}</h3>
-                <p>${data.price},- kr</p>
-                <p>${data.stock}</p>
-                <p>${data.expected_shipped}</p>
+                <h3>${itemObject.description}</h3>
+                <p>${itemObject.price},- kr</p>
+                <button id="btnAddItem">Buy this item</button>
+                <p>${itemObject.stock}</p>
+                <p>${itemObject.expected_shipped}</p>
                 <p> Customer rating: </p>
                 <hr>
             `;
 
         this.listContainer.appendChild(theDiv);
+        // const btnAddItem = document.getElementById("btnAddItem")
+        const btnAddItem = this.shadowRoot.getElementById("btnAddItem");
 
-        //     // theDiv.addEventListener('click', evt => {
-        //     //     const theEvent = new CustomEvent("dummyselect", {composed: true, bubbles:true, detail: value});
-        //     //     this.dispatchEvent(theEvent);
-        //     //     console.log("detailed Product View");
+        btnAddItem.addEventListener('click', evt => {
+            const theEvent = new CustomEvent("addItem", { composed: true, bubbles: true, detail: itemObject });
+            this.dispatchEvent(theEvent);
+        })
     }
 
 } //end of class

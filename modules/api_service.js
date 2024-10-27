@@ -106,13 +106,9 @@ export async function getChocolateDetails(chosenChocolateID) {
                 discount: chocoDet.discount,
                 stock: chocoDet.stock,
                 expected_shipped: chocoDet.expected_shipped,
-                rating: chocoDet.rating
-                //fikk hjelp av chatGPT for .push og chosenCat array. 
+                rating: chocoDet.rating 
+                //fikk hjelp av chatGPT for .push og chosenCat array.
             };
-
-            if(chocoObj.stock == 0) {
-                chocoObj.stock = "not in stock"
-            }
 
             return new DummyModel(chocoObj);
         };

@@ -18,6 +18,7 @@ import { CategoryListView } from "./views/category_list_view.js";
 import { ChocolateListView } from "./views/dummy_list_view.js";
 import { AddDummyFormView } from "./views/add_dummy_form_view.js";
 import { DetailedProductView } from "./views/detailed_product_view.js";
+import { OrderModel } from "./models.js"
 
 const viewContainer = document.getElementById('viewContainer');
 const btnShowCategoriesView = document.getElementById('btnShowCategories');
@@ -30,6 +31,8 @@ const categoryListView = new CategoryListView();
 const chocolateListView = new ChocolateListView();
 const detailedProductView = new DetailedProductView();
 const addDummyFormView = new AddDummyFormView();
+
+const orderModel = new OrderModel();
 
 
 //startup----------------------------------------
@@ -58,9 +61,14 @@ btnShowCategoriesView.addEventListener('click', function (evt) {
 chocolateListView.addEventListener('chocolateselect', function (evt) {    
     const detailProductPromise = api.getChocolateDetails(evt.detail.chocoID);
     detailedProductView.refresh(detailProductPromise);
-    
     viewContainer.innerHTML = "";
     viewContainer.appendChild(detailedProductView);
+
+});
+//---------------------------------------------- AddEventListener for trykking av addItem
+detailedProductView.addEventListener('addItem', function (evt) {    
+    console.log(evt.detail);
+    orderModel.addItem(evt.detail);
 
 });
 
