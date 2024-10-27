@@ -59,10 +59,14 @@ btnShowCategoriesView.addEventListener('click', function (evt) {
 
 //---------------------------------------------- AddEventListener for trykking av spesefikk sjokolade
 chocolateListView.addEventListener('chocolateselect', function (evt) {    
-    const detailProductPromise = api.getChocolateDetails(evt.detail.chocoID);
-    detailedProductView.refresh(detailProductPromise);
     viewContainer.innerHTML = "";
+    const detailProductPromise = api.getChocolateDetails(evt.detail.chocoID);
+    
+    detailedProductView.refresh(detailProductPromise);
+    console.log(detailProductPromise);
+    detailedProductView.showDetailed();
     viewContainer.appendChild(detailedProductView);
+    
 
 });
 //---------------------------------------------- AddEventListener for trykking av addItem

@@ -31,10 +31,10 @@ export class DetailedProductView extends HTMLElement {
                 <img src="${itemObject.image}">
                 <h1> HUSK discount </h1>
                 <h3>${itemObject.description}</h3>
-                <p>${itemObject.price},- kr</p>
+                <p>Price: ${itemObject.price},- kr</p>
                 <button id="btnAddItem">Buy this item</button>
                 <p>${itemObject.stock}</p>
-                <p>${itemObject.expected_shipped}</p>
+                <p> ${itemObject.expected_shipped}</p>
                 <p> Customer rating: </p>
                 <hr>
             `;

@@ -1,3 +1,5 @@
+import { shortenDate } from "./utilities.js";
+
 //=====================================================
 export class CategoryModel {
 
@@ -40,6 +42,24 @@ export class DummyModel {
         this.stock = obj.stock;
         this.expected_shipped = obj.expected_shipped;
         this.rating = obj.rating;
+
+
+    }
+
+    showDetailed() {
+        console.log("test");
+        
+        if (this.stock == 0) {
+            this.stock = "Out of stock"
+            this.expected_shipped = "Expected shipping date: " + this.expected_shipped
+        }
+        else {
+            this.stock = "Stock: " + this.stock
+            // shortenDate(this.expected_shipped)
+            console.log(shortenDate(this.expected_shipped));
+
+            // this.expected_shipped = ""
+        }
     }
 
 }
@@ -57,10 +77,10 @@ export class OrderModel {
 
     }
 
-    addItem (item) {
+    addItem(item) {
         this.cart.push(item)
         console.log(this.cart);
-        
+
     }
 }
 

@@ -27,6 +27,11 @@ export function createBasicAuthString(username, password) {
     return "basic " + b64Str; //return the basic authentication string
 }
 
+export function shortenDate (dateInp) {
+    const dateData = dateInp
+    const stringModified = dateData.split("T")[0]
+    return stringModified
+}
 
 //-----------------------------------------------------------
 // more utility-functions here if needed...
