@@ -93,7 +93,6 @@ export async function getChocolateDetails(chosenChocolateID) {
 
         for (let chocoDet of data) {
             let chocoObj = {
-
                 chocoID: chocoDet.id,
                 categoryID: chocoDet.category_id,
                 chocoName: chocoDet.name,
@@ -106,7 +105,8 @@ export async function getChocolateDetails(chosenChocolateID) {
                 discount: chocoDet.discount,
                 stock: chocoDet.stock,
                 expected_shipped: chocoDet.expected_shipped,
-                rating: chocoDet.rating 
+                rating: chocoDet.rating,
+                number_of_ratings: chocoDet.number_of_ratings
                 //fikk hjelp av chatGPT for .push og chosenCat array.
             };
 

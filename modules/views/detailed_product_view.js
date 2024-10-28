@@ -24,6 +24,7 @@ export class DetailedProductView extends HTMLElement {
         const itemObject = await dataPromise; //wait for the promise to be resolved
         this.listContainer.innerHTML = "";
         const theDiv = document.createElement("div");
+
         theDiv.innerHTML = `
                 <h1>${itemObject.chocoName}</h1>
                 <h3>${itemObject.heading}</h3>
@@ -35,13 +36,19 @@ export class DetailedProductView extends HTMLElement {
                 <button id="btnAddItem">Buy this item</button>
                 <p>${itemObject.stock}</p>
                 <p> ${itemObject.expected_shipped}</p>
-                <p> Customer rating: </p>
-                <hr>
+
+                
             `;
+        if (itemObject.number_of_ratings > 0) {
+            theDiv.innerHTML += `<p> Customer rating: ${itemObject.rating} </p>`
+        }
 
         this.listContainer.appendChild(theDiv);
-        // const btnAddItem = document.getElementById("btnAddItem")
+
         const btnAddItem = this.shadowRoot.getElementById("btnAddItem");
+        if (itemObject.stock === "Out of stock") {
+            btnAddItem.style.display = "none"
+        }
 
         btnAddItem.addEventListener('click', evt => {
             const theEvent = new CustomEvent("addItem", { composed: true, bubbles: true, detail: itemObject });

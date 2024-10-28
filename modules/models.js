@@ -42,23 +42,17 @@ export class DummyModel {
         this.stock = obj.stock;
         this.expected_shipped = obj.expected_shipped;
         this.rating = obj.rating;
-
-
+        this.number_of_ratings = obj.number_of_ratings
     }
 
-    showDetailed() {
-        console.log("test");
-        
+    showDetailed() {        
         if (this.stock == 0) {
             this.stock = "Out of stock"
-            this.expected_shipped = "Expected shipping date: " + this.expected_shipped
+            this.expected_shipped = "Expected shipping date: " + shortenDate(this.expected_shipped)
         }
         else {
-            this.stock = "Stock: " + this.stock
-            // shortenDate(this.expected_shipped)
-            console.log(shortenDate(this.expected_shipped));
-
-            // this.expected_shipped = ""
+            this.stock = "In stock: " + this.stock
+            this.expected_shipped = ""
         }
     }
 
@@ -79,7 +73,6 @@ export class OrderModel {
 
     addItem(item) {
         this.cart.push(item)
-        console.log(this.cart);
     }
 }
 

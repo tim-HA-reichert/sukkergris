@@ -58,16 +58,15 @@ btnShowCategoriesView.addEventListener('click', function (evt) {
 });
 
 //---------------------------------------------- AddEventListener for trykking av spesefikk sjokolade
-chocolateListView.addEventListener('chocolateselect', async function (evt) {    
+chocolateListView.addEventListener('chocolateselect', function (evt) {    
     viewContainer.innerHTML = "";
-    const detailProductPromise = await api.getChocolateDetails(evt.detail.chocoID);
-    
-    detailedProductView.refresh(detailProductPromise);
-    console.log(detailProductPromise);
-    detailProductPromise.showDetailed();
-    viewContainer.appendChild(detailedProductView);
-    
+    const detailProductPromise = api.getChocolateDetails(evt.detail.chocoID); //Lager et promise
 
+    detailProductPromise.then((dummyModelClass) => {        //Etter at promiset er ferdig, kjøres koden under
+        detailedProductView.refresh(dummyModelClass);
+        dummyModelClass.showDetailed();
+        viewContainer.appendChild(detailedProductView);
+    })
 });
 //---------------------------------------------- AddEventListener for trykking av addItem knappen
 detailedProductView.addEventListener('addItem', function (evt) {    
