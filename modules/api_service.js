@@ -163,6 +163,17 @@ export async function addDummy(formDataObj) {
     }
 }
 
+//----------------------------------------------------------
+// Manages OrderModel
+//----------------------------------------------------------
+
+export function manageOrderModel (aOrderModel){ //klasse som parameter
+    const classOrderModel = aOrderModel; //Refererer til klassen som er definert i main.js
+
+    // classOrderModel.addItem("test") //eksempel på hvordan man kan kjøre en funksjon fra klassen
+    
+
+}
 
 //----------------------------------------------------------
 //Add more service functions here...

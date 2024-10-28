@@ -80,7 +80,6 @@ export class OrderModel {
     addItem(item) {
         this.cart.push(item)
         console.log(this.cart);
-
     }
 }
 

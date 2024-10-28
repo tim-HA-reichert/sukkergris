@@ -69,10 +69,10 @@ chocolateListView.addEventListener('chocolateselect', async function (evt) {
     
 
 });
-//---------------------------------------------- AddEventListener for trykking av addItem
+//---------------------------------------------- AddEventListener for trykking av addItem knappen
 detailedProductView.addEventListener('addItem', function (evt) {    
-    console.log(evt.detail);
     orderModel.addItem(evt.detail);
+    api.manageOrderModel(orderModel)
 
 });
 
