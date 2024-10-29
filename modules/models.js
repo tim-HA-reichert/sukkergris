@@ -46,3 +46,41 @@ export class DummyModel {
 // Add more model classes here, e.g.:
 // OrderModel, UserModel, LoginDataModel, CommentsModel...
 
+export class LoginDataModel {
+
+    constructor(loginData){
+        this.update(loginData);
+    }
+
+    update(data){
+        this.superuser = data.superuser;
+        this.thumb = data.thumb;
+        this.token = data.token;
+        this.userid = data.userid;
+        this.username = data.username;
+    }
+
+}
+
+
+export class NewProductModel{
+
+    constructor(newProductObject) {
+        this.update(newProductObject);
+     }
+ 
+     //----------------------------------------
+     update(newProduct) {
+ 
+        //Apply form values here
+         this.chocoID = newProduct.chocoID;
+         this.categoryID = newProduct.categoryID;
+         this.chocoName = newProduct.chocoName;
+         this.details = newProduct.details;        
+         this.description = newProduct.description;        
+         this.thumb = newProduct.thumb;
+         this.price = newProduct.price;        
+     }
+
+
+}

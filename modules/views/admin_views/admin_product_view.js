@@ -25,7 +25,7 @@ export class AdminProductView extends HTMLElement {
 
         this.listContainer.innerHTML = "";
 
-/*         for (let value of data) {
+         for (let value of data) {
 
             const theDiv = document.createElement("div");
             theDiv.innerHTML = `
@@ -35,12 +35,6 @@ export class AdminProductView extends HTMLElement {
             `;
 
             this.listContainer.appendChild(theDiv);
-
-            theDiv.addEventListener('click', evt => {
-                const theEvent = new CustomEvent("dummyselect", {composed: true, bubbles:true, detail: value});
-                this.dispatchEvent(theEvent);
-                
-            }); 
 
         } //end for-loop*/
     }

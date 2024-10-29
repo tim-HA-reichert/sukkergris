@@ -1,5 +1,4 @@
 
-
 // fetch wrapper function -----------------------------------
 export async function fetchData(url, config) {
 
@@ -8,8 +7,9 @@ export async function fetchData(url, config) {
         const data = await response.json();
 
         if (!response.ok && data) {
-            throw new Error("Something went wrong. Check the 'error.cause' object", { cause: data });
-        }
+            throw new Error("Something went wrong. Check the 'error.cause' object", 
+                { cause: data });
+        };
 
         return Promise.resolve(data); //returns a resolved promise with data
 
@@ -20,13 +20,13 @@ export async function fetchData(url, config) {
     }
 }
 
+
 // basic authentication -------------------------------------
 export function createBasicAuthString(username, password) {
     let combinedStr = username + ":" + password;
     let b64Str = btoa(combinedStr);
-    return "basic " + b64Str; //return the basic authentication string
+    return "basic " + b64Str; 
 }
-
 
 //-----------------------------------------------------------
 // more utility-functions here if needed...

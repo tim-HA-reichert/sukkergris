@@ -42,15 +42,14 @@ viewContainer.appendChild(categoryListView);
 
 //-----------------------------------------------
 categoryListView.addEventListener('categoryselect', function (evt) {    
-    const chocolateProductPromise = api.getChocolateByCategory(evt.detail.categoryID);
-    chocolateListView.refresh(chocolateProductPromise);
+    const chocolateCategoryPromise = api.getChocolateByCategory(evt.detail.categoryID);
+    chocolateListView.refresh(chocolateCategoryPromise);
     viewContainer.innerHTML = "";
     viewContainer.appendChild(chocolateListView);
 });
 
 //----------------------------------------------
 btnShowCategoriesView.addEventListener('click', function (evt) {
-
     viewContainer.innerHTML = "";
     viewContainer.appendChild(categoryListView);
 
@@ -58,13 +57,13 @@ btnShowCategoriesView.addEventListener('click', function (evt) {
 
 //----------------------------------------------
 btnShowCreateDummyView.addEventListener('click', function(evt) {
-
     viewContainer.innerHTML = "";
     viewContainer.appendChild(addDummyFormView);
 
 });
 
 //----------------------------------------------
+
 btnGoToCart.addEventListener('click', function(evt) {
     const chocolateProductPromise = api.getChocolateByCategory(evt.detail.categoryID);
     shoppingCartView.refresh(chocolateProductPromise);
@@ -74,7 +73,7 @@ btnGoToCart.addEventListener('click', function(evt) {
 
 //----------------------------------------------
 addDummyFormView.addEventListener("add-dummy", function(evt) {    
-    
+
     api.addDummy(evt.detail)
 });
 
@@ -83,4 +82,17 @@ addDummyFormView.addEventListener("add-dummy", function(evt) {
 searchBtn.addEventListener("click", function(evt){
     evt.preventDefault();
     const searchValue = searchBar.value;
+    const searchBarPromise = api.getChocolateBySearch(searchValue);
+    chocolateListView.refresh(searchBarPromise);
+    viewContainer.innerHTML = "";
+    viewContainer.appendChild(chocolateListView);
 });
+
+
+
+
+
+
+
+
+

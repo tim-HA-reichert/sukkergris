@@ -1,6 +1,6 @@
 
 const html = `
-    <h2>Dummy products</h2>
+    <h2>The Products</h2>
     <div id="listContainer"></div>
 `;
 
