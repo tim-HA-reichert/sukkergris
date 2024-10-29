@@ -18,6 +18,8 @@ import { CategoryListView } from "./views/category_list_view.js";
 import { ChocolateListView } from "./views/dummy_list_view.js";
 import { AddDummyFormView } from "./views/add_dummy_form_view.js";
 import { ShoppingCartView } from "./views/shopping_cart_view.js";
+import { DetailedProductView } from "./views/detailed_product_view.js";
+import { OrderModel } from "./models.js";
 
 const viewContainer = document.getElementById('viewContainer');
 const btnShowCategoriesView = document.getElementById('btnShowCategories');
@@ -30,8 +32,11 @@ const searchBar = document.getElementById("searchBar");
 
 const categoryListView = new CategoryListView();
 const chocolateListView = new ChocolateListView();
+const detailedProductView = new DetailedProductView();
 const addDummyFormView = new AddDummyFormView();
 const shoppingCartView = new ShoppingCartView();
+
+const orderModel = new OrderModel();
 
 
 //startup----------------------------------------
@@ -48,10 +53,27 @@ categoryListView.addEventListener('categoryselect', function (evt) {
     viewContainer.appendChild(chocolateListView);
 });
 
-//----------------------------------------------
+//---------------------------------------------- AddEventListener for Home knapp
 btnShowCategoriesView.addEventListener('click', function (evt) {
     viewContainer.innerHTML = "";
     viewContainer.appendChild(categoryListView);
+});
+
+//---------------------------------------------- AddEventListener for trykking av spesefikk sjokolade
+chocolateListView.addEventListener('chocolateselect', function (evt) {    
+    viewContainer.innerHTML = "";
+    const detailProductPromise = api.getChocolateDetails(evt.detail.chocoID); //Lager et promise
+
+    detailProductPromise.then((dummyModelClass) => {        //Etter at promiset er ferdig, kjøres koden under
+        detailedProductView.refresh(dummyModelClass);
+        dummyModelClass.showDetailed();
+        viewContainer.appendChild(detailedProductView);
+    })
+});
+//---------------------------------------------- AddEventListener for trykking av addItem knappen
+detailedProductView.addEventListener('addItem', function (evt) {    
+    orderModel.addItem(evt.detail);
+    api.manageOrderModel(orderModel)
 
 });
 
