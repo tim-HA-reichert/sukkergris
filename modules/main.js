@@ -59,7 +59,8 @@ btnShowCreateDummyView.addEventListener('click', function(evt) {
 });
 
 //----------------------------------------------
-addDummyFormView.addEventListener("add-dummy", function(evt) {    
+addDummyFormView.addEventListener("add-dummy", function(evt) {  
+    console.log(evt);  
     api.addDummy(evt.detail)
 });
 
@@ -73,3 +74,12 @@ searchBtn.addEventListener("click", function(evt){
     viewContainer.innerHTML = "";
     viewContainer.appendChild(chocolateListView);
 });
+
+
+
+
+
+
+
+
+

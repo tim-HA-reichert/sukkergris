@@ -4,7 +4,7 @@
 
 import { fetchData } from "./utilities.js";
 import { createBasicAuthString } from "./utilities.js";
-import { CategoryModel, DummyModel } from "./models.js";
+import { CategoryModel, DummyModel, LoginDataModel } from "./models.js";
 import { errorHandler } from "./error_handler.js";
 import { messageHandler } from "./messageHandler.js";
 
@@ -15,7 +15,11 @@ const imgKey = "GFTPOE21";
 const urlMap = {
     categoryURL: "https://sukkergris.onrender.com/webshop/categories",
     chosenCategoryURL: "https://sukkergris.onrender.com/webshop/products",
-    adminLoginURL: "https://sukkergris.onrender.com/users/adminlogin"
+
+    //Admin URL's
+    adminLoginURL: "https://sukkergris.onrender.com/users/adminlogin",
+    addProductURL: "https://sukkergris.onrender.com/webshop/products",
+    deleteProductURL: "https://sukkergris.onrender.com/webshop/products"
 }
 
 //----------------------------------------------------------
@@ -167,7 +171,6 @@ export async function getChocolateBySearch(searchValue){
                     thumb: chocoCat.thumb,
                     price: chocoCat.price
                     };
-                    
                 chosenCat.push(new DummyModel(chocoObj));
                     };
                 };
@@ -191,8 +194,8 @@ export async function logIn(aForm){
 
     const url = urlMap.adminLoginURL + "?key=" + groupKey;
 
-    try{
-
+    //See if you can use loginModel here. Or if loginModel is for new users?
+    //OR rather: store login data in LoginDataModel, such as admintoken. 
         const loginCred = {
             username: aForm.get("username"),
             password: aForm.get("password"),
@@ -207,12 +210,21 @@ export async function logIn(aForm){
             }
         }
 
+    try{
         const result = await fetchData(url, cfg);
         messageHandler(result);
 
-         
-        return result.logindata.superuser;
+            const loginDataObj = {
+                superuser: result.logindata.superuser,
+                thumb: result.logindata.thumb,
+                token: result.logindata.token,
+                userid: result.logindata.userid,
+                username: result.logindata.username
+            };
 
+            const loginData = new LoginDataModel(loginDataObj);
+        return loginData;
+      
 
     } catch(error){
         errorHandler(error);
@@ -220,12 +232,62 @@ export async function logIn(aForm){
 }
 
 //----------------------------------------------------------
-// admin control panel
+// Add a new product
 //----------------------------------------------------------
 
-//Returnerer en boolean
-//Gir undefined hvis bruker skriver feil passord
-export async function isSuper(aForm) {
-    const isSuperUser = await logIn(aForm); 
-    return isSuperUser;
+export async function addProduct (aToken, aNewProductForm){
+
+    const url = urlMap.addProductURL + "?key=" + groupKey;
+
+    const adminToken = aToken;
+    
+    const formData = aNewProductForm;
+
+    try{
+        
+    const cfg = {
+        method: "POST",
+        headers: {
+            "authorization": adminToken
+        },
+        body: formData
+    }
+
+        const result = await fetchData(url, cfg);
+
+        messageHandler(result);
+        return result;
+        
+    }catch(error){
+        errorHandler(error);
+    }
+}
+
+//----------------------------------------------------------
+// Delete a product made by admin 
+//----------------------------------------------------------
+
+export async function deleteProduct (aToken, aProductID){
+
+    const url = urlMap.deleteProductURL + "?id=" + aProductID + "key=" + groupKey;
+
+    let adminToken = aToken;
+
+try{
+    const cfg = {
+        method: "DELETE",
+        headers: {
+            "authorization": adminToken
+        }
+    }
+
+    const result = await fetchData(url, cfg);
+
+    messageHandler(result);
+    return result;
+
+}catch(error){
+    errorHandler(error);
+}
+
 }
