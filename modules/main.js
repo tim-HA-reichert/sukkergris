@@ -17,10 +17,13 @@ import * as api from "./api_service.js";
 import { CategoryListView } from "./views/category_list_view.js";
 import { ChocolateListView } from "./views/dummy_list_view.js";
 import { AddDummyFormView } from "./views/add_dummy_form_view.js";
+import { ShoppingCartView } from "./views/shopping_cart_view.js";
 
 const viewContainer = document.getElementById('viewContainer');
 const btnShowCategoriesView = document.getElementById('btnShowCategories');
 const btnShowCreateDummyView = document.getElementById('btnShowCreateDummy');
+
+const btnGoToCart = document.getElementById('btnGoToCart');
 
 const searchBtn = document.getElementById("searchBtn");
 const searchBar = document.getElementById("searchBar");
@@ -28,6 +31,7 @@ const searchBar = document.getElementById("searchBar");
 const categoryListView = new CategoryListView();
 const chocolateListView = new ChocolateListView();
 const addDummyFormView = new AddDummyFormView();
+const shoppingCartView = new ShoppingCartView();
 
 
 //startup----------------------------------------
@@ -58,6 +62,14 @@ btnShowCreateDummyView.addEventListener('click', function(evt) {
     viewContainer.innerHTML = "";
     viewContainer.appendChild(addDummyFormView);
 
+});
+
+//----------------------------------------------
+btnGoToCart.addEventListener('click', function(evt) {
+    const chocolateProductPromise = api.getChocolateByCategory(evt.detail.categoryID);
+    shoppingCartView.refresh(chocolateProductPromise);
+    viewContainer.innerHTML = "";
+    viewContainer.appendChild(shoppingCartView);
 });
 
 //----------------------------------------------
