@@ -30,7 +30,6 @@ export class LoginView extends HTMLElement {
         this.attachShadow({mode: "open"});
         this.shadowRoot.innerHTML = html;
         this.form = this.shadowRoot.getElementById("login-form");
-        this.contentWrapper = this.shadowRoot.getElementById("content-wrapper");
 
         this.form.addEventListener("submit", evt => {
             evt.preventDefault();
@@ -41,31 +40,6 @@ export class LoginView extends HTMLElement {
             this.dispatchEvent(theEvent);
         });
     }
-
-    
-  async refresh(aBool){
-
-        if(aBool){
-            this.contentWrapper.innerHTML = "";
-
-            const theDiv = document.createElement("div");
-            theDiv.innerHTML = `
-            <button>Products</button>
-            <button>Orders</button>
-            <button>Users</button>
-            <button>User comments/reviews</button>
-            `;
-
-            this.contentWrapper.appendChild(theDiv);
-
-        } else {
-            return
-        }
-
-    }
-
-
-
 }
 
 customElements.define("login-view", LoginView);
