@@ -26,11 +26,9 @@ loginView.addEventListener("log-in", function(evt){
     
     logInPromise.then((result) => {
         adminToken = result.token;
-        if(result.superuser){
             viewContainer.innerHTML ="";
             viewContainer.appendChild(adminPanelView)
-            adminPanelView.refresh();
-        } 
+            adminPanelView.refresh();  
     });
 });
 

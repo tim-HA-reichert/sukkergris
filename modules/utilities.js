@@ -9,7 +9,7 @@ export async function fetchData(url, config) {
         if (!response.ok && data) {
             throw new Error("Something went wrong. Check the 'error.cause' object", 
                 { cause: data });
-        }
+        };
 
         return Promise.resolve(data); //returns a resolved promise with data
 
