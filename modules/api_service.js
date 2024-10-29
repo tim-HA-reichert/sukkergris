@@ -240,7 +240,6 @@ export async function addProduct (aToken, aNewProductForm){
     const url = urlMap.addProductURL + "?key=" + groupKey;
 
     const adminToken = aToken;
-    
     const formData = aNewProductForm;
 
     try{

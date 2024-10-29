@@ -9,6 +9,9 @@ export function errorHandler(error) {
         case 403: 
         console.log("Wrong username or password, please try again.");
         break
+        case 500: 
+        console.log("Wrong groupkey")
+        break
     }
 
     // handle errors here, e.g. show a dialog with an easy-to-understand explanation
