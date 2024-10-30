@@ -15,6 +15,7 @@ const addProduct = new AddProductView();
 
 viewContainer.innerHTML = "";
 viewContainer.appendChild(loginView);
+const categoryPromise = api.getCategories();
 
 //For storing the adminToken later
 let adminToken = null;
@@ -36,6 +37,7 @@ loginView.addEventListener("log-in", function(evt){
 //Consider: adding product list for deletion/listing/changing information about a product
 adminPanelView.addEventListener("admin-products", function(evt){
     viewContainer.innerHTML = "";
+    addProduct.refresh(categoryPromise);
     viewContainer.appendChild(addProduct);
 });
 
@@ -45,4 +47,10 @@ addProduct.addEventListener("add-product", function(evt){
         alert("Product has been added");
         //this.form.reset();
     });
+});
+
+addProduct.addEventListener("categoryselect", function(evt){
+    const chocolateCategoryPromise = api.getChocolateByCategory(evt.detail.categoryID);
+
+    addProduct.listChocolates(chocolateCategoryPromise);
 });

@@ -115,7 +115,7 @@ export async function getChocolateDetails(chosenChocolateID) {
                 number_of_ratings: chocoDet.number_of_ratings
                 //fikk hjelp av chatGPT for .push og chosenCat array.
             };
-
+            console.log(chocoDet);
             return new DummyModel(chocoObj);
         };
         //     return chosenCat;
@@ -188,6 +188,9 @@ export function manageOrderModel (aOrderModel){ //klasse som parameter
 export async function getChocolateBySearch(searchValue){
     //Use value from searchbar to filter chocolates. 
     //Add a onclick to searchBtn to trigger this function. 
+
+    //Sjekk API for "search" URL. 
+    //Ser det i "list products"
     const url = urlMap.chosenCategoryURL + "?key=" + groupKey + "&category_id=" + searchValue;   
         try {
             const data = await fetchData(url);
