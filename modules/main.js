@@ -15,8 +15,7 @@
 
 import * as api from "./api_service.js";
 import { CategoryListView } from "./views/category_list_view.js";
-import { ChocolateListView } from "./views/dummy_list_view.js";
-import { AddDummyFormView } from "./views/add_dummy_form_view.js";
+import { ChocolateListView } from "./views/chocolate_list_view.js";
 import { ShoppingCartView } from "./views/shopping_cart_view.js";
 import { DetailedProductView } from "./views/detailed_product_view.js";
 import { OrderModel } from "./models.js";
@@ -33,7 +32,6 @@ const searchBar = document.getElementById("searchBar");
 const categoryListView = new CategoryListView();
 const chocolateListView = new ChocolateListView();
 const detailedProductView = new DetailedProductView();
-const addDummyFormView = new AddDummyFormView();
 const shoppingCartView = new ShoppingCartView();
 
 const orderModel = new OrderModel();
@@ -92,13 +90,6 @@ btnGoToCart.addEventListener('click', function(evt) {
     viewContainer.innerHTML = "";
     viewContainer.appendChild(shoppingCartView);
 });
-
-//----------------------------------------------
-addDummyFormView.addEventListener("add-dummy", function(evt) {    
-
-    api.addDummy(evt.detail)
-});
-
 
 //----------------------------------------------
 searchBtn.addEventListener("click", function(evt){

@@ -127,47 +127,14 @@ export async function getChocolateDetails(chosenChocolateID) {
 }
 
 //----------------------------------------------------------
-// return a dummy-product based on ID
-//----------------------------------------------------------
-export async function getDummyById(id) {
-
-    const url = urlMap.chosenCategoryURL + "?key=" + groupKey + "&id=" + id;
-
-    //more code here...
-}
-
-//----------------------------------------------------------
 // return all dummy-products
 //----------------------------------------------------------
+
 export async function getAllDummies() {
 
     const url = urlMap.chosenCategoryURL + "?key=" + groupKey;
 
     //more code here...
-}
-
-//----------------------------------------------------------
-// add a dummy-product, returns the result
-//----------------------------------------------------------
-export async function addDummy(formDataObj) {
-
-    const url = urlMap.chosenCategoryURL + "?key=" + groupKey;
-
-    console.log(formDataObj.get("name"));
-
-    try {
-
-        const cfg = {
-            method: "POST",
-            body: formDataObj
-        }
-
-        const result = await fetchData(url, cfg);
-        messageHandler(result);
-
-    } catch (error) {
-        errorHandler(error);
-    }
 }
 
 //----------------------------------------------------------
@@ -185,8 +152,7 @@ export function manageOrderModel (aOrderModel){ //klasse som parameter
 //----------------------------------------------------------
 // Search function
 //----------------------------------------------------------
-
-    
+  
 export async function getChocolateBySearch(searchValue){
     //Use value from searchbar to filter chocolates. 
     //Add a onclick to searchBtn to trigger this function. 
@@ -229,9 +195,6 @@ export async function getChocolateBySearch(searchValue){
         }
         
     }
-
-
-
 
 //----------------------------------------------------------
 // admin log-in
