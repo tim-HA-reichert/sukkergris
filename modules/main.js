@@ -62,9 +62,9 @@ chocolateListView.addEventListener('chocolateselect', function (evt) {
     viewContainer.innerHTML = "";
     const detailProductPromise = api.getChocolateDetails(evt.detail.chocoID); //Lager et promise
 
-    detailProductPromise.then((dummyModelClass) => {        //Etter at promiset er ferdig, kjøres koden under
-        detailedProductView.refresh(dummyModelClass);
-        dummyModelClass.showDetailed();
+    detailProductPromise.then((ChocolateModelClass) => {        //Etter at promiset er ferdig, kjøres koden under
+        detailedProductView.refresh(ChocolateModelClass);
+        ChocolateModelClass.showDetailed();
         viewContainer.appendChild(detailedProductView);
     })
 });

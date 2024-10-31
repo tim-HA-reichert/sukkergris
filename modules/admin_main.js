@@ -1,7 +1,7 @@
 import * as api from "./api_service.js";
 import { LoginView } from "./views/admin_views/admin_login_view.js";
 import { AdminPanelView } from "./views/admin_views/admin_panel_view.js";
-import { adminProductsView } from "./views/admin_views/add_product_view.js";
+import { adminProductsView } from "./views/admin_views/admin_product_view.js";
 
 const viewContainer = document.getElementById("viewContainer");
 
@@ -45,12 +45,11 @@ adminPanelView.addEventListener("admin-products", function(evt){
 adminProducts.addEventListener("add-product", function(evt){
     api.adminProducts(adminToken, evt.detail).then(response => {
         alert("Product has been added");
-        //this.form.reset();
+        this.form.reset();
     });
 });
 
 adminProducts.addEventListener("categoryselect", function(evt){
     const chocolateCategoryPromise = api.getChocolateByCategory(evt.detail.categoryID);
-
     adminProducts.listChocolates(chocolateCategoryPromise);
 });

@@ -4,7 +4,7 @@
 
 import { fetchData } from "./utilities.js";
 import { createBasicAuthString } from "./utilities.js";
-import { CategoryModel, DummyModel, LoginDataModel } from "./models.js";
+import { CategoryModel, ChocolateModel, LoginDataModel } from "./models.js";
 import { errorHandler } from "./error_handler.js";
 import { messageHandler } from "./messageHandler.js";
 
@@ -79,7 +79,7 @@ export async function getChocolateByCategory(category) {
                     price: chocoCat.price
                 };
                 //fikk hjelp av chatGPT for .push og chosenCat array. 
-                chosenCat.push(new DummyModel(chocoObj));
+                chosenCat.push(new ChocolateModel(chocoObj));
                 }; 
             }; 
 
@@ -117,7 +117,7 @@ export async function getChocolateDetails(chosenChocolateID) {
                 //fikk hjelp av chatGPT for .push og chosenCat array.
             };
             console.log(chocoDet);
-            return new DummyModel(chocoObj);
+            return new ChocolateModel(chocoObj);
         };
         //     return chosenCat;
 
@@ -181,7 +181,7 @@ export async function getChocolateBySearch(searchValue){
                     thumb: chocoCat.thumb,
                     price: chocoCat.price
                     };
-                chosenCat.push(new DummyModel(chocoObj));
+                chosenCat.push(new ChocolateModel(chocoObj));
                     };
                 };
 
