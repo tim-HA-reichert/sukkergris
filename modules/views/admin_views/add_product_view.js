@@ -33,7 +33,7 @@ const html = `
 
 
 //===================================================
-export class AddProductView extends HTMLElement {    
+export class adminProductsView extends HTMLElement {    
     
     //---------------------------------------
     constructor() {
@@ -111,4 +111,4 @@ export class AddProductView extends HTMLElement {
 
 
 
-customElements.define("add-product-view", AddProductView);
+customElements.define("add-product-view", adminProductsView);

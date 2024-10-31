@@ -1,7 +1,7 @@
 import * as api from "./api_service.js";
 import { LoginView } from "./views/admin_views/admin_login_view.js";
 import { AdminPanelView } from "./views/admin_views/admin_panel_view.js";
-import { AddProductView } from "./views/admin_views/add_product_view.js";
+import { adminProductsView } from "./views/admin_views/add_product_view.js";
 
 const viewContainer = document.getElementById("viewContainer");
 
@@ -9,7 +9,7 @@ const testBtn = document.getElementById("btnShowCategories");
 
 const loginView = new LoginView();
 const adminPanelView = new AdminPanelView();
-const addProduct = new AddProductView();
+const adminProducts = new adminProductsView();
 
 //startup-------------------------------------------
 
@@ -37,20 +37,20 @@ loginView.addEventListener("log-in", function(evt){
 //Consider: adding product list for deletion/listing/changing information about a product
 adminPanelView.addEventListener("admin-products", function(evt){
     viewContainer.innerHTML = "";
-    addProduct.refresh(categoryPromise);
-    viewContainer.appendChild(addProduct);
+    adminProducts.refresh(categoryPromise);
+    viewContainer.appendChild(adminProducts);
 });
 
 /* See "addDummyFormView" from main.js, line 62-65. Transfer logic here. */
-addProduct.addEventListener("add-product", function(evt){
-    api.addProduct(adminToken, evt.detail).then(response => {
+adminProducts.addEventListener("add-product", function(evt){
+    api.adminProducts(adminToken, evt.detail).then(response => {
         alert("Product has been added");
         //this.form.reset();
     });
 });
 
-addProduct.addEventListener("categoryselect", function(evt){
+adminProducts.addEventListener("categoryselect", function(evt){
     const chocolateCategoryPromise = api.getChocolateByCategory(evt.detail.categoryID);
 
-    addProduct.listChocolates(chocolateCategoryPromise);
+    adminProducts.listChocolates(chocolateCategoryPromise);
 });
