@@ -19,6 +19,7 @@ import { ChocolateListView } from "./views/dummy_list_view.js";
 import { AddDummyFormView } from "./views/add_dummy_form_view.js";
 import { ShoppingCartView } from "./views/shopping_cart_view.js";
 import { DetailedProductView } from "./views/detailed_product_view.js";
+import { AddUserView } from "./views/add_user_view.js";
 import { OrderModel } from "./models.js";
 
 const viewContainer = document.getElementById('viewContainer');
@@ -26,6 +27,7 @@ const btnShowCategoriesView = document.getElementById('btnShowCategories');
 const btnShowCreateDummyView = document.getElementById('btnShowCreateDummy');
 
 const btnGoToCart = document.getElementById('btnGoToCart');
+const btnAddUser = document.getElementById('btnAddUser');
 
 const searchBtn = document.getElementById("searchBtn");
 const searchBar = document.getElementById("searchBar");
@@ -35,6 +37,7 @@ const chocolateListView = new ChocolateListView();
 const detailedProductView = new DetailedProductView();
 const addDummyFormView = new AddDummyFormView();
 const shoppingCartView = new ShoppingCartView();
+const addUserView = new AddUserView();
 
 const orderModel = new OrderModel();
 
@@ -70,7 +73,7 @@ chocolateListView.addEventListener('chocolateselect', function (evt) {
         viewContainer.appendChild(detailedProductView);
     })
 });
-//---------------------------------------------- AddEventListener for trykking av addItem knappen
+//---------------------------------------------- Lytter til addItem knapp
 detailedProductView.addEventListener('addItem', function (evt) {    
     orderModel.addItem(evt.detail);
     api.manageOrderModel(orderModel)
@@ -91,6 +94,14 @@ btnGoToCart.addEventListener('click', function(evt) {
     shoppingCartView.refresh(chocolateProductPromise);
     viewContainer.innerHTML = "";
     viewContainer.appendChild(shoppingCartView);
+});
+//---------------------------------------------- Lytter til addUser knapp
+
+btnAddUser.addEventListener('click', function(evt) {
+    // const chocolateProductPromise = api.getChocolateByCategory(evt.detail.categoryID);
+    // shoppingCartView.refresh(chocolateProductPromise);
+    viewContainer.innerHTML = "";
+    viewContainer.appendChild(addUserView);
 });
 
 //----------------------------------------------
