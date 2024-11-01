@@ -22,9 +22,11 @@ const html = `
 
  <hr>
 <div class="content-wrapper">
+    <form id="delete-product-form">
     <input type="text" id="deleteProduct" placeholder="Use ID to delete product">
-    <button id="delete-product">Delete product</button>
-<div> 
+    <input type="submit" value="delete product with ID">
+</form>
+    <div> 
 
 <hr>
     <h2>Find chocolate by category</h2>
@@ -44,6 +46,7 @@ export class adminProductsView extends HTMLElement {
         this.shadowRoot.innerHTML = html;
         this.form = this.shadowRoot.getElementById("addProductForm");
         this.listContainer = this.shadowRoot.getElementById("listContainer");
+        this.deleteForm = this.shadowRoot.getElementById("delete-product-form");
         
         this.form.addEventListener('submit', evt => {
             evt.preventDefault();           
@@ -75,12 +78,20 @@ export class adminProductsView extends HTMLElement {
                 const theEvent = new CustomEvent("categoryselect", {composed: true, bubbles:true, detail: value});
                 this.dispatchEvent(theEvent);
             });
-            
         } 
+
+        this.deleteForm.addEventListener("submit", function(evt){
+            evt.preventDefault();  
+            const formData = new FormData(this.deleteForm);
+
+            const deleteEvent = new CustomEvent("delete-product", {composed: true, bubbles: true, detail: formData});
+            this.dispatchEvent(deleteEvent);
+        });
+
+
     } //end of refresh
 
     async listChocolates(dataPromise){
- 
             this.listContainer.innerHTML = "";
     
             const data = await dataPromise; //wait for the promise to be resolved
@@ -100,15 +111,8 @@ export class adminProductsView extends HTMLElement {
             
         }//End of listChocolates 
     
-    async deleteProduct(productToDelete){
-        
-    } //End of deleteProduct 
     
 } //end of class
-
-
-//Burde vi legge til DELETE product knapp her? 
-
 
 
 customElements.define("add-product-view", adminProductsView);

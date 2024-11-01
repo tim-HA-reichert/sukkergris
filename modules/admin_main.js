@@ -53,3 +53,9 @@ adminProducts.addEventListener("categoryselect", function(evt){
     const chocolateCategoryPromise = api.getChocolateByCategory(evt.detail.categoryID);
     adminProducts.listChocolates(chocolateCategoryPromise);
 });
+
+adminProducts.addEventListener("delete-product", function(evt){
+    evt.preventDefault();
+    console.log("pressed")
+
+})
