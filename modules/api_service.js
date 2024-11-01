@@ -20,6 +20,8 @@ const urlMap = {
     adminLoginURL: "https://sukkergris.onrender.com/users/adminlogin",
     addProductURL: "https://sukkergris.onrender.com/webshop/products",
     deleteProductURL: "https://sukkergris.onrender.com/webshop/products",
+    //
+    AddUserURL: "https://sukkergris.onrender.com/users",
     // add more URL' here...
 }
 
@@ -79,10 +81,10 @@ export async function getChocolateByCategory(category) {
                 };
                 //fikk hjelp av chatGPT for .push og chosenCat array. 
                 chosenCat.push(new DummyModel(chocoObj));
-                }; 
-            }; 
+            };
+        };
 
-            return chosenCat;
+        return chosenCat;
 
     } catch (error) {
         errorHandler(error);
@@ -173,11 +175,11 @@ export async function addDummy(formDataObj) {
 // Manages OrderModel
 //----------------------------------------------------------
 
-export function manageOrderModel (aOrderModel){ //klasse som parameter
+export function manageOrderModel(aOrderModel) { //klasse som parameter
     const classOrderModel = aOrderModel; //Refererer til klassen som er definert i main.js
 
     // classOrderModel.addItem("test") //eksempel på hvordan man kan kjøre en funksjon fra klassen
-    
+
 
 }
 
@@ -185,32 +187,32 @@ export function manageOrderModel (aOrderModel){ //klasse som parameter
 // return chocolates based on search-bar 
 //----------------------------------------------------------
 
-export async function getChocolateBySearch(searchValue){
+export async function getChocolateBySearch(searchValue) {
     //Use value from searchbar to filter chocolates. 
     //Add a onclick to searchBtn to trigger this function. 
-    const url = urlMap.chosenCategoryURL + "?key=" + groupKey + "&category_id=" + searchValue;   
-        try {
-            const data = await fetchData(url);
-        
-            const chosenCat = [];
+    const url = urlMap.chosenCategoryURL + "?key=" + groupKey + "&category_id=" + searchValue;
+    try {
+        const data = await fetchData(url);
 
-            /*
-            Chatgpt hjalp oss med denne. Den returnerer en tom array, funksjonen forventer en 
-            array med innhold. Dette sier tydelig ifra til programmet når det ikke er noen treff eller match.  
-            */
-            if (searchValue.length <= 2) {
-                messageHandler("Please enter more than 2 characters for the search.");
-                return [];
-            };
+        const chosenCat = [];
 
-            //"i" er for case-insenstive
-            const regexSearchTest = new RegExp(searchValue, "i"); 
+        /*
+        Chatgpt hjalp oss med denne. Den returnerer en tom array, funksjonen forventer en 
+        array med innhold. Dette sier tydelig ifra til programmet når det ikke er noen treff eller match.  
+        */
+        if (searchValue.length <= 2) {
+            messageHandler("Please enter more than 2 characters for the search.");
+            return [];
+        };
 
-            for(let chocoCat of data){
-                if(chocoCat.category_name.toLowerCase() === searchValue.toLowerCase() ||
-                regexSearchTest.test(chocoCat.name)        
-                ){               
-                    const chocoObj = {
+        //"i" er for case-insenstive
+        const regexSearchTest = new RegExp(searchValue, "i");
+
+        for (let chocoCat of data) {
+            if (chocoCat.category_name.toLowerCase() === searchValue.toLowerCase() ||
+                regexSearchTest.test(chocoCat.name)
+            ) {
+                const chocoObj = {
                     chocoID: chocoCat.id,
                     chocoName: chocoCat.name,
                     categoryID: chocoCat.category_id,
@@ -218,63 +220,63 @@ export async function getChocolateBySearch(searchValue){
                     details: chocoCat.details,
                     thumb: chocoCat.thumb,
                     price: chocoCat.price
-                    };
+                };
                 chosenCat.push(new DummyModel(chocoObj));
-                    };
-                };
+            };
+        };
 
-                if(chosenCat.length === 0){
-                    messageHandler("Nothing matches your search");
-                };
-                return chosenCat;
-                
-        } catch(error) {
-            errorHandler(error);
-        }
-        
+        if (chosenCat.length === 0) {
+            messageHandler("Nothing matches your search");
+        };
+        return chosenCat;
+
+    } catch (error) {
+        errorHandler(error);
     }
+
+}
 
 //----------------------------------------------------------
 // admin log-in
 //----------------------------------------------------------
 
-export async function logIn(aForm){
+export async function logIn(aForm) {
 
     const url = urlMap.adminLoginURL + "?key=" + groupKey;
 
     //See if you can use loginModel here. Or if loginModel is for new users?
     //OR rather: store login data in LoginDataModel, such as admintoken. 
-        const loginCred = {
-            username: aForm.get("username"),
-            password: aForm.get("password"),
-        }
-    
-       const authString = createBasicAuthString(loginCred.username, loginCred.password);
+    const loginCred = {
+        username: aForm.get("username"),
+        password: aForm.get("password"),
+    }
 
-        const cfg = {
-            method: "POST",
-            headers:{
-                "authorization": authString
-            }
-        }
+    const authString = createBasicAuthString(loginCred.username, loginCred.password);
 
-    try{
+    const cfg = {
+        method: "POST",
+        headers: {
+            "authorization": authString
+        }
+    }
+
+    try {
         const result = await fetchData(url, cfg);
         messageHandler(result);
 
-            const loginDataObj = {
-                superuser: result.logindata.superuser,
-                thumb: result.logindata.thumb,
-                token: result.logindata.token,
-                userid: result.logindata.userid,
-                username: result.logindata.username
-            };
+        const loginDataObj = {
+            superuser: result.logindata.superuser,
+            thumb: result.logindata.thumb,
+            token: result.logindata.token,
+            userid: result.logindata.userid,
+            username: result.logindata.username
+        };
 
-            const loginData = new LoginDataModel(loginDataObj);
+        const loginData = new LoginDataModel(loginDataObj);
         return loginData;
-      
 
-    } catch(error){
+
+    } catch (error) {
         errorHandler(error);
     }
 }
@@ -283,29 +285,29 @@ export async function logIn(aForm){
 // Add a new product
 //----------------------------------------------------------
 
-export async function addProduct (aToken, aNewProductForm){
+export async function addProduct(aToken, aNewProductForm) {
 
     const url = urlMap.addProductURL + "?key=" + groupKey;
 
     const adminToken = aToken;
     const formData = aNewProductForm;
 
-    try{
-        
-    const cfg = {
-        method: "POST",
-        headers: {
-            "authorization": adminToken
-        },
-        body: formData
-    }
+    try {
+
+        const cfg = {
+            method: "POST",
+            headers: {
+                "authorization": adminToken
+            },
+            body: formData
+        }
 
         const result = await fetchData(url, cfg);
 
         messageHandler(result);
         return result;
-        
-    }catch(error){
+
+    } catch (error) {
         errorHandler(error);
     }
 }
@@ -314,27 +316,59 @@ export async function addProduct (aToken, aNewProductForm){
 // Delete a product made by admin 
 //----------------------------------------------------------
 
-export async function deleteProduct (aToken, aProductID){
+export async function deleteProduct(aToken, aProductID) {
 
     const url = urlMap.deleteProductURL + "?id=" + aProductID + "key=" + groupKey;
 
     let adminToken = aToken;
 
-try{
-    const cfg = {
-        method: "DELETE",
-        headers: {
-            "authorization": adminToken
+    try {
+        const cfg = {
+            method: "DELETE",
+            headers: {
+                "authorization": adminToken
+            }
         }
+
+        const result = await fetchData(url, cfg);
+
+        messageHandler(result);
+        return result;
+
+    } catch (error) {
+        errorHandler(error);
     }
 
-    const result = await fetchData(url, cfg);
-
-    messageHandler(result);
-    return result;
-
-}catch(error){
-    errorHandler(error);
 }
 
+//----------------------------------------------------------
+// Adds user
+//----------------------------------------------------------
+
+
+export async function addUser(aForm) {
+    const url = urlMap.AddUserURL + "?key=" + groupKey;
+    const formData = aForm;
+    for (let [key, value] of aForm.entries()) {
+        console.log(`${key}: ${value}`);
+    }
+
+    try {
+
+        const cfg = {
+            method: "POST",
+            body: formData
+        }
+
+        const result = await fetchData(url, cfg);
+        if (result.msg !== "insert user ok") {
+            messageHandler("Something went wrong","Could not create user")
+            throw new Error(result);
+        };
+        messageHandler("Created new user", "User created successfully");
+        return result;
+
+    } catch (error) {
+        errorHandler(error);
+    }
 }

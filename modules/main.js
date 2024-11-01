@@ -23,9 +23,11 @@ import { AddUserView } from "./views/add_user_view.js";
 import { OrderModel } from "./models.js";
 
 const viewContainer = document.getElementById('viewContainer');
+
+export const dialog = document.getElementById("dialog");
+
 const btnShowCategoriesView = document.getElementById('btnShowCategories');
 const btnShowCreateDummyView = document.getElementById('btnShowCreateDummy');
-
 const btnGoToCart = document.getElementById('btnGoToCart');
 const btnAddUser = document.getElementById('btnAddUser');
 
@@ -47,6 +49,7 @@ const categoryPromise = api.getCategories(); //retrieve the categories from the 
 categoryListView.refresh(categoryPromise); //send the promise to the view. The view will wait for the promise to resolve
 viewContainer.innerHTML = "";
 viewContainer.appendChild(categoryListView);
+
 
 //-----------------------------------------------
 categoryListView.addEventListener('categoryselect', function (evt) {    
@@ -95,13 +98,20 @@ btnGoToCart.addEventListener('click', function(evt) {
     viewContainer.innerHTML = "";
     viewContainer.appendChild(shoppingCartView);
 });
-//---------------------------------------------- Lytter til addUser knapp
+//---------------------------------------------- Lytter til Create user knapp
 
 btnAddUser.addEventListener('click', function(evt) {
-    // const chocolateProductPromise = api.getChocolateByCategory(evt.detail.categoryID);
-    // shoppingCartView.refresh(chocolateProductPromise);
     viewContainer.innerHTML = "";
     viewContainer.appendChild(addUserView);
+});
+
+//---------------------------------------------- Lytter til add-user submit
+
+addUserView.addEventListener('add-user', function(evt) {
+    const addUserPromise = api.addUser(evt.detail);    
+    console.log(addUserPromise);
+    // viewContainer.innerHTML = "";
+    // viewContainer.appendChild(addUserView);
 });
 
 //----------------------------------------------

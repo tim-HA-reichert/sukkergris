@@ -2,7 +2,7 @@
 const html = `
     <h2>Create User</h2>
     <div id="listContainer">
-        <form id="login-form" action="">
+        <form id="add-user-form" action="">
         
             <label for="username">Username:</label>
             <input required type="text" id="username" name="username"
@@ -65,30 +65,24 @@ export class AddUserView extends HTMLElement {
 
         this.attachShadow({ mode: "open" });
         this.shadowRoot.innerHTML = html;
-        this.listContainer = this.shadowRoot.getElementById("listContainer");
-    }
+        this.form = this.shadowRoot.getElementById("add-user-form");
 
-    //---------------------------------------
-    async refresh(dataPromise) { // DataPromise er et class object med item.
+        this.form.addEventListener("submit", evt => {
+            evt.preventDefault();
+            
+            const formData = new FormData(this.form);
 
-        const itemObject = await dataPromise; //wait for the promise to be resolved
-        this.listContainer.innerHTML = "";
-        const theDiv = document.createElement("div");
+            // //Legger inn test verdier for alle variabler
+            // formData.forEach((value, key) => {
+            //     formData.set(key, "Test2");
+            // });
+            
+            const theEvent = new CustomEvent("add-user", { composed: true, bubbles: true, detail: formData });
+            this.dispatchEvent(theEvent);
+        });
 
-        theDiv.innerHTML = `
-                <h1>Dette er en test I guess</h1>
-                <h1>${itemObject.chocoName}</h1>
-                <button id="btnAddItem">Buy this item</button>                
-            `;
 
-        this.listContainer.appendChild(theDiv);
-
-        // const btnAddItem = this.shadowRoot.getElementById("btnAddItem");
-
-        // btnAddItem.addEventListener('click', evt => {
-        //     const theEvent = new CustomEvent("addItem", { composed: true, bubbles: true, detail: itemObject });
-        //     this.dispatchEvent(theEvent);
-        // })
+        
     }
 
 } //end of class
