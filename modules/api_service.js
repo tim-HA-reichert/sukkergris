@@ -22,6 +22,8 @@ const urlMap = {
     deleteProductURL: "https://sukkergris.onrender.com/webshop/products",
     //
     AddUserURL: "https://sukkergris.onrender.com/users",
+    userLoginURL: "https://sukkergris.onrender.com/users/login",
+    userImageURL: "https://sukkergris.onrender.com/images/"
     // add more URL' here...
 }
 
@@ -237,12 +239,12 @@ export async function getChocolateBySearch(searchValue) {
 }
 
 //----------------------------------------------------------
-// admin log-in
+// admin and user log-in
 //----------------------------------------------------------
 
-export async function logIn(aForm) {
+export async function logIn(aForm, accountType) {
 
-    const url = urlMap.adminLoginURL + "?key=" + groupKey;
+    const url = urlMap[`${accountType}LoginURL`] + "?key=" + groupKey;
 
     //See if you can use loginModel here. Or if loginModel is for new users?
     //OR rather: store login data in LoginDataModel, such as admintoken. 
@@ -262,23 +264,35 @@ export async function logIn(aForm) {
 
     try {
         const result = await fetchData(url, cfg);
-        messageHandler(result);
+        messageHandler("Login", "User logged in successfully");
 
         const loginDataObj = {
             superuser: result.logindata.superuser,
             thumb: result.logindata.thumb,
             token: result.logindata.token,
             userid: result.logindata.userid,
-            username: result.logindata.username
+            username: result.logindata.username,
+            city: result.logindata.city,
+            country: result.logindata.country,
+            full_name: result.logindata.full_name,
+            street: result.logindata.street,
+            zipcode: result.logindata.zipcode,
         };
-
         const loginData = new LoginDataModel(loginDataObj);
         return loginData;
 
 
     } catch (error) {
         errorHandler(error);
-    }
+    };
+};
+
+//----------------------------------------------------------
+// Gets user profile image
+//----------------------------------------------------------
+export function getUserImage(userModel) {
+    const imageUrl = urlMap.userImageURL + groupKey + "/users/" + userModel.thumb
+    return imageUrl;
 }
 
 //----------------------------------------------------------
@@ -362,7 +376,7 @@ export async function addUser(aForm) {
 
         const result = await fetchData(url, cfg);
         if (result.msg !== "insert user ok") {
-            messageHandler("Something went wrong","Could not create user")
+            messageHandler("Something went wrong", "Could not create user")
             throw new Error(result);
         };
         messageHandler("Created new user", "User created successfully");

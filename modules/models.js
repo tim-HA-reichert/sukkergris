@@ -97,6 +97,11 @@ export class LoginDataModel {
         this.token = data.token;
         this.userid = data.userid;
         this.username = data.username;
+        this.city = data.city;
+        this.country = data.country;
+        this.full_name = data.full_name;
+        this.street = data.street;
+        this.zipcode = data.zipcode;
     }
 
 }
