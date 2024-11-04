@@ -56,6 +56,5 @@ adminProducts.addEventListener("categoryselect", function(evt){
 
 adminProducts.addEventListener("delete-product", function(evt){
     evt.preventDefault();
-    console.log("pressed")
-
+    api.deleteProduct(adminToken, evt.detail);
 })

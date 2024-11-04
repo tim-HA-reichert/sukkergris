@@ -3,7 +3,7 @@ const html = `
     <h2>Add new product</h2>
     <hr>
     <div class="content-wrapper">
-        <form id="addProductForm">
+        <form id="add-product-form">
             <input name="name"     placeholder="Product name"><br>
             <input name="heading"  placeholder="Heading"><br>
             <input name="category_id" placeholder="Category ID (1-7)"><br>
@@ -22,11 +22,9 @@ const html = `
 
  <hr>
 <div class="content-wrapper">
-    <form id="delete-product-form">
-    <input type="text" id="deleteProduct" placeholder="Use ID to delete product">
-    <input type="submit" value="delete product with ID">
-</form>
-    <div> 
+    <input name="delete-product" id="delete-product" type="number" placeholder="Use ID to delete product" required>
+    <button id="deleteButton">Delete product with ID</button>
+<div> 
 
 <hr>
     <h2>Find chocolate by category</h2>
@@ -44,17 +42,32 @@ export class adminProductsView extends HTMLElement {
 
         this.attachShadow({mode: "open"});
         this.shadowRoot.innerHTML = html;
-        this.form = this.shadowRoot.getElementById("addProductForm");
+        this.form = this.shadowRoot.getElementById("add-product-form");
         this.listContainer = this.shadowRoot.getElementById("listContainer");
-        this.deleteForm = this.shadowRoot.getElementById("delete-product-form");
-        
+        this.deleteProductID = this.shadowRoot.getElementById("delete-product");
+        this.deleteButton = this.shadowRoot.getElementById("deleteButton");
+
+
+        //Add a product
         this.form.addEventListener('submit', evt => {
             evt.preventDefault();           
-
             const formData = new FormData(this.form);            
 
-            const theEvent = new CustomEvent("add-product", {composed: true, bubbles:true, detail: formData});
+            const theEvent = new CustomEvent("add-product", 
+                {composed: true, bubbles:true, detail: formData});
+
             this.dispatchEvent(theEvent);
+        });
+
+
+        //Delete a product
+        this.deleteButton.addEventListener("click", evt => {
+            evt.preventDefault();  
+
+            const deleteEvent = new CustomEvent("delete-product", 
+                {composed: true, bubbles: true, detail: this.deleteProductID.value});
+
+            this.dispatchEvent(deleteEvent);
         });
     }
     
@@ -79,16 +92,6 @@ export class adminProductsView extends HTMLElement {
                 this.dispatchEvent(theEvent);
             });
         } 
-
-        this.deleteForm.addEventListener("submit", function(evt){
-            evt.preventDefault();  
-            const formData = new FormData(this.deleteForm);
-
-            const deleteEvent = new CustomEvent("delete-product", {composed: true, bubbles: true, detail: formData});
-            this.dispatchEvent(deleteEvent);
-        });
-
-
     } //end of refresh
 
     async listChocolates(dataPromise){

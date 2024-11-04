@@ -252,6 +252,7 @@ export async function adminProducts (aToken, aNewProductForm){
     const adminToken = aToken;
     const formData = aNewProductForm;
 
+
     try{
         
     const cfg = {
@@ -276,18 +277,18 @@ export async function adminProducts (aToken, aNewProductForm){
 // Delete a product made by admin 
 //----------------------------------------------------------
 
-export async function deleteProduct (aToken, aProductID){
+export async function deleteProduct (aToken, productID){
 
-    const url = urlMap.deleteProductURL + "?id=" + aProductID + "key=" + groupKey;
-
+    const url = urlMap.deleteProductURL + "?id=" + productID + "&key=" + groupKey;
     let adminToken = aToken;
 
 try{
+
     const cfg = {
         method: "DELETE",
         headers: {
             "authorization": adminToken
-        }
+        },        
     }
 
     const result = await fetchData(url, cfg);
