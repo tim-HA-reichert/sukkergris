@@ -15,7 +15,7 @@ const adminProducts = new adminProductsView();
 
 viewContainer.innerHTML = "";
 viewContainer.appendChild(loginView);
-const categoryPromise = api.getCategories();
+let deleteChocolates = api.chocolatesForDeletion();
 
 //For storing the adminToken later
 let adminToken = null;
@@ -33,28 +33,30 @@ loginView.addEventListener("log-in", function(evt){
     });
 });
 
-//enter the "add product" view--------------------------------
-//Consider: adding product list for deletion/listing/changing information about a product
+
 adminPanelView.addEventListener("admin-products", function(evt){
     viewContainer.innerHTML = "";
-    adminProducts.refresh(categoryPromise);
+    adminProducts.chocoDeletionList(deleteChocolates);
     viewContainer.appendChild(adminProducts);
 });
 
-/* See "addDummyFormView" from main.js, line 62-65. Transfer logic here. */
 adminProducts.addEventListener("add-product", function(evt){
     api.adminProducts(adminToken, evt.detail).then(response => {
-        alert("Product has been added");
-        this.form.reset();
-    });
-});
+        deleteChocolates = api.chocolatesForDeletion();
 
-adminProducts.addEventListener("categoryselect", function(evt){
-    const chocolateCategoryPromise = api.getChocolateByCategory(evt.detail.categoryID);
-    adminProducts.listChocolates(chocolateCategoryPromise);
+        adminProducts.chocoDeletionList(deleteChocolates);
+        viewContainer.appendChild(adminProducts);
+
+        this.form.reset();  
+    });
 });
 
 adminProducts.addEventListener("delete-product", function(evt){
     evt.preventDefault();
-    api.deleteProduct(adminToken, evt.detail);
+    api.deleteProduct(adminToken, evt.detail).then(response =>{
+        deleteChocolates = api.chocolatesForDeletion();
+
+        adminProducts.chocoDeletionList(deleteChocolates);
+        viewContainer.appendChild(adminProducts);
+    });
 })

@@ -27,7 +27,7 @@ const html = `
 <div> 
 
 <hr>
-    <h2>Find chocolate by category</h2>
+    <h2>Deletable chocolates</h2>
     <div id="listContainer"></div>
 `;
 
@@ -68,33 +68,12 @@ export class adminProductsView extends HTMLElement {
                 {composed: true, bubbles: true, detail: this.deleteProductID.value});
 
             this.dispatchEvent(deleteEvent);
+
+            this.deleteProductID.value = "";
         });
     }
-    
-    async refresh(dataPromise) {        
-        
-        const data = await dataPromise; //wait for the promise to be resolved
 
-        this.listContainer.innerHTML = "";
-
-        for (let value of data) {
-
-            const theDiv = document.createElement("div");
-            theDiv.innerHTML = `
-                <h3>${value.categoryID} ${value.categoryName}</h3>
-                <hr>
-            `;
-
-            this.listContainer.appendChild(theDiv);
-
-            theDiv.addEventListener('click', evt => {
-                const theEvent = new CustomEvent("categoryselect", {composed: true, bubbles:true, detail: value});
-                this.dispatchEvent(theEvent);
-            });
-        } 
-    } //end of refresh
-
-    async listChocolates(dataPromise){
+    async chocoDeletionList (dataPromise){
             this.listContainer.innerHTML = "";
     
             const data = await dataPromise; //wait for the promise to be resolved
@@ -109,12 +88,9 @@ export class adminProductsView extends HTMLElement {
                     <hr>
                 `;
                 this.listContainer.appendChild(theDiv);
-                console.log(value);
             }
-            
-        }//End of listChocolates 
-    
-    
+        }//End of deleteChoco 
+
 } //end of class
 
 

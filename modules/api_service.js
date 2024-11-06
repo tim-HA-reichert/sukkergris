@@ -89,6 +89,48 @@ export async function getChocolateByCategory(category) {
         errorHandler(error);
     }
 }
+
+//----------------------------------------------------------
+// return details about chosen chocolate
+//----------------------------------------------------------
+
+export async function chocolatesForDeletion(category) {
+    const url = urlMap.chosenCategoryURL + "?key=" + groupKey + "&category_id=" + category;
+    //Category er et tall, som er lik categoryID til eventListener i category_list_view.js
+
+
+    try {
+        const data = await fetchData(url);
+        //data er en liste med sjokolade. Ufiltrert liste. 
+
+        const chocoDeleteList = [];
+
+        for (let chocoCat of data) {
+            if (chocoCat.static === false) {
+                const chocoObj = {
+                    chocoID: chocoCat.id,
+                    chocoName: chocoCat.name,
+                    categoryID: chocoCat.category_id,
+                    description: chocoCat.description,
+                    details: chocoCat.details,
+                    thumb: chocoCat.thumb,
+                    price: chocoCat.price
+                };
+                //fikk hjelp av chatGPT for .push og chosenCat array. 
+                chocoDeleteList.push(new ChocolateModel(chocoObj));
+                }; 
+            }; 
+
+            return chocoDeleteList;
+
+    } catch (error) {
+        errorHandler(error);
+    }
+}
+
+
+
+
 //----------------------------------------------------------
 // return details about chosen chocolate
 //----------------------------------------------------------
