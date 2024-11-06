@@ -21,6 +21,7 @@ const urlMap = {
     adminLoginURL: "https://sukkergris.onrender.com/users/adminlogin",
     adminProductsURL: "https://sukkergris.onrender.com/webshop/products",
     deleteProductURL: "https://sukkergris.onrender.com/webshop/products",
+    changeProductURL: "https://sukkergris.onrender.com/webshop/products"
     // add more URL' here...
 }
 
@@ -94,7 +95,7 @@ export async function getChocolateByCategory(category) {
 // return details about chosen chocolate
 //----------------------------------------------------------
 
-export async function chocolatesForDeletion(category) {
+export async function adjustableChocolateList(category) {
     const url = urlMap.chosenCategoryURL + "?key=" + groupKey + "&category_id=" + category;
     //Category er et tall, som er lik categoryID til eventListener i category_list_view.js
 
@@ -321,25 +322,61 @@ export async function adminProducts (aToken, aNewProductForm){
 
 export async function deleteProduct (aToken, productID){
 
-    const url = urlMap.deleteProductURL + "?id=" + productID + "&key=" + groupKey;
-    let adminToken = aToken;
+        const url = urlMap.deleteProductURL + "?id=" + productID + "&key=" + groupKey;
+        let adminToken = aToken;
 
-try{
+    try{
 
-    const cfg = {
-        method: "DELETE",
-        headers: {
-            "authorization": adminToken
-        },        
+        const cfg = {
+            method: "DELETE",
+            headers: {
+                "authorization": adminToken
+            },        
+        }
+
+        const result = await fetchData(url, cfg);
+
+        messageHandler(result);
+        return result;
+
+    }catch(error){
+        errorHandler(error);
     }
 
-    const result = await fetchData(url, cfg);
-
-    messageHandler(result);
-    return result;
-
-}catch(error){
-    errorHandler(error);
 }
+
+//----------------------------------------------------------
+// Change a product
+//----------------------------------------------------------
+
+export async function changeProduct (adminToken, aForm){
+
+    const url = urlMap.changeProductURL + "?id=" + adminToken + "&key=" + groupKey;
+
+    let formData = aForm;
+
+
+    try{
+
+        const cfg = {
+            method: "PUT",
+            headers: {
+                "authorization": adminToken
+            },
+            body: formData
+        }
+
+
+        const result = await fetchData(url, cfg);
+
+        messageHandler(result);
+        return result;
+
+
+    } catch (error){
+        errorHandler(error);
+    }
+
+
 
 }

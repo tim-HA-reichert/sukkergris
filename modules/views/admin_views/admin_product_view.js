@@ -1,10 +1,8 @@
-
-const html = `    
+const addNewProductHTML = `
     <h2>Add new product</h2>
-    <hr>
     <div class="content-wrapper">
         <form id="add-product-form">
-            <input name="name"     placeholder="Product name"><br>
+            <input name="name"     placeholder="Product name" required><br>
             <input name="heading"  placeholder="Heading"><br>
             <input name="category_id" placeholder="Category ID (1-7)"><br>
             <input name="description" placeholder="Description"><br>
@@ -19,8 +17,13 @@ const html = `
             <input type="submit" value="Add new product">
         </form>
     <div>
+`;
 
- <hr>
+const html = `    
+<button id="change-product-btn">Change info of product</button>
+ ${addNewProductHTML}
+<hr>
+
 <div class="content-wrapper">
     <input name="delete-product" id="delete-product" type="number" placeholder="Use ID to delete product" required>
     <button id="deleteButton">Delete product with ID</button>
@@ -30,6 +33,7 @@ const html = `
     <h2>Deletable chocolates</h2>
     <div id="listContainer"></div>
 `;
+
 
 
 //===================================================
@@ -43,7 +47,11 @@ export class adminProductsView extends HTMLElement {
         this.attachShadow({mode: "open"});
         this.shadowRoot.innerHTML = html;
         this.form = this.shadowRoot.getElementById("add-product-form");
+
         this.listContainer = this.shadowRoot.getElementById("listContainer");
+
+        this.changeProduct = this.shadowRoot.getElementById("change-product-btn");
+
         this.deleteProductID = this.shadowRoot.getElementById("delete-product");
         this.deleteButton = this.shadowRoot.getElementById("deleteButton");
 
@@ -59,7 +67,6 @@ export class adminProductsView extends HTMLElement {
             this.dispatchEvent(theEvent);
         });
 
-
         //Delete a product
         this.deleteButton.addEventListener("click", evt => {
             evt.preventDefault();  
@@ -71,6 +78,18 @@ export class adminProductsView extends HTMLElement {
 
             this.deleteProductID.value = "";
         });
+
+        //Switch to change-product form
+        this.changeProduct.addEventListener("click", evt => {
+            evt.preventDefault();
+
+            const changeProductEvent = new CustomEvent("change-product-form", 
+                {composed: true, bubbles: true, detail: evt})
+
+                this.dispatchEvent(changeProductEvent);
+        });
+
+
     }
 
     async chocoDeletionList (dataPromise){
