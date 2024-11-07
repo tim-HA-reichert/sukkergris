@@ -27,7 +27,7 @@ let adminToken = null;
 //log in as admin-----------------------------------
 loginView.addEventListener("log-in", function(evt){
     //the "log-in" tag in the eventListener sends the username and password to the server
-    const logInPromise = api.logIn(evt.detail);
+    const logInPromise = api.logIn(evt.detail, "admin");
     
     logInPromise.then((result) => {
         adminToken = result.token;
