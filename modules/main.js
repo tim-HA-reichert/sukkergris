@@ -21,14 +21,14 @@ import { ShoppingCartView } from "./views/shopping_cart_view.js";
 import { DetailedProductView } from "./views/detailed_product_view.js";
 import { OrderModel } from "./models.js";
 
-const viewContainer = document.getElementById('viewContainer');
-const btnShowCategoriesView = document.getElementById('btnShowCategories');
-const btnShowCreateDummyView = document.getElementById('btnShowCreateDummy');
-
+const searchBar = document.getElementById("searchBar");
+const searchBtn = document.getElementById("searchBtn");
 const btnGoToCart = document.getElementById('btnGoToCart');
 
-const searchBtn = document.getElementById("searchBtn");
-const searchBar = document.getElementById("searchBar");
+const btnShowCategoriesView = document.getElementById('btnShowCategories');
+const btnShowCreateDummyView = document.getElementById('btnShowCreateDummy');
+const viewContainer = document.getElementById('viewContainer');
+const btnAddToCart = document.getElementById('btnAddToCart');
 
 const categoryListView = new CategoryListView();
 const chocolateListView = new ChocolateListView();
@@ -87,8 +87,7 @@ btnShowCreateDummyView.addEventListener('click', function(evt) {
 //----------------------------------------------
 
 btnGoToCart.addEventListener('click', function(evt) {
-    const chocolateProductPromise = api.getChocolateByCategory(evt.detail.categoryID);
-    shoppingCartView.refresh(chocolateProductPromise);
+    shoppingCartView.refresh(orderModel);
     viewContainer.innerHTML = "";
     viewContainer.appendChild(shoppingCartView);
 });
@@ -98,7 +97,6 @@ addDummyFormView.addEventListener("add-dummy", function(evt) {
 
     api.addDummy(evt.detail)
 });
-
 
 //----------------------------------------------
 searchBtn.addEventListener("click", function(evt){
