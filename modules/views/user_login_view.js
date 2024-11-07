@@ -1,14 +1,14 @@
 const html = `
-<h2> Administration log in </h2>
+<h2> User login </h2>
 
     <div id="content-wrapper">
         <form id="login-form" action="">
             <label for="username">Username:</label>
-            <input type="text" id="username" name="username"
+            <input required type="text" id="username" name="username"
                 placeholder="Enter your Username">
             <br>
             <label for="password">Password</label>
-            <input type="password" id="password" name="password"
+            <input required type="password" id="password" name="password"
                 placeholder="Enter your Password">
 
             <div class="button-wrapper">

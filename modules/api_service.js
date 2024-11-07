@@ -244,7 +244,7 @@ export async function getChocolateBySearch(searchValue) {
 
 export async function logIn(aForm, accountType) {
 
-    const url = urlMap[`${accountType}LoginURL`] + "?key=" + groupKey;
+    const url = urlMap[`${accountType}LoginURL`] + "?key=" + groupKey; //Får tilgang til URLMapping, bruker brackets ([]) for å få tilgang til objekt element.
 
     //See if you can use loginModel here. Or if loginModel is for new users?
     //OR rather: store login data in LoginDataModel, such as admintoken. 
@@ -363,9 +363,9 @@ export async function deleteProduct(aToken, aProductID) {
 export async function addUser(aForm) {
     const url = urlMap.AddUserURL + "?key=" + groupKey;
     const formData = aForm;
-    for (let [key, value] of aForm.entries()) {
-        console.log(`${key}: ${value}`);
-    }
+    // for (let [key, value] of aForm.entries()) {
+    //     console.log(`${key}: ${value}`); //logger input som er sendt til server
+    // }
 
     try {
 

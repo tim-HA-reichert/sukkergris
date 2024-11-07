@@ -71,11 +71,6 @@ export class AddUserView extends HTMLElement {
             evt.preventDefault();
             
             const formData = new FormData(this.form);
-
-            // //Legger inn test verdier for alle variabler
-            // formData.forEach((value, key) => {
-            //     formData.set(key, "Test2");
-            // });
             
             const theEvent = new CustomEvent("add-user", { composed: true, bubbles: true, detail: formData });
             this.dispatchEvent(theEvent);

@@ -19,7 +19,4 @@ export function messageHandler(title, msg) {
     btnDialogClose.addEventListener("click", () => {
         dialog.close()
     })
-    
-    // Skal få en dialog handler her som skal behandle input, skal vise dialog herfra og vise den.
-
 }

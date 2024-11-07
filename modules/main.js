@@ -122,14 +122,11 @@ btnAddUser.addEventListener('click', function(evt) {
 
 addUserView.addEventListener('add-user', function(evt) {
     const addUserPromise = api.addUser(evt.detail);
-    // viewContainer.innerHTML = "";
-    // viewContainer.appendChild(addUserView);
 });
 
 //---------------------------------------------- Lytter til login knapp
 
 btnLogin.addEventListener('click', function(evt) {
-    // const addUserPromise = api.addUser(evt.detail);    
     viewContainer.innerHTML = "";
     viewContainer.appendChild(loginView);
 });
@@ -144,10 +141,6 @@ loginView.addEventListener('log-in', function(evt) {
         startUp();
         userPicture.style.visibility = "visible";
     });
-
-    
-    // viewContainer.innerHTML = "";
-    // viewContainer.appendChild(loginView);
 });
 
 //----------------------------------------------
