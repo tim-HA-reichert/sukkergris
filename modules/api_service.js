@@ -320,10 +320,9 @@ export async function adminProducts (aToken, aNewProductForm){
 // Delete a product made by admin 
 //----------------------------------------------------------
 
-export async function deleteProduct (aToken, productID){
+export async function deleteProduct (adminToken, productID){
 
         const url = urlMap.deleteProductURL + "?id=" + productID + "&key=" + groupKey;
-        let adminToken = aToken;
 
     try{
 

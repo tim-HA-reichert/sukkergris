@@ -85,11 +85,8 @@ export class adminProductsView extends HTMLElement {
 
             const changeProductEvent = new CustomEvent("change-product-form", 
                 {composed: true, bubbles: true, detail: evt})
-
                 this.dispatchEvent(changeProductEvent);
         });
-
-
     }
 
     async chocoDeletionList (dataPromise){

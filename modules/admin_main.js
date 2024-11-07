@@ -76,9 +76,9 @@ adminProducts.addEventListener("delete-product", function(evt){
 
 
 adminProducts.addEventListener("change-product-form", function(evt){
-viewContainer.innerHTML = "";
-changeProductInfo.changeableChoco(adjustableChocolateList);
-viewContainer.appendChild(changeProductInfo);
+    viewContainer.innerHTML = "";
+    changeProductInfo.changeableChoco(adjustableChocolateList);
+    viewContainer.appendChild(changeProductInfo);
 });
 
 
