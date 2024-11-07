@@ -27,13 +27,12 @@ const viewContainer = document.getElementById('viewContainer');
 
 const btnShowCategoriesView = document.getElementById('btnShowCategories');
 const btnShowCreateDummyView = document.getElementById('btnShowCreateDummy');
+const searchBar = document.getElementById("searchBar");
+const searchBtn = document.getElementById("searchBtn");
 const btnGoToCart = document.getElementById('btnGoToCart');
 const btnAddUser = document.getElementById('btnAddUser');
-const btnLogin = document.getElementById("btnLogin")
-const userPicture = document.getElementById("userPicture")
-
-const searchBtn = document.getElementById("searchBtn");
-const searchBar = document.getElementById("searchBar");
+const btnLogin = document.getElementById("btnLogin");
+const userPicture = document.getElementById("userPicture");
 
 const categoryListView = new CategoryListView();
 const chocolateListView = new ChocolateListView();
@@ -102,8 +101,7 @@ btnShowCreateDummyView.addEventListener('click', function(evt) {
 //----------------------------------------------
 
 btnGoToCart.addEventListener('click', function(evt) {
-    const chocolateProductPromise = api.getChocolateByCategory(evt.detail.categoryID);
-    shoppingCartView.refresh(chocolateProductPromise);
+    shoppingCartView.refresh(orderModel);
     viewContainer.innerHTML = "";
     viewContainer.appendChild(shoppingCartView);
 });

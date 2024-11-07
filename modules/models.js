@@ -62,7 +62,7 @@ export class OrderModel {
 
     //----------------------------------------
     constructor() {
-        this.cart = [];
+        this.cartArray = [];
     }
 
     //----------------------------------------
@@ -72,7 +72,11 @@ export class OrderModel {
     }
 
     addItem(item) {
-        this.cart.push(item)
+        this.cartArray.push(item);
+    }
+
+    emptyCart () {
+        this.cartArray = [];
     }
 }
 
