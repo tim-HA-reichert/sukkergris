@@ -2,7 +2,7 @@
 //-------------------------------------------------------------
 export function errorHandler(error) {
 
-    switch(error.cause.http_code){
+/*     switch(error.cause.http_code){
         case 400: 
         console.log("Please check your input.");
         break
@@ -12,11 +12,11 @@ export function errorHandler(error) {
         case 500: 
         console.log("Wrong groupkey")
         break
-    }
+    } */
 
     // handle errors here, e.g. show a dialog with an easy-to-understand explanation
     // based on the error type/code.
 
-    console.log(error.cause);
-
+    //console.log(error.cause);
+    console.log(error);
 }

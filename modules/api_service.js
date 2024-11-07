@@ -4,7 +4,7 @@
 
 import { fetchData } from "./utilities.js";
 import { createBasicAuthString } from "./utilities.js";
-import { CategoryModel, DummyModel, LoginDataModel } from "./models.js";
+import { CategoryModel, ChocolateModel, LoginDataModel } from "./models.js";
 import { errorHandler } from "./error_handler.js";
 import { messageHandler } from "./messageHandler.js";
 
@@ -16,10 +16,12 @@ const urlMap = {
     categoryURL: "https://sukkergris.onrender.com/webshop/categories",
     chosenCategoryURL: "https://sukkergris.onrender.com/webshop/products",
     chosenProductURL: "https://sukkergris.onrender.com/webshop/products",
+    searchProductURL: "https://sukkergris.onrender.com/webshop/products",
     //Admin URL's
     adminLoginURL: "https://sukkergris.onrender.com/users/adminlogin",
-    addProductURL: "https://sukkergris.onrender.com/webshop/products",
+    adminProductsURL: "https://sukkergris.onrender.com/webshop/products",
     deleteProductURL: "https://sukkergris.onrender.com/webshop/products",
+    changeProductURL: "https://sukkergris.onrender.com/webshop/products"
     // add more URL' here...
 }
 
@@ -78,7 +80,7 @@ export async function getChocolateByCategory(category) {
                     price: chocoCat.price
                 };
                 //fikk hjelp av chatGPT for .push og chosenCat array. 
-                chosenCat.push(new DummyModel(chocoObj));
+                chosenCat.push(new ChocolateModel(chocoObj));
                 }; 
             }; 
 
@@ -88,6 +90,48 @@ export async function getChocolateByCategory(category) {
         errorHandler(error);
     }
 }
+
+//----------------------------------------------------------
+// return details about chosen chocolate
+//----------------------------------------------------------
+
+export async function adjustableChocolateList(category) {
+    const url = urlMap.chosenCategoryURL + "?key=" + groupKey + "&category_id=" + category;
+    //Category er et tall, som er lik categoryID til eventListener i category_list_view.js
+
+
+    try {
+        const data = await fetchData(url);
+        //data er en liste med sjokolade. Ufiltrert liste. 
+
+        const chocoDeleteList = [];
+
+        for (let chocoCat of data) {
+            if (chocoCat.static === false) {
+                const chocoObj = {
+                    chocoID: chocoCat.id,
+                    chocoName: chocoCat.name,
+                    categoryID: chocoCat.category_id,
+                    description: chocoCat.description,
+                    details: chocoCat.details,
+                    thumb: chocoCat.thumb,
+                    price: chocoCat.price
+                };
+                //fikk hjelp av chatGPT for .push og chosenCat array. 
+                chocoDeleteList.push(new ChocolateModel(chocoObj));
+                }; 
+            }; 
+
+            return chocoDeleteList;
+
+    } catch (error) {
+        errorHandler(error);
+    }
+}
+
+
+
+
 //----------------------------------------------------------
 // return details about chosen chocolate
 //----------------------------------------------------------
@@ -115,8 +159,8 @@ export async function getChocolateDetails(chosenChocolateID) {
                 number_of_ratings: chocoDet.number_of_ratings
                 //fikk hjelp av chatGPT for .push og chosenCat array.
             };
-
-            return new DummyModel(chocoObj);
+            console.log(chocoDet);
+            return new ChocolateModel(chocoObj);
         };
         //     return chosenCat;
 
@@ -126,47 +170,14 @@ export async function getChocolateDetails(chosenChocolateID) {
 }
 
 //----------------------------------------------------------
-// return a dummy-product based on ID
-//----------------------------------------------------------
-export async function getDummyById(id) {
-
-    const url = urlMap.chosenCategoryURL + "?key=" + groupKey + "&id=" + id;
-
-    //more code here...
-}
-
-//----------------------------------------------------------
 // return all dummy-products
 //----------------------------------------------------------
+
 export async function getAllDummies() {
 
     const url = urlMap.chosenCategoryURL + "?key=" + groupKey;
 
     //more code here...
-}
-
-//----------------------------------------------------------
-// add a dummy-product, returns the result
-//----------------------------------------------------------
-export async function addDummy(formDataObj) {
-
-    const url = urlMap.chosenCategoryURL + "?key=" + groupKey;
-
-    console.log(formDataObj.get("name"));
-
-    try {
-
-        const cfg = {
-            method: "POST",
-            body: formDataObj
-        }
-
-        const result = await fetchData(url, cfg);
-        messageHandler(result);
-
-    } catch (error) {
-        errorHandler(error);
-    }
 }
 
 //----------------------------------------------------------
@@ -182,34 +193,28 @@ export function manageOrderModel (aOrderModel){ //klasse som parameter
 }
 
 //----------------------------------------------------------
-// return chocolates based on search-bar 
+// Search function
 //----------------------------------------------------------
-
+  
 export async function getChocolateBySearch(searchValue){
     //Use value from searchbar to filter chocolates. 
     //Add a onclick to searchBtn to trigger this function. 
-    const url = urlMap.chosenCategoryURL + "?key=" + groupKey + "&category_id=" + searchValue;   
+
+    const url = urlMap.chosenCategoryURL + "?search=" + searchValue + "&key=" + groupKey;   
         try {
             const data = await fetchData(url);
         
             const chosenCat = [];
 
-            /*
-            Chatgpt hjalp oss med denne. Den returnerer en tom array, funksjonen forventer en 
-            array med innhold. Dette sier tydelig ifra til programmet når det ikke er noen treff eller match.  
-            */
-            if (searchValue.length <= 2) {
-                messageHandler("Please enter more than 2 characters for the search.");
-                return [];
-            };
-
-            //"i" er for case-insenstive
+            //"i" for removing case-sensitivty. 
+            //new RegExp is a javaScript function that creates a regular expression from parameter. 
+            //Allows us to use .test, which tests searchValue against a chosen object. 
             const regexSearchTest = new RegExp(searchValue, "i"); 
 
+
             for(let chocoCat of data){
-                if(chocoCat.category_name.toLowerCase() === searchValue.toLowerCase() ||
-                regexSearchTest.test(chocoCat.name)        
-                ){               
+                regexSearchTest.test(chocoCat.name)  
+                    {               
                     const chocoObj = {
                     chocoID: chocoCat.id,
                     chocoName: chocoCat.name,
@@ -219,12 +224,12 @@ export async function getChocolateBySearch(searchValue){
                     thumb: chocoCat.thumb,
                     price: chocoCat.price
                     };
-                chosenCat.push(new DummyModel(chocoObj));
+                chosenCat.push(new ChocolateModel(chocoObj));
                     };
                 };
 
                 if(chosenCat.length === 0){
-                    messageHandler("Nothing matches your search");
+                    messageHandler("Nothing matches your search, please try again.");
                 };
                 return chosenCat;
                 
@@ -283,12 +288,13 @@ export async function logIn(aForm){
 // Add a new product
 //----------------------------------------------------------
 
-export async function addProduct (aToken, aNewProductForm){
+export async function adminProducts (aToken, aNewProductForm){
 
-    const url = urlMap.addProductURL + "?key=" + groupKey;
+    const url = urlMap.adminProductsURL + "?key=" + groupKey;
 
     const adminToken = aToken;
     const formData = aNewProductForm;
+
 
     try{
         
@@ -314,27 +320,62 @@ export async function addProduct (aToken, aNewProductForm){
 // Delete a product made by admin 
 //----------------------------------------------------------
 
-export async function deleteProduct (aToken, aProductID){
+export async function deleteProduct (adminToken, productID){
 
-    const url = urlMap.deleteProductURL + "?id=" + aProductID + "key=" + groupKey;
+        const url = urlMap.deleteProductURL + "?id=" + productID + "&key=" + groupKey;
 
-    let adminToken = aToken;
+    try{
 
-try{
-    const cfg = {
-        method: "DELETE",
-        headers: {
-            "authorization": adminToken
+        const cfg = {
+            method: "DELETE",
+            headers: {
+                "authorization": adminToken
+            },        
         }
+
+        const result = await fetchData(url, cfg);
+
+        messageHandler(result);
+        return result;
+
+    }catch(error){
+        errorHandler(error);
     }
 
-    const result = await fetchData(url, cfg);
-
-    messageHandler(result);
-    return result;
-
-}catch(error){
-    errorHandler(error);
 }
+
+//----------------------------------------------------------
+// Change a product
+//----------------------------------------------------------
+
+export async function changeProduct (adminToken, aForm){
+
+    const url = urlMap.changeProductURL + "?id=" + adminToken + "&key=" + groupKey;
+
+    let formData = aForm;
+
+
+    try{
+
+        const cfg = {
+            method: "PUT",
+            headers: {
+                "authorization": adminToken
+            },
+            body: formData
+        }
+
+
+        const result = await fetchData(url, cfg);
+
+        messageHandler(result);
+        return result;
+
+
+    } catch (error){
+        errorHandler(error);
+    }
+
+
 
 }

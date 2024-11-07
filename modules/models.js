@@ -17,7 +17,7 @@ export class CategoryModel {
 }
 
 //=====================================================
-export class DummyModel {
+export class ChocolateModel {
 
     //----------------------------------------
     constructor(dummyObject) {
