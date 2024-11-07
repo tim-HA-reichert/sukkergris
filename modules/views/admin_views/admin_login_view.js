@@ -21,7 +21,7 @@ const html = `
 `;
 
 
-export class LoginView extends HTMLElement {
+export class AdminLoginView extends HTMLElement {
     //---------------------------------------
     constructor(){
         
@@ -42,4 +42,4 @@ export class LoginView extends HTMLElement {
     }
 }
 
-customElements.define("login-view", LoginView);
+customElements.define("login-view", AdminLoginView);

@@ -23,9 +23,7 @@ import { LoginView } from "./views/user_login_view.js";
 
 import { OrderModel } from "./models.js";
 
-const viewContainer = document.getElementById('viewContainer');
-
-export const dialog = document.getElementById("dialog");            
+const viewContainer = document.getElementById('viewContainer');            
 
 const btnShowCategoriesView = document.getElementById('btnShowCategories');
 const btnShowCreateDummyView = document.getElementById('btnShowCreateDummy');
@@ -58,7 +56,7 @@ function startUp () {
     viewContainer.innerHTML = "";
     viewContainer.appendChild(categoryListView);
     
-    // userPicture.src = userModel.thumb || (userPicture.style.visibility = "hidden")
+     //userPicture.src = userModel.thumb || (userPicture.style.visibility = "hidden")
 }
 
 

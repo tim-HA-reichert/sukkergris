@@ -1,5 +1,5 @@
 import * as api from "./api_service.js";
-import { LoginView } from "./views/admin_views/admin_login_view.js";
+import { AdminLoginView } from "./views/admin_views/admin_login_view.js";
 import { AdminPanelView } from "./views/admin_views/admin_panel_view.js";
 import { adminProductsView } from "./views/admin_views/admin_product_view.js";
 import { changeProductView } from "./views/admin_views/admin_product_change_view.js";
@@ -9,7 +9,7 @@ const viewContainer = document.getElementById("viewContainer");
 
 const homeBtn = document.getElementById("back-to-admin-start");
 
-const loginView = new LoginView();
+const adminLoginView = new AdminLoginView();
 const adminPanelView = new AdminPanelView();
 const adminProducts = new adminProductsView();
 
@@ -18,17 +18,16 @@ const changeProductInfo = new changeProductView();
 //startup-------------------------------------------
 
 viewContainer.innerHTML = "";
-viewContainer.appendChild(loginView);
+viewContainer.appendChild(adminLoginView);
 let adjustableChocolateList = api.adjustableChocolateList();
 
 //For storing the adminToken later
 let adminToken = null;
 
 //log in as admin-----------------------------------
-loginView.addEventListener("log-in", function(evt){
+adminLoginView.addEventListener("log-in", function(evt){
     //the "log-in" tag in the eventListener sends the username and password to the server
     const logInPromise = api.logIn(evt.detail, "admin");
-    
     logInPromise.then((result) => {
         adminToken = result.token;
             viewContainer.innerHTML ="";
@@ -43,7 +42,6 @@ homeBtn.addEventListener("click", function(evt){
     viewContainer.innerHTML ="";
     viewContainer.appendChild(adminPanelView)
     adminPanelView.refresh();  
-
 });
 
 

@@ -1,4 +1,3 @@
-
 const html = `
     <h2>The Products</h2>
     <div id="listContainer"></div>

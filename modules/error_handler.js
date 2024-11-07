@@ -1,41 +1,32 @@
-import { dialog } from './main.js';
+import { MessageView } from "./views/message_view.js";
 
 //-------------------------------------------------------------
-export function errorHandler(error) {
+const messageDialog = new MessageView();
+document.body.appendChild(messageDialog);
 
-    let errorMessage = ""
+export function errorHandler(error) {
+    let errorMessage = "";
     
-    switch(error.cause.http_code){
+    switch (error.cause.http_code) {
         case 400:
-        errorMessage = "Please check your input."
-        break
+            errorMessage = "Please check your input.";
+            break;
         case 403: 
-        errorMessage = "Wrong username or password, please try again."
-        break
+            errorMessage = "Wrong username or password, please try again.";
+            break;
         case 500: 
-        errorMessage = "Wrong groupkey"
-        break
+            errorMessage = "Wrong groupkey";
+            break;
         default:        
-        errorMessage = error.cause.msg
-    }   
+            errorMessage = error.cause.msg;
+    }
     
     let html = `
-    <h1>Error occurred</h1>
-    <p>${errorMessage}</p>
-    <button id="btnDialogClose">Ok</button>
-    `    
+        <h1>Error occurred</h1>
+        <p>${errorMessage}</p>
+    `;
+    
+    messageDialog.typeOfMessage(html);
 
-    dialog.innerHTML = html;
-    const btnDialogClose = document.getElementById("btnDialogClose")
-    dialog.showModal();
-    
-    btnDialogClose.addEventListener("click", () => {
-        dialog.close()
-    })
-    
-    // handle errors here, e.g. show a dialog with an easy-to-understand explanation
-    // based on the error type/code.
-    
     console.log(error.cause);
-    
 }

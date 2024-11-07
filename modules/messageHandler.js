@@ -1,4 +1,8 @@
-import { dialog } from './main.js';
+//import { dialog } from './main.js';
+import { MessageView } from "./views/message_view.js";
+
+const messageDialog = new MessageView();
+document.body.appendChild(messageDialog);
 
 //-------------------------------------------------------------
 export function messageHandler(title, msg) {
@@ -8,15 +12,6 @@ export function messageHandler(title, msg) {
     let html = `
         <h1> ${title}</h1>
         <p>${msg}</p>
-        <button id="btnDialogClose">Ok</button>
     `
-
-    dialog.innerHTML = html;
-
-    const btnDialogClose = document.getElementById("btnDialogClose")
-    dialog.showModal();
-
-    btnDialogClose.addEventListener("click", () => {
-        dialog.close()
-    })
+    messageDialog.typeOfMessage(html);
 }
