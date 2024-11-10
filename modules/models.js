@@ -129,6 +129,21 @@ export class NewProductModel{
          this.thumb = newProduct.thumb;
          this.price = newProduct.price;        
      }
+}
 
 
+//===========================================
+//New recipe model
+//===========================================
+
+export class NewRecipeModel{
+
+    constructor(newRecipeObject){
+        this.update(newRecipeObject);
+    }
+
+    update(newRecipe){
+        this.title = newRecipe.title;
+        this.recipeText = newRecipe.recipeText
+    }
 }

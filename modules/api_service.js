@@ -22,10 +22,14 @@ const urlMap = {
     adminProductsURL: "https://sukkergris.onrender.com/webshop/products",
     deleteProductURL: "https://sukkergris.onrender.com/webshop/products",
     changeProductURL: "https://sukkergris.onrender.com/webshop/products",
-    //
+    //User URL's
     AddUserURL: "https://sukkergris.onrender.com/users",
     userLoginURL: "https://sukkergris.onrender.com/users/login",
-    userImageURL: "https://sukkergris.onrender.com/images/"
+    userImageURL: "https://sukkergris.onrender.com/images/",
+    //Message URL's
+    messageURL: "https://sukkergris.onrender.com/msgboard/messages",
+    
+    
     // add more URL' here...
 }
 
@@ -203,8 +207,9 @@ export function manageOrderModel(aOrderModel) { //klasse som parameter
 export async function getChocolateBySearch(searchValue){
     //Use value from searchbar to filter chocolates. 
     //Add a onclick to searchBtn to trigger this function. 
+    let searchFor = searchValue.get("searchBar");
 
-    const url = urlMap.chosenCategoryURL + "?search=" + searchValue + "&key=" + groupKey;   
+    const url = urlMap.chosenCategoryURL + "?search=" + searchFor + "&key=" + groupKey;   
         try {
             const data = await fetchData(url);
         
@@ -213,7 +218,7 @@ export async function getChocolateBySearch(searchValue){
             //"i" for removing case-sensitivty. 
             //new RegExp is a javaScript function that creates a regular expression from parameter. 
             //Allows us to use .test, which tests searchValue against a chosen object. 
-            const regexSearchTest = new RegExp(searchValue, "i"); 
+            const regexSearchTest = new RegExp(searchFor, "i"); 
 
 
             for(let chocoCat of data){
@@ -339,7 +344,7 @@ export async function adminProducts (aToken, aNewProductForm){
 
 export async function deleteProduct (adminToken, productID){
 
-        const url = urlMap.deleteProductURL + "?id=" + productID + "&key=" + groupKey;
+    const url = urlMap.deleteProductURL + "?id=" + productID + "&key=" + groupKey;
 
     try{
 
@@ -392,7 +397,92 @@ export async function changeProduct (adminToken, aForm){
     } catch (error){
         errorHandler(error);
     }
+}
 
+//-----------------------------------------------
+// Add a message
+//-----------------------------------------------
+
+//chosenThread, if supplied, removes the effect of "postAll" and "ifAsc"
+export async function listRecipes(aToken, postAll, ifAsc, chosenThread){
+
+    if(!chosenThread){
+        const url = urlMap.messageURL + "?key=" + groupKey + "&all=" + postAll + "&asc=" + ifAsc;
+    } else {
+        const url = urlMap.messageURL + "?key=" + groupKey + "&thread=" + chosenThread; 
+    }
+
+    try{
+
+        const cfg = {
+            method: "GET",
+            headers: {
+                "authorization": aToken
+            }
+        }
+
+
+        const result = await fetchData(url, cfg);
+
+        messageHandler(result);
+        return result;
+
+    } catch (error){
+        errorHandler(error);
+    }
+}
+
+
+//-----------------------------------------------
+// Add a message
+//-----------------------------------------------
+
+
+//If no thread is provided, a new thread with a integer that comes naturally after the last integer is created. 
+export async function addRecipes(aToken, recipeForm){
+
+    const url = urlMap.messageURL + "?key=" + groupKey + "&thread=";
+
+        const data = {
+            recipeHeading: recipeForm.get("recipe-title"),
+            messageText: recipeForm.get("recipe-text"),
+        }
+
+
+        console.log(data);
+
+        const cfg = {
+            method: "POST",
+            headers: {
+                "authorization": aToken,
+                "content-type": "application/json",
+            },
+            body: JSON.stringify({
+                heading: data.recipeHeading,
+                message_text: data.messageText
+            })
+        }
+
+        try{
+
+        const result = await fetchData(url, cfg);
+        messageHandler("Recipe", "Added new recipe!");
+            console.log(result);
+
+//I don't think this object is working, but we can insert new recipes, at least. 
+            const recipeObj = {
+                recipeHeading: result.heading,
+                recipeText: result.recipeText,
+            }
+            const newRecipe = new NewRecipeModel(recipeObj);
+            console.log(newRecipe);
+
+        return newRecipe;
+
+    } catch (error){
+        errorHandler(error);
+    }
 
 
 }
+

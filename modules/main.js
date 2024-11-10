@@ -20,19 +20,16 @@ import { ShoppingCartView } from "./views/shopping_cart_view.js";
 import { DetailedProductView } from "./views/detailed_product_view.js";
 import { AddUserView } from "./views/add_user_view.js";
 import { LoginView } from "./views/user_login_view.js";
+import { NavigationView } from "./views/navigation_view.js";
+import { CreateNewRecipeView } from "./views/create_recipe_view.js";
+
 
 import { OrderModel } from "./models.js";
 
 const viewContainer = document.getElementById('viewContainer');            
+const userContainer = document.getElementById("user-container");
 
 const btnShowCategoriesView = document.getElementById('btnShowCategories');
-const btnShowCreateDummyView = document.getElementById('btnShowCreateDummy');
-const searchBar = document.getElementById("searchBar");
-const searchBtn = document.getElementById("searchBtn");
-const btnGoToCart = document.getElementById('btnGoToCart');
-const btnAddUser = document.getElementById('btnAddUser');
-const btnLogin = document.getElementById("btnLogin");
-const userPicture = document.getElementById("userPicture");
 
 const categoryListView = new CategoryListView();
 const chocolateListView = new ChocolateListView();
@@ -40,6 +37,11 @@ const detailedProductView = new DetailedProductView();
 const shoppingCartView = new ShoppingCartView();
 const addUserView = new AddUserView();
 const loginView = new LoginView();
+//Attach content based on if user is logged in
+const navButtons = new NavigationView();
+
+const newRecipeView = new CreateNewRecipeView();
+
 
 const orderModel = new OrderModel();
 let userModel = null;
@@ -49,15 +51,16 @@ let userModel = null;
 startUp();
 
 function startUp () {
-    userPicture.style.visibility = "hidden"
+    
     const categoryPromise = api.getCategories(); //retrieve the categories from the service layer as a promise
     categoryListView.refresh(categoryPromise); //send the promise to the view. The view will wait for the promise to resolve
+    
     viewContainer.innerHTML = "";
     viewContainer.appendChild(categoryListView);
-    
-     //userPicture.src = userModel.thumb || (userPicture.style.visibility = "hidden")
-}
 
+    navButtons.isUserLogged(userModel)
+    userContainer.appendChild(navButtons);
+}
 
 //-----------------------------------------------
 categoryListView.addEventListener('categoryselect', function (evt) {    
@@ -92,22 +95,15 @@ detailedProductView.addEventListener('addItem', function (evt) {
 });
 
 //----------------------------------------------
-btnShowCreateDummyView.addEventListener('click', function(evt) {
-    viewContainer.innerHTML = "";
-    viewContainer.appendChild(addDummyFormView);
 
-});
-
-//----------------------------------------------
-
-btnGoToCart.addEventListener('click', function(evt) {
+navButtons.addEventListener('go-to-cart', function(evt) {
     shoppingCartView.refresh(orderModel);
     viewContainer.innerHTML = "";
     viewContainer.appendChild(shoppingCartView);
 });
 //---------------------------------------------- Lytter til Create User knapp
 
-btnAddUser.addEventListener('click', function(evt) {
+navButtons.addEventListener('add-new-user', function(evt) {
     viewContainer.innerHTML = "";
     viewContainer.appendChild(addUserView);
 });
@@ -120,7 +116,7 @@ addUserView.addEventListener('add-user', function(evt) {
 
 //---------------------------------------------- Lytter til login knapp
 
-btnLogin.addEventListener('click', function(evt) {
+navButtons.addEventListener('log-in', function(evt) {
     viewContainer.innerHTML = "";
     viewContainer.appendChild(loginView);
 });
@@ -131,27 +127,37 @@ loginView.addEventListener('log-in', function(evt) {
     
     addUserPromise.then((aUserModel) => {        //Etter at promiset er ferdig, kjøres koden under
         userModel = aUserModel;
-        userPicture.src = api.getUserImage(userModel);
         startUp();
-        userPicture.style.visibility = "visible";
+
+        navButtons.isUserLogged(userModel);
+        navButtons.activeUser(api.getUserImage(userModel));
     });
 });
 
 //----------------------------------------------
-searchBtn.addEventListener("click", function(evt){
+navButtons.addEventListener("search-for-products", function(evt){
     evt.preventDefault();
-    const searchValue = searchBar.value;
+    viewContainer.innerHTML = "";
+    const searchValue = evt.detail;
     const searchBarPromise = api.getChocolateBySearch(searchValue);
     chocolateListView.refresh(searchBarPromise);
-    viewContainer.innerHTML = "";
     viewContainer.appendChild(chocolateListView);
 });
 
+//----------------------------------------------
+navButtons.addEventListener("go-to-recipes", e => {
+    console.log("rrrrrecipes");
+    //Insert recipe list view. 
+});
 
+//----------------------------------------------
+navButtons.addEventListener("create-recipe", e => {
+    viewContainer.innerHTML = "";
+    viewContainer.appendChild(newRecipeView);
+});
 
-
-
-
-
-
+newRecipeView.addEventListener("submit-new-recipe", e => {
+    api.addRecipes(userModel.token, e.detail);
+});
+//--------------------------------------------
 
