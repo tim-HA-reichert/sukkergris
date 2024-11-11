@@ -5,11 +5,11 @@ const html = `
 <div id="threadContainer"> 
 
     <form id="new-thread-form" action="">
-        <label for="recipe-title">Topic Title: </label>
+        <label for="thread-title">Topic Title: </label>
         <input type="text" id="thread-title" name="thread-title"
             placeholder="Give your topic a name!">
 
-        <label for="recipe-text">Topic Description: </label>
+        <label for="thread-text">Topic Description: </label>
         <input type="text" id="thread-text" name="thread-text"
             placeholder="Describe the topic.">
 

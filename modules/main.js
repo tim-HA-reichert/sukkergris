@@ -24,7 +24,7 @@ import { LoginView } from "./views/user_login_view.js";
 import { NavigationView } from "./views/navigation_view.js";
 import { CreateNewThreadView } from "./views/create_thread_view.js";
 import { ThreadListView } from "./views/list_thread_view.js";
-
+import { IndividualThreadView } from "./views/individual_forum_thread_view.js"; 
 
 import { OrderModel } from "./models.js";
 
@@ -44,6 +44,7 @@ const navButtons = new NavigationView();
 
 const newThreadView = new CreateNewThreadView();
 const allThreadsView = new ThreadListView();
+const singleThreadView = new IndividualThreadView();
 
 const orderModel = new OrderModel();
 let userModel = null;
@@ -129,6 +130,7 @@ loginView.addEventListener('log-in', function(evt) {
     
     addUserPromise.then((aUserModel) => {        //Etter at promiset er ferdig, kjøres koden under
         userModel = aUserModel;
+        console.log(userModel);
         startUp();
 
         navButtons.isUserLogged(userModel);
@@ -150,19 +152,20 @@ navButtons.addEventListener("search-for-products", function(evt){
 //RECIPES
 //---------------------------------------------
 navButtons.addEventListener("go-to-threads", e => {
-
-   api.listThreads(userModel.token, true, true).then((threadList) =>{
     viewContainer.innerHTML = "";
+   api.listThreads(userModel.token, true, true).then((threadList) =>{
     allThreadsView.loadThreads(threadList);
     viewContainer.appendChild(allThreadsView);
+        console.log(threadList);
    });
 });
 
-allThreadsView.addEventListener("wish-to-comment", e => {
-    console.log("i wanna comment papi")
-//Add new view for seperate recipes. 
+allThreadsView.addEventListener("wish-to-inspect", e => {
+    viewContainer.innerHTML ="";
+    console.log(e.detail);
+    singleThreadView.refresh(e.detail);
+    viewContainer.appendChild(singleThreadView);
 //Add comment functionality on said view (form for comments?)
-//Perhaps rework listThreads function to be more readable. 
 });
 
 
@@ -174,7 +177,6 @@ navButtons.addEventListener("create-thread", e => {
 
 newThreadView.addEventListener("submit-new-thread", e => {
     api.addThreads(userModel.token, e.detail);
-    this.form.reset(); 
 });
 //--------------------------------------------
 

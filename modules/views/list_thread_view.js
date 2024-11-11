@@ -1,6 +1,7 @@
 const html = `
 <h2>User forum</h2>
-<div id="threadContainer"> </div>
+    <div id="threadContainer"> </div> 
+<hr>
 `;
 
 
@@ -15,16 +16,16 @@ export class ThreadListView extends HTMLElement {
         this.attachShadow({mode: "open"});
         this.shadowRoot.innerHTML = html;
         this.threadContainer = this.shadowRoot.getElementById("threadContainer");
+
     }
 
     //---------------------------------------
     async loadThreads(threadData){
         this.threadContainer.innerHTML = "";
-
+        
         const threads = await threadData;
         
         for(let value of threads){
-
             const theDiv = document.createElement("div");
             theDiv.innerHTML = `
                 <h3>${value.heading}</h3>
@@ -32,15 +33,17 @@ export class ThreadListView extends HTMLElement {
                 <hr>
             `;
 
-            this.threadContainer.appendChild(theDiv);
+            //Need to add: delete-button. 
+            //Consider adding delete-button to user-homepage instead. 
 
             theDiv.addEventListener('click', evt => {
-                const wishToCommentEvent = new CustomEvent("wish-to-comment", {composed: true, bubbles:true, detail: value});
-                console.log(wishToCommentEvent);
-                this.dispatchEvent(wishToCommentEvent);
+                const wishToInspectEvent = new CustomEvent("wish-to-inspect", {composed: true, bubbles:true, detail: value});
+                console.log(wishToInspectEvent);
+                this.dispatchEvent(wishToInspectEvent);
             });
-        }
 
+            this.threadContainer.appendChild(theDiv);
+        }
     }
 }
 

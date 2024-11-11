@@ -436,13 +436,13 @@ export async function listThreads(aToken, postAll, ifAsc){
 
 
 //If no thread is provided, a new thread with a integer that comes naturally after the last integer is created. 
-export async function addThreads(aToken, recipeForm){
+export async function addThreads(aToken, threadForm){
 
     const url = urlMap.messageURL + "?key=" + groupKey + "&thread=";
 
         const data = {
-            threadHeading: recipeForm.get("recipe-title"),
-            messageText: recipeForm.get("recipe-text"),
+            threadHeading: threadForm.get("thread-title"),
+            messageText: threadForm.get("thread-text"),
         }
 
         const cfg = {
