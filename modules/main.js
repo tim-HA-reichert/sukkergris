@@ -22,8 +22,8 @@ import { AddUserView } from "./views/add_user_view.js";
 import { LoginView } from "./views/user_login_view.js";
 
 import { NavigationView } from "./views/navigation_view.js";
-import { CreateNewRecipeView } from "./views/create_recipe_view.js";
-import { RecipeListView } from "./views/list_recipe_view.js";
+import { CreateNewThreadView } from "./views/create_thread_view.js";
+import { ThreadListView } from "./views/list_thread_view.js";
 
 
 import { OrderModel } from "./models.js";
@@ -42,8 +42,8 @@ const loginView = new LoginView();
 //Attach content based on if user is logged in
 const navButtons = new NavigationView();
 
-const newRecipeView = new CreateNewRecipeView();
-const allRecipesView = new RecipeListView();
+const newThreadView = new CreateNewThreadView();
+const allThreadsView = new ThreadListView();
 
 const orderModel = new OrderModel();
 let userModel = null;
@@ -149,27 +149,30 @@ navButtons.addEventListener("search-for-products", function(evt){
 //----------------------------------------------
 //RECIPES
 //---------------------------------------------
-navButtons.addEventListener("go-to-recipes", e => {
+navButtons.addEventListener("go-to-threads", e => {
 
-   api.listRecipes(userModel.token, true, true, null).then((recipeList) =>{
+   api.listThreads(userModel.token, true, true).then((threadList) =>{
     viewContainer.innerHTML = "";
-    allRecipesView.loadRecipes(recipeList);
-    viewContainer.appendChild(allRecipesView);
+    allThreadsView.loadThreads(threadList);
+    viewContainer.appendChild(allThreadsView);
    });
 });
 
-allRecipesView.addEventListener("wish-to-comment", e => {
+allThreadsView.addEventListener("wish-to-comment", e => {
     console.log("i wanna comment papi")
+//Add new view for seperate recipes. 
+//Add comment functionality on said view (form for comments?)
+//Perhaps rework listThreads function to be more readable. 
 });
 
 
 //----------------------------------------------
-navButtons.addEventListener("create-recipe", e => {
+navButtons.addEventListener("create-thread", e => {
     viewContainer.innerHTML = "";
-    viewContainer.appendChild(newRecipeView);
+    viewContainer.appendChild(newThreadView);
 });
 
-newRecipeView.addEventListener("submit-new-recipe", e => {
+newThreadView.addEventListener("submit-new-thread", e => {
     api.addRecipes(userModel.token, e.detail);
 });
 //--------------------------------------------

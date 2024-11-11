@@ -4,7 +4,7 @@
 
 import { fetchData } from "./utilities.js";
 import { createBasicAuthString } from "./utilities.js";
-import { CategoryModel, ChocolateModel, LoginDataModel, UserRecipeModel } from "./models.js";
+import { CategoryModel, ChocolateModel, LoginDataModel, UserThreadModel } from "./models.js";
 import { errorHandler } from "./error_handler.js";
 import { messageHandler } from "./messageHandler.js";
 
@@ -178,17 +178,6 @@ export async function getChocolateDetails(chosenChocolateID) {
 }
 
 //----------------------------------------------------------
-// return all dummy-products
-//----------------------------------------------------------
-
-export async function getAllDummies() {
-
-    const url = urlMap.chosenCategoryURL + "?key=" + groupKey;
-
-    //more code here...
-}
-
-//----------------------------------------------------------
 // Manages OrderModel
 //----------------------------------------------------------
 
@@ -196,8 +185,6 @@ export function manageOrderModel(aOrderModel) { //klasse som parameter
     const classOrderModel = aOrderModel; //Refererer til klassen som er definert i main.js
 
     // classOrderModel.addItem("test") //eksempel på hvordan man kan kjøre en funksjon fra klassen
-
-
 }
 
 //----------------------------------------------------------
@@ -405,7 +392,7 @@ export async function changeProduct (adminToken, aForm){
 
 //Need to make seperate function for specific threads. 
 //Vi kan prøve å sammenfatte de, men jeg tror det blir messy. 
-export async function listRecipes(aToken, postAll, ifAsc){
+export async function listThreads(aToken, postAll, ifAsc){
 
     const url = urlMap.messageURL + "?key=" + groupKey + "&all=" + postAll + "&asc=" + ifAsc;
     
@@ -418,14 +405,13 @@ export async function listRecipes(aToken, postAll, ifAsc){
             }
         }
 
-
         const result = await fetchData(url, cfg);
 
-        const recipeList = [];
+        const threadList = [];
 
         for(let value of result){
 
-            const recipeObj = {
+            const threadObj = {
                 date: value.date,
                 heading: value.heading, 
                 id: value.id,
@@ -433,10 +419,10 @@ export async function listRecipes(aToken, postAll, ifAsc){
                 thread: value.thread,
                 user_id: value.user_id
             }
-           recipeList.push(new UserRecipeModel(recipeObj));
+           threadList.push(new UserThreadModel(threadObj));
         }
 
-        return recipeList;
+        return threadList;
 
     } catch (error){
         errorHandler(error);
@@ -459,9 +445,6 @@ export async function addRecipes(aToken, recipeForm){
             messageText: recipeForm.get("recipe-text"),
         }
 
-
-        console.log(data);
-
         const cfg = {
             method: "POST",
             headers: {
@@ -478,15 +461,6 @@ export async function addRecipes(aToken, recipeForm){
 
         const result = await fetchData(url, cfg);
         messageHandler("Recipe", "Added new recipe!");
-            console.log(result);
-
-//I don't think this object is working, but we can insert new recipes, at least. 
-/*             const recipeObj = {
-                recipeHeading: result.heading,
-                recipeText: result.recipeText,
-            }
-            const newRecipe = new NewRecipeModel(recipeObj);
-            console.log(newRecipe); */
 
         return result;
 

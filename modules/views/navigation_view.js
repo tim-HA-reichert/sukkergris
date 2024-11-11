@@ -10,8 +10,9 @@ const html = `
 
     <template id="logged-in">
         <img id="userPicture" src="" alt="users profile picture">
-        <button id="user-made-recipes">Read our user-made recipes!</button>
-        <button id="create-recipe-btn">Create a new recipe!</button>
+
+        <button id="user-forum-button">Read our user forum!</button>
+        <button id="create-thread-btn">Create a new topic!</button>
     </template>
 
     <template id="not-logged-in">
@@ -87,18 +88,18 @@ export class NavigationView extends HTMLElement {
     //seperate method for logged in users: 
     activeUser(pictureData){
         this.userPicture = this.shadowRoot.getElementById("userPicture");
-        this.createRecipe = this.shadowRoot.getElementById("create-recipe-btn");
-        this.userRecipes = this.shadowRoot.getElementById("user-made-recipes");
+        this.createThread = this.shadowRoot.getElementById("create-thread-btn");
+        this.userForum = this.shadowRoot.getElementById("user-forum-button");
         
         this.userPicture.src = pictureData;
     
-        this.createRecipe.addEventListener("click", (e) => {
-                const createRecipeEvent = new CustomEvent("create-recipe", {composed: true, bubbles:true, detail: e});
+        this.createThread.addEventListener("click", (e) => {
+                const createRecipeEvent = new CustomEvent("create-thread", {composed: true, bubbles:true, detail: e});
                 this.dispatchEvent(createRecipeEvent);
         });
 
-        this.userRecipes.addEventListener("click", (e)=>{
-            const recipeEvent = new CustomEvent("go-to-recipes", {composed: true, bubbles:true, detail: e});
+        this.userForum.addEventListener("click", (e)=>{
+            const recipeEvent = new CustomEvent("go-to-threads", {composed: true, bubbles:true, detail: e});
             this.dispatchEvent(recipeEvent);
         });
     }

@@ -4,7 +4,7 @@ let html = `
         <button id="btnDialogClose">Ok</button>
     </dialog>
 `
-export class MessageView extends HTMLElement {
+export class SystemMessageView extends HTMLElement {
 
     constructor(){
 
@@ -27,4 +27,4 @@ export class MessageView extends HTMLElement {
         this.dialog.showModal();
     }  
 }
-customElements.define("message-view", MessageView);
+customElements.define("system-message-view", SystemMessageView);

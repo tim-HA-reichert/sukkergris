@@ -1,11 +1,11 @@
 const html = `
-<h2>Recipes created by our users</h2>
-<div id="recipeContainer"> </div>
+<h2>User forum</h2>
+<div id="threadContainer"> </div>
 `;
 
 
 //===================================================
-export class RecipeListView extends HTMLElement {
+export class ThreadListView extends HTMLElement {
 
     //---------------------------------------
     constructor(){
@@ -14,16 +14,16 @@ export class RecipeListView extends HTMLElement {
         
         this.attachShadow({mode: "open"});
         this.shadowRoot.innerHTML = html;
-        this.recipeContainer = this.shadowRoot.getElementById("recipeContainer");
+        this.threadContainer = this.shadowRoot.getElementById("threadContainer");
     }
 
     //---------------------------------------
-    async loadRecipes(recipePromise){
-        this.recipeContainer.innerHTML = "";
+    async loadThreads(threadData){
+        this.threadContainer.innerHTML = "";
 
-        const recipes = await recipePromise;
+        const threads = await threadData;
         
-        for(let value of recipes){
+        for(let value of threads){
 
             const theDiv = document.createElement("div");
             theDiv.innerHTML = `
@@ -32,20 +32,19 @@ export class RecipeListView extends HTMLElement {
                 <hr>
             `;
 
-            this.recipeContainer.appendChild(theDiv);
+            this.threadContainer.appendChild(theDiv);
 
             theDiv.addEventListener('click', evt => {
                 const wishToCommentEvent = new CustomEvent("wish-to-comment", {composed: true, bubbles:true, detail: value});
+                console.log(wishToCommentEvent);
                 this.dispatchEvent(wishToCommentEvent);
             });
-
-
         }
 
     }
 }
 
-customElements.define("recipe-list-view", RecipeListView);
+customElements.define("thread-list-view", ThreadListView);
 
 
 

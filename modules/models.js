@@ -136,10 +136,10 @@ export class NewProductModel{
 //New recipe model
 //===========================================
 
-export class UserRecipeModel{
+export class UserThreadModel{
 
-    constructor(newRecipeObject){
-        this.update(newRecipeObject);
+    constructor(newthreadObject){
+        this.update(newthreadObject);
     }
 //----------------------------------------
     update(newRecipe){
