@@ -436,12 +436,12 @@ export async function listThreads(aToken, postAll, ifAsc){
 
 
 //If no thread is provided, a new thread with a integer that comes naturally after the last integer is created. 
-export async function addRecipes(aToken, recipeForm){
+export async function addThreads(aToken, recipeForm){
 
     const url = urlMap.messageURL + "?key=" + groupKey + "&thread=";
 
         const data = {
-            recipeHeading: recipeForm.get("recipe-title"),
+            threadHeading: recipeForm.get("recipe-title"),
             messageText: recipeForm.get("recipe-text"),
         }
 
@@ -452,7 +452,7 @@ export async function addRecipes(aToken, recipeForm){
                 "content-type": "application/json",
             },
             body: JSON.stringify({
-                heading: data.recipeHeading,
+                heading: data.threadHeading,
                 message_text: data.messageText
             })
         }
@@ -460,7 +460,7 @@ export async function addRecipes(aToken, recipeForm){
         try{
 
         const result = await fetchData(url, cfg);
-        messageHandler("Recipe", "Added new recipe!");
+        messageHandler("Forum", "Added new topic of discussion!");
 
         return result;
 

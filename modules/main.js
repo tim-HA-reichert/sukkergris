@@ -173,7 +173,8 @@ navButtons.addEventListener("create-thread", e => {
 });
 
 newThreadView.addEventListener("submit-new-thread", e => {
-    api.addRecipes(userModel.token, e.detail);
+    api.addThreads(userModel.token, e.detail);
+    this.form.reset(); 
 });
 //--------------------------------------------
 
