@@ -1,19 +1,16 @@
 const html = `
-
         <form id="search-form" action="">
         <input type="text" placeholder="Search.." name="searchBar" id="searchBar">
             <button type="submit" id="searchBtn">Search</button>
         </form>
-
         <button id="btnGoToCart">Go to shopping cart</button>
-        <button id="user-made-recipes">Read our user-made recipes!</button>
-
-        <div id="user-container"></div>
+    
 
 <div id="navigationContainer"></div>
 
     <template id="logged-in">
         <img id="userPicture" src="" alt="users profile picture">
+        <button id="user-made-recipes">Read our user-made recipes!</button>
         <button id="create-recipe-btn">Create a new recipe!</button>
     </template>
 
@@ -43,7 +40,7 @@ export class NavigationView extends HTMLElement {
 
         this.searchForm = this.shadowRoot.getElementById("search-form");
         this.btnGoToCart = this.shadowRoot.getElementById('btnGoToCart');
-        this.userRecipes = this.shadowRoot.getElementById("user-made-recipes");
+       
 
         this.searchForm.addEventListener("submit", (e) =>{
             e.preventDefault();
@@ -53,10 +50,7 @@ export class NavigationView extends HTMLElement {
             this.dispatchEvent(searchEvent);
         });
 
-        this.userRecipes.addEventListener("click", (e)=>{
-            const recipeEvent = new CustomEvent("go-to-recipes", {composed: true, bubbles:true, detail: e});
-            this.dispatchEvent(recipeEvent);
-        });
+
 
         this.btnGoToCart.addEventListener("click", (e) =>{
             const cartEvent = new CustomEvent("go-to-cart", {composed: true, bubbles:true, detail: e});
@@ -67,10 +61,13 @@ export class NavigationView extends HTMLElement {
     isUserLogged(aUser) {
         this.navigationContainer.innerHTML = "";
 
+        //Choose what to render
+        //"aUser" is provided in main.js
         let template =  aUser ? this.loggedIn : this.notLoggedIn;
             const clone = template.content.cloneNode(true);
             this.navigationContainer.appendChild(clone);
         
+        //If not logged in, do this: 
         if(!aUser){
             this.btnLogin = this.shadowRoot.getElementById("btnLogin");
             this.btnAddUser = this.shadowRoot.getElementById("btnAddUser");
@@ -87,9 +84,11 @@ export class NavigationView extends HTMLElement {
         } 
     }
 
+    //seperate method for logged in users: 
     activeUser(pictureData){
         this.userPicture = this.shadowRoot.getElementById("userPicture");
         this.createRecipe = this.shadowRoot.getElementById("create-recipe-btn");
+        this.userRecipes = this.shadowRoot.getElementById("user-made-recipes");
         
         this.userPicture.src = pictureData;
     
@@ -98,6 +97,10 @@ export class NavigationView extends HTMLElement {
                 this.dispatchEvent(createRecipeEvent);
         });
 
+        this.userRecipes.addEventListener("click", (e)=>{
+            const recipeEvent = new CustomEvent("go-to-recipes", {composed: true, bubbles:true, detail: e});
+            this.dispatchEvent(recipeEvent);
+        });
     }
 } //end of class
 

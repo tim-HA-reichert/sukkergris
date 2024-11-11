@@ -20,8 +20,10 @@ import { ShoppingCartView } from "./views/shopping_cart_view.js";
 import { DetailedProductView } from "./views/detailed_product_view.js";
 import { AddUserView } from "./views/add_user_view.js";
 import { LoginView } from "./views/user_login_view.js";
+
 import { NavigationView } from "./views/navigation_view.js";
 import { CreateNewRecipeView } from "./views/create_recipe_view.js";
+import { RecipeListView } from "./views/list_recipe_view.js";
 
 
 import { OrderModel } from "./models.js";
@@ -41,7 +43,7 @@ const loginView = new LoginView();
 const navButtons = new NavigationView();
 
 const newRecipeView = new CreateNewRecipeView();
-
+const allRecipesView = new RecipeListView();
 
 const orderModel = new OrderModel();
 let userModel = null;
@@ -145,10 +147,21 @@ navButtons.addEventListener("search-for-products", function(evt){
 });
 
 //----------------------------------------------
+//RECIPES
+//---------------------------------------------
 navButtons.addEventListener("go-to-recipes", e => {
-    console.log("rrrrrecipes");
-    //Insert recipe list view. 
+
+   api.listRecipes(userModel.token, true, true, null).then((recipeList) =>{
+    viewContainer.innerHTML = "";
+    allRecipesView.loadRecipes(recipeList);
+    viewContainer.appendChild(allRecipesView);
+   });
 });
+
+allRecipesView.addEventListener("wish-to-comment", e => {
+    console.log("i wanna comment papi")
+});
+
 
 //----------------------------------------------
 navButtons.addEventListener("create-recipe", e => {

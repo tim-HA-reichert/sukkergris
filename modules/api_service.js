@@ -4,7 +4,7 @@
 
 import { fetchData } from "./utilities.js";
 import { createBasicAuthString } from "./utilities.js";
-import { CategoryModel, ChocolateModel, LoginDataModel } from "./models.js";
+import { CategoryModel, ChocolateModel, LoginDataModel, UserRecipeModel } from "./models.js";
 import { errorHandler } from "./error_handler.js";
 import { messageHandler } from "./messageHandler.js";
 
@@ -406,14 +406,15 @@ export async function changeProduct (adminToken, aForm){
 //chosenThread, if supplied, removes the effect of "postAll" and "ifAsc"
 export async function listRecipes(aToken, postAll, ifAsc, chosenThread){
 
+    let url;
+
     if(!chosenThread){
-        const url = urlMap.messageURL + "?key=" + groupKey + "&all=" + postAll + "&asc=" + ifAsc;
+        url = urlMap.messageURL + "?key=" + groupKey + "&all=" + postAll + "&asc=" + ifAsc;
     } else {
-        const url = urlMap.messageURL + "?key=" + groupKey + "&thread=" + chosenThread; 
+        url = urlMap.messageURL + "?key=" + groupKey + "&thread=" + chosenThread; 
     }
 
     try{
-
         const cfg = {
             method: "GET",
             headers: {
@@ -424,8 +425,22 @@ export async function listRecipes(aToken, postAll, ifAsc, chosenThread){
 
         const result = await fetchData(url, cfg);
 
-        messageHandler(result);
-        return result;
+        const recipeList = [];
+
+        for(let value of result){
+
+            const recipeObj = {
+                date: value.date,
+                heading: value.heading, 
+                id: value.id,
+                message: value.message,
+                thread: value.thread,
+                user_id: value.user_id
+            }
+           recipeList.push(new UserRecipeModel(recipeObj));
+        }
+
+        return recipeList;
 
     } catch (error){
         errorHandler(error);
@@ -470,14 +485,14 @@ export async function addRecipes(aToken, recipeForm){
             console.log(result);
 
 //I don't think this object is working, but we can insert new recipes, at least. 
-            const recipeObj = {
+/*             const recipeObj = {
                 recipeHeading: result.heading,
                 recipeText: result.recipeText,
             }
             const newRecipe = new NewRecipeModel(recipeObj);
-            console.log(newRecipe);
+            console.log(newRecipe); */
 
-        return newRecipe;
+        return result;
 
     } catch (error){
         errorHandler(error);

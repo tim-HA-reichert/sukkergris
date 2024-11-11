@@ -136,14 +136,19 @@ export class NewProductModel{
 //New recipe model
 //===========================================
 
-export class NewRecipeModel{
+export class UserRecipeModel{
 
     constructor(newRecipeObject){
         this.update(newRecipeObject);
     }
-
+//----------------------------------------
     update(newRecipe){
-        this.title = newRecipe.title;
-        this.recipeText = newRecipe.recipeText
+        this.date = newRecipe.date;
+        this.heading = newRecipe.heading;
+        this.id = newRecipe.id;
+        this.message = newRecipe.message;
+        this.start_of_thread = newRecipe.start_of_thread;
+        this.thread = newRecipe.thread;
+        this.user_id = newRecipe.user_id;
     }
 }
