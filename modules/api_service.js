@@ -403,16 +403,12 @@ export async function changeProduct (adminToken, aForm){
 // Add a message
 //-----------------------------------------------
 
-//chosenThread, if supplied, removes the effect of "postAll" and "ifAsc"
-export async function listRecipes(aToken, postAll, ifAsc, chosenThread){
+//Need to make seperate function for specific threads. 
+//Vi kan prøve å sammenfatte de, men jeg tror det blir messy. 
+export async function listRecipes(aToken, postAll, ifAsc){
 
-    let url;
-
-    if(!chosenThread){
-        url = urlMap.messageURL + "?key=" + groupKey + "&all=" + postAll + "&asc=" + ifAsc;
-    } else {
-        url = urlMap.messageURL + "?key=" + groupKey + "&thread=" + chosenThread; 
-    }
+    const url = urlMap.messageURL + "?key=" + groupKey + "&all=" + postAll + "&asc=" + ifAsc;
+    
 
     try{
         const cfg = {
