@@ -39,6 +39,7 @@ const detailedProductView = new DetailedProductView();
 const shoppingCartView = new ShoppingCartView();
 const addUserView = new AddUserView();
 const loginView = new LoginView();
+
 //Attach content based on if user is logged in
 const navButtons = new NavigationView();
 
@@ -116,7 +117,7 @@ navButtons.addEventListener('add-new-user', function(evt) {
 //---------------------------------------------- Lytter til add-user submit
 
 addUserView.addEventListener('add-user', function(evt) {
-    const addUserPromise = api.addUser(evt.detail);
+    api.addUser(evt.detail);
 });
 
 //---------------------------------------------- Lytter til login knapp
@@ -175,9 +176,7 @@ allThreadsView.addEventListener("wish-to-inspect", e => {
 singleThreadView.addEventListener("submit-comment", e => {
 
     api.addThreadComment(userModel.token, threadInfo.thread, userModel.username, e.detail);
-        console.log(userModel.username);
-
-    const commentContent = api.listComments(userModel.token, threadInfo.thread, userModel.username);
+    const commentContent = api.listComments(userModel.token, threadInfo.thread);
 
     singleThreadView.comment(commentContent).then((result)=>{
             viewContainer.appendChild(singleThreadView);
@@ -198,5 +197,3 @@ navButtons.addEventListener("create-thread", e => {
 newThreadView.addEventListener("submit-new-thread", e => {
     api.addThreads(userModel.token, e.detail);
 });
-//--------------------------------------------
-

@@ -29,6 +29,7 @@ export class ThreadListView extends HTMLElement {
             theDiv.innerHTML = `
                 <h3>${value.heading}</h3>
                 <p>${value.message}</p>
+                <p>Posted: ${value.date}</p>
                 <hr>
             `;
             

@@ -4,7 +4,8 @@
 
 import { fetchData } from "./utilities.js";
 import { createBasicAuthString } from "./utilities.js";
-import { CategoryModel, ChocolateModel, LoginDataModel, UserThreadModel, UserCommentModel } from "./models.js";
+import { CategoryModel, ChocolateModel, LoginDataModel, 
+    UserThreadModel, UserCommentModel, userModel } from "./models.js";
 import { errorHandler } from "./error_handler.js";
 import { messageHandler } from "./messageHandler.js";
 
@@ -24,12 +25,12 @@ const urlMap = {
     changeProductURL: "https://sukkergris.onrender.com/webshop/products",
     //User URL's
     AddUserURL: "https://sukkergris.onrender.com/users",
+    listAllUsersURL: "https://sukkergris.onrender.com/users",
+    deleteUserURL: "https://sukkergris.onrender.com/users",
     userLoginURL: "https://sukkergris.onrender.com/users/login",
     userImageURL: "https://sukkergris.onrender.com/images/",
     //Message URL's
-    messageURL: "https://sukkergris.onrender.com/msgboard/messages",
-    
-    
+    messageURL: "https://sukkergris.onrender.com/msgboard/messages",  
     // add more URL' here...
 }
 
@@ -354,8 +355,108 @@ export async function deleteProduct (adminToken, productID){
 }
 
 //----------------------------------------------------------
-// Change a product
+// User functions
 //----------------------------------------------------------
+
+export async function addUser (aForm){
+
+    const url = urlMap.AddUserURL + "?key=" + groupKey;
+
+    const formData = aForm;
+
+    try{
+
+        const cfg = {
+            method: "POST",
+            body: formData
+        }
+
+        const result = await fetchData(url, cfg);
+
+        messageHandler(result);
+        return result;
+
+    }catch(error){
+        errorHandler(error);
+    }
+
+}
+
+export async function getAllUsers(aToken, aUserID){
+    let url;
+
+    if(aUserID){
+        url = urlMap.listAllUsersURL + "?key=" + groupKey + "&userid=" + aUserID;
+    } else {
+        url = urlMap.listAllUsersURL + "?key=" + groupKey + "&userid=";
+    }
+
+    try{
+        const cfg = {
+            method: "GET",
+            headers: {
+                "authorization": aToken
+            }
+        }
+
+        const result = await fetchData(url, cfg);
+
+        const userList = [];
+
+        for(let value of result){
+            const userObj = {
+                city: value.city,
+                heading: value.country, 
+                full_name: value.full_name,
+                id: value.id,
+                street: value.street,
+                superuser: value.superuser,
+                thumb: value.thumb,
+                username: value.username,
+                zipcode: value.zipcode
+                }         
+           userList.push(new userModel(userObj));        
+    }
+
+        return userList;
+
+    }catch(error){
+        errorHandler(error);
+    }
+}
+
+
+
+export async function deleteUser(adminToken, aUserId){
+    const url = urlMap.deleteUserURL + "?key=" + groupKey + "&id=" + aUserId;
+
+    const cfg = {
+        method: "DELETE",
+        headers: {
+            "authorization": adminToken
+        }
+    }
+
+    try{
+        const result = await fetchData(url, cfg);
+
+        messageHandler(result);
+        return result;
+
+    }catch(error){
+        errorHandler(error);
+    }
+}
+
+
+
+
+//----------------------------------------------------------
+// Product functions
+//----------------------------------------------------------
+
+
+
 
 export async function changeProduct (adminToken, aForm){
 
@@ -387,7 +488,7 @@ export async function changeProduct (adminToken, aForm){
 }
 
 //-----------------------------------------------
-// Add a message
+// Forum functions
 //-----------------------------------------------
 
 //Need to make seperate function for specific threads. 
@@ -428,7 +529,6 @@ export async function listThreads(aToken, postAll, ifAsc){
         errorHandler(error);
     }
 }
-
 
 //-----------------------------------------------
 // Add a message
@@ -472,6 +572,12 @@ export async function addThreads(aToken, threadForm){
 }
 
 //If no thread is provided, a new thread with a integer ID that comes after the last integer is created. 
+
+/*Current bug: "Comment by" only shows the name of the currently logged in user, 
+after the user has pressed the submit button. 
+The first issue is in the way we save the aUserNameID (in a global variable). 
+
+The second issue is unknown for now. Perhaps it is because the global variable isn't "made" before we press submit. */
 export async function addThreadComment(aToken, aThreadID, aUsernameID, aCommentForm){
 
     const url = urlMap.messageURL + "?key=" + groupKey + "&thread=" + aThreadID;
@@ -497,8 +603,6 @@ export async function addThreadComment(aToken, aThreadID, aUsernameID, aCommentF
 
         const result = await fetchData(url, cfg);
 
-        console.log(result);
-
         messageHandler("Forum", "Thanks for furthering discussions about candy.");
         
        return result;
@@ -508,10 +612,12 @@ export async function addThreadComment(aToken, aThreadID, aUsernameID, aCommentF
     }
 }
 
-export async function listComments(aToken, aThreadID, aUserName){
-    const url = urlMap.messageURL + "?key=" + groupKey + "&thread=" + aThreadID;
-    const username = aUserName;
 
+
+
+
+export async function listComments(aToken, aThreadID){
+    const url = urlMap.messageURL + "?key=" + groupKey + "&thread=" + aThreadID;
 
     const cfg = {
         method: "GET",
@@ -528,9 +634,9 @@ export async function listComments(aToken, aThreadID, aUserName){
          for(let value of result){
             if(value.start_of_thread === false && value.thread === aThreadID){
             const commentObj = {
-                heading: `Comment by: ${username}`,
                 message: value.message,
-                thread: value.thread
+                thread: value.thread,
+                user_id: value.user_id,
             }
                 listOfComments.push(new UserCommentModel(commentObj));
             }
@@ -547,8 +653,6 @@ export async function listComments(aToken, aThreadID, aUserName){
 
 
 export async function deleteThread(aMessageID, aToken){
-
-
     const url = urlMap.messageURL + "?key=" + groupKey + "&message_id=" + aMessageID;
 
     const cfg = {

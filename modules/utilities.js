@@ -29,10 +29,21 @@ export function createBasicAuthString(username, password) {
 }
 
 export function shortenDate (dateInp) {
-    const dateData = dateInp
-    const dateShortened = dateData.split("T")[0]
-    const dateModified = dateShortened.replace(/-/g, ".")
+    const dateData = dateInp;
+    const dateShortened = dateData.split("T")[0];
+    const dateModified = dateShortened.replace(/-/g, ".");
     return dateModified
+}
+
+export function removeTimeLetters(dateData){
+
+    const dateShortened = dateData.substring(0, 10);
+    const timeShortened = dateData.substring(11, 19);
+    const dateModified = dateShortened.replace(/-/g, ".");
+
+    const dateAndTime = `${dateModified} at ${timeShortened}` ;
+
+    return dateAndTime
 }
 
 //-----------------------------------------------------------

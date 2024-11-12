@@ -77,6 +77,8 @@ export class IndividualThreadView extends HTMLElement{
             const commentDiv = document.createElement("div");
                 console.log(value);
 
+//value.heading is showing as undefined. 
+
             commentDiv.innerHTML = `
                 <p>${value.message}</p>
                 <h6>${value.heading}</h6>

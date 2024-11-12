@@ -1,4 +1,4 @@
-import { shortenDate } from "./utilities.js";
+import { shortenDate, removeTimeLetters } from "./utilities.js";
 
 //=====================================================
 export class CategoryModel {
@@ -47,12 +47,12 @@ export class ChocolateModel {
 
     showDetailed() {        
         if (this.stock == 0) {
-            this.stock = "Out of stock"
-            this.expected_shipped = "Expected shipping date: " + shortenDate(this.expected_shipped)
+            this.stock = "Out of stock";
+            this.expected_shipped = "Expected shipping date: " + shortenDate(this.expected_shipped);
         }
         else {
-            this.stock = "In stock: " + this.stock
-            this.expected_shipped = ""
+            this.stock = "In stock: " + this.stock;
+            this.expected_shipped = "";
         }
     }
 
@@ -143,7 +143,7 @@ export class UserThreadModel{
     }
 //----------------------------------------
     update(newThread){
-        this.date = newThread.date;
+        this.date = shortenDate(newThread.date);
         this.heading = newThread.heading;
         this.id = newThread.id;
         this.message = newThread.message;
@@ -159,15 +159,37 @@ export class UserCommentModel{
         this.update(newUserCommentObject)
     }
 
-
     update(newComment){
         this.heading = newComment.heading;
         this.message = newComment.message;
         this.start_of_thread = false;
         this.thread = newComment.thread;
+        this.user_id = newComment.user_id;
     }
-
-
-
 }
 
+
+//===========================================
+//User models
+//===========================================
+
+export class userModel {
+
+    constructor(newUserObject){
+        this.update(newUserObject);
+    }
+
+    update(newUser){
+        this.beenz = newUser.beenz;
+        this.city = newUser.city;
+        this.country = newUser.country;
+        this.full_name = newUser.full_name;
+        this.id = newUser.id;
+        this.street = newUser.street;
+        this.superuser = newUser.superuser;
+        this.thumb = newUser.thumb;
+        this.username = newUser.username;
+        this.zipcode = newUser.zipcode;
+    }
+
+}
