@@ -392,7 +392,30 @@ export async function changeProduct (adminToken, aForm){
     } catch (error){
         errorHandler(error);
     }
+}
 
 
+export async function addUser (aForm){
+
+    const url = urlMap.AddUserURL + "?key=" + groupKey;
+
+    const formData = aForm;
+
+    try{
+
+        const cfg = {
+            method: "POST",
+            body: formData
+        }
+
+        const result = await fetchData(url, cfg);
+        console.log(result);
+
+        messageHandler(result);
+        return result;
+
+    }catch(error){
+        errorHandler(error);
+    }
 
 }

@@ -115,7 +115,7 @@ btnAddUser.addEventListener('click', function(evt) {
 //---------------------------------------------- Lytter til add-user submit
 
 addUserView.addEventListener('add-user', function(evt) {
-    const addUserPromise = api.addUser(evt.detail);
+    api.addUser(evt.detail);
 });
 
 //---------------------------------------------- Lytter til login knapp
