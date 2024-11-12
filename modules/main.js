@@ -61,7 +61,7 @@ function startUp () {
 
 //-----------------------------------------------
 categoryListView.addEventListener('categoryselect', function (evt) {    
-    const chocolateCategoryPromise = api.getChocolateByCategory(evt.detail.categoryID);
+    const chocolateCategoryPromise = api.getChocolateByCategory(evt.detail.categoryID, userModel);
     chocolateListView.refresh(chocolateCategoryPromise);
     viewContainer.innerHTML = "";
     viewContainer.appendChild(chocolateListView);

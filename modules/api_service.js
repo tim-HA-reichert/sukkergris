@@ -61,7 +61,7 @@ export async function getCategories() {
 //----------------------------------------------------------
 // return a list (array) of dummy-products based on category
 //----------------------------------------------------------
-export async function getChocolateByCategory(category) {
+export async function getChocolateByCategory(category, userExist) {
     const url = urlMap.chosenCategoryURL + "?key=" + groupKey + "&category_id=" + category;
     //Category er et tall, som er lik categoryID til eventListener i category_list_view.js
 
@@ -72,21 +72,43 @@ export async function getChocolateByCategory(category) {
 
         const chosenCat = [];
 
-        for (let chocoCat of data) {
-            if (chocoCat.category_id === category) {
-                const chocoObj = {
-                    chocoID: chocoCat.id,
-                    chocoName: chocoCat.name,
-                    categoryID: chocoCat.category_id,
-                    description: chocoCat.description,
-                    details: chocoCat.details,
-                    thumb: chocoCat.thumb,
-                    price: chocoCat.price
+        if (userExist) {
+            //Sjekk hvis bruker eksisterer, hvis vis alle sjokoladene
+            for (let chocoCat of data) {
+                if (chocoCat.category_id === category) {
+                    const chocoObj = {
+                        chocoID: chocoCat.id,
+                        chocoName: chocoCat.name,
+                        categoryID: chocoCat.category_id,
+                        description: chocoCat.description,
+                        details: chocoCat.details,
+                        thumb: chocoCat.thumb,
+                        price: chocoCat.price
+                    };
+                    //fikk hjelp av chatGPT for .push og chosenCat array. 
+                    chosenCat.push(new ChocolateModel(chocoObj));
                 };
-                //fikk hjelp av chatGPT for .push og chosenCat array. 
-                chosenCat.push(new ChocolateModel(chocoObj));
-                }; 
-            }; 
+            };
+        }
+
+        else {
+            //Legg til hvis sjokoladen bare kan vises uten å være logget inn 
+            for (let chocoCat of data) {
+                if (chocoCat.category_id === category && chocoCat.reserved_members == false) {
+                    const chocoObj = {
+                        chocoID: chocoCat.id,
+                        chocoName: chocoCat.name,
+                        categoryID: chocoCat.category_id,
+                        description: chocoCat.description,
+                        details: chocoCat.details,
+                        thumb: chocoCat.thumb,
+                        price: chocoCat.price
+                    };
+                    //fikk hjelp av chatGPT for .push og chosenCat array. 
+                    chosenCat.push(new ChocolateModel(chocoObj));
+                };
+            };
+        }
 
         return chosenCat;
 
@@ -123,10 +145,10 @@ export async function adjustableChocolateList(category) {
                 };
                 //fikk hjelp av chatGPT for .push og chosenCat array. 
                 chocoDeleteList.push(new ChocolateModel(chocoObj));
-                }; 
-            }; 
+            };
+        };
 
-            return chocoDeleteList;
+        return chocoDeleteList;
 
     } catch (error) {
         errorHandler(error);
@@ -163,7 +185,6 @@ export async function getChocolateDetails(chosenChocolateID) {
                 number_of_ratings: chocoDet.number_of_ratings
                 //fikk hjelp av chatGPT for .push og chosenCat array.
             };
-            console.log(chocoDet);
             return new ChocolateModel(chocoObj);
         };
         //     return chosenCat;
@@ -200,26 +221,26 @@ export function manageOrderModel(aOrderModel) { //klasse som parameter
 // Search function
 //----------------------------------------------------------
 
-export async function getChocolateBySearch(searchValue){
+export async function getChocolateBySearch(searchValue) {
     //Use value from searchbar to filter chocolates. 
     //Add a onclick to searchBtn to trigger this function. 
 
-    const url = urlMap.chosenCategoryURL + "?search=" + searchValue + "&key=" + groupKey;   
-        try {
-            const data = await fetchData(url);
-        
-            const chosenCat = [];
+    const url = urlMap.chosenCategoryURL + "?search=" + searchValue + "&key=" + groupKey;
+    try {
+        const data = await fetchData(url);
 
-            //"i" for removing case-sensitivty. 
-            //new RegExp is a javaScript function that creates a regular expression from parameter. 
-            //Allows us to use .test, which tests searchValue against a chosen object. 
-            const regexSearchTest = new RegExp(searchValue, "i"); 
+        const chosenCat = [];
+
+        //"i" for removing case-sensitivty. 
+        //new RegExp is a javaScript function that creates a regular expression from parameter. 
+        //Allows us to use .test, which tests searchValue against a chosen object. 
+        const regexSearchTest = new RegExp(searchValue, "i");
 
 
-            for(let chocoCat of data){
-                regexSearchTest.test(chocoCat.name)  
-                    {               
-                    const chocoObj = {
+        for (let chocoCat of data) {
+            regexSearchTest.test(chocoCat.name)
+            {
+                const chocoObj = {
                     chocoID: chocoCat.id,
                     chocoName: chocoCat.name,
                     categoryID: chocoCat.category_id,
@@ -227,20 +248,20 @@ export async function getChocolateBySearch(searchValue){
                     details: chocoCat.details,
                     thumb: chocoCat.thumb,
                     price: chocoCat.price
-                    };
+                };
                 chosenCat.push(new ChocolateModel(chocoObj));
-                    };
-                };
+            };
+        };
 
-                if(chosenCat.length === 0){
-                    messageHandler("Nothing matches your search, please try again.");
-                };
-                return chosenCat;
-                
-        } catch(error) {
-            errorHandler(error);
-        }
-        
+        if (chosenCat.length === 0) {
+            messageHandler("Nothing matches your search, please try again.");
+        };
+        return chosenCat;
+
+    } catch (error) {
+        errorHandler(error);
+    }
+
 }
 
 
@@ -305,7 +326,7 @@ export function getUserImage(userModel) {
 // Add a new product
 //----------------------------------------------------------
 
-export async function adminProducts (aToken, aNewProductForm){
+export async function adminProducts(aToken, aNewProductForm) {
 
     const url = urlMap.adminProductsURL + "?key=" + groupKey;
 
@@ -313,15 +334,15 @@ export async function adminProducts (aToken, aNewProductForm){
     const formData = aNewProductForm;
 
 
-    try{
-        
-    const cfg = {
-        method: "POST",
-        headers: {
-            "authorization": adminToken
-        },
-        body: formData
-    }
+    try {
+
+        const cfg = {
+            method: "POST",
+            headers: {
+                "authorization": adminToken
+            },
+            body: formData
+        }
 
         const result = await fetchData(url, cfg);
 
@@ -337,17 +358,17 @@ export async function adminProducts (aToken, aNewProductForm){
 // Delete a product made by admin 
 //----------------------------------------------------------
 
-export async function deleteProduct (adminToken, productID){
+export async function deleteProduct(adminToken, productID) {
 
-        const url = urlMap.deleteProductURL + "?id=" + productID + "&key=" + groupKey;
+    const url = urlMap.deleteProductURL + "?id=" + productID + "&key=" + groupKey;
 
-    try{
+    try {
 
         const cfg = {
             method: "DELETE",
             headers: {
                 "authorization": adminToken
-            },        
+            },
         }
 
         const result = await fetchData(url, cfg);
@@ -355,7 +376,7 @@ export async function deleteProduct (adminToken, productID){
         messageHandler(result);
         return result;
 
-    }catch(error){
+    } catch (error) {
         errorHandler(error);
     }
 
@@ -365,14 +386,14 @@ export async function deleteProduct (adminToken, productID){
 // Change a product
 //----------------------------------------------------------
 
-export async function changeProduct (adminToken, aForm){
+export async function changeProduct(adminToken, aForm) {
 
     const url = urlMap.changeProductURL + "?id=" + adminToken + "&key=" + groupKey;
 
     let formData = aForm;
 
 
-    try{
+    try {
 
         const cfg = {
             method: "PUT",
@@ -389,19 +410,19 @@ export async function changeProduct (adminToken, aForm){
         return result;
 
 
-    } catch (error){
+    } catch (error) {
         errorHandler(error);
     }
 }
 
 
-export async function addUser (aForm){
+export async function addUser(aForm) {
 
     const url = urlMap.AddUserURL + "?key=" + groupKey;
 
     const formData = aForm;
 
-    try{
+    try {
 
         const cfg = {
             method: "POST",
@@ -414,7 +435,7 @@ export async function addUser (aForm){
         messageHandler(result);
         return result;
 
-    }catch(error){
+    } catch (error) {
         errorHandler(error);
     }
 
