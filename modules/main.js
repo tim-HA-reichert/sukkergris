@@ -45,6 +45,8 @@ const navButtons = new NavigationView();
 const newThreadView = new CreateNewThreadView();
 const allThreadsView = new ThreadListView();
 const singleThreadView = new IndividualThreadView();
+let threadInfo = null;
+
 
 const orderModel = new OrderModel();
 let userModel = null;
@@ -130,9 +132,8 @@ loginView.addEventListener('log-in', function(evt) {
     
     addUserPromise.then((aUserModel) => {        //Etter at promiset er ferdig, kjøres koden under
         userModel = aUserModel;
-        console.log(userModel);
         startUp();
-
+        console.log(userModel);
         navButtons.isUserLogged(userModel);
         navButtons.activeUser(api.getUserImage(userModel));
     });
@@ -156,17 +157,36 @@ navButtons.addEventListener("go-to-threads", e => {
    api.listThreads(userModel.token, true, true).then((threadList) =>{
     allThreadsView.loadThreads(threadList);
     viewContainer.appendChild(allThreadsView);
-        console.log(threadList);
    });
 });
 
 allThreadsView.addEventListener("wish-to-inspect", e => {
     viewContainer.innerHTML ="";
-    console.log(e.detail);
-    singleThreadView.refresh(e.detail);
-    viewContainer.appendChild(singleThreadView);
-//Add comment functionality on said view (form for comments?)
+    threadInfo = e.detail;
+    singleThreadView.refresh(e.detail).then((result) => {
+        const commentContent = api.listComments(userModel.token, threadInfo.thread);
+        singleThreadView.comment(commentContent);
+        viewContainer.appendChild(singleThreadView);
+    });
+    
+
 });
+
+singleThreadView.addEventListener("submit-comment", e => {
+
+    api.addThreadComment(userModel.token, threadInfo.thread, userModel.username, e.detail);
+        console.log(userModel.username);
+
+    const commentContent = api.listComments(userModel.token, threadInfo.thread, userModel.username);
+
+    singleThreadView.comment(commentContent).then((result)=>{
+            viewContainer.appendChild(singleThreadView);
+        });
+});
+
+singleThreadView.addEventListener("delete-thread", e => {
+    api.deleteThread(threadInfo.id, userModel.token);
+})
 
 
 //----------------------------------------------

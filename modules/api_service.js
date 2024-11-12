@@ -4,7 +4,7 @@
 
 import { fetchData } from "./utilities.js";
 import { createBasicAuthString } from "./utilities.js";
-import { CategoryModel, ChocolateModel, LoginDataModel, UserThreadModel } from "./models.js";
+import { CategoryModel, ChocolateModel, LoginDataModel, UserThreadModel, UserCommentModel } from "./models.js";
 import { errorHandler } from "./error_handler.js";
 import { messageHandler } from "./messageHandler.js";
 
@@ -397,20 +397,20 @@ export async function listThreads(aToken, postAll, ifAsc){
     const url = urlMap.messageURL + "?key=" + groupKey + "&all=" + postAll + "&asc=" + ifAsc;
     
 
-    try{
-        const cfg = {
-            method: "GET",
-            headers: {
-                "authorization": aToken
-            }
+    const cfg = {
+        method: "GET",
+        headers: {
+            "authorization": aToken
         }
-
+    }
+    
+    try{
         const result = await fetchData(url, cfg);
 
         const threadList = [];
 
         for(let value of result){
-
+            if(value.start_of_thread === true){
             const threadObj = {
                 date: value.date,
                 heading: value.heading, 
@@ -418,10 +418,10 @@ export async function listThreads(aToken, postAll, ifAsc){
                 message: value.message,
                 thread: value.thread,
                 user_id: value.user_id
-            }
+                }         
            threadList.push(new UserThreadModel(threadObj));
         }
-
+    }
         return threadList;
 
     } catch (error){
@@ -435,7 +435,7 @@ export async function listThreads(aToken, postAll, ifAsc){
 //-----------------------------------------------
 
 
-//If no thread is provided, a new thread with a integer that comes naturally after the last integer is created. 
+//If no thread is provided, a new thread with a integer ID that comes after the last integer is created. 
 export async function addThreads(aToken, threadForm){
 
     const url = urlMap.messageURL + "?key=" + groupKey + "&thread=";
@@ -460,6 +460,8 @@ export async function addThreads(aToken, threadForm){
         try{
 
         const result = await fetchData(url, cfg);
+        result.start_of_thread = true;
+
         messageHandler("Forum", "Added new topic of discussion!");
 
         return result;
@@ -467,7 +469,101 @@ export async function addThreads(aToken, threadForm){
     } catch (error){
         errorHandler(error);
     }
-
-
 }
 
+//If no thread is provided, a new thread with a integer ID that comes after the last integer is created. 
+export async function addThreadComment(aToken, aThreadID, aUsernameID, aCommentForm){
+
+    const url = urlMap.messageURL + "?key=" + groupKey + "&thread=" + aThreadID;
+
+        const data = {
+            commentHeading: `Comment by: ${aUsernameID}`,
+            commentText: aCommentForm.get("comment-text"),
+        }
+
+        const cfg = {
+            method: "POST",
+            headers: {
+                "authorization": aToken,
+                "content-type": "application/json",
+            },
+            body: JSON.stringify({
+                heading: data.commentHeading,
+                message_text: data.commentText
+            })
+        }
+
+        try{
+
+        const result = await fetchData(url, cfg);
+
+        console.log(result);
+
+        messageHandler("Forum", "Thanks for furthering discussions about candy.");
+        
+       return result;
+
+    } catch (error){
+        errorHandler(error);
+    }
+}
+
+export async function listComments(aToken, aThreadID, aUserName){
+    const url = urlMap.messageURL + "?key=" + groupKey + "&thread=" + aThreadID;
+    const username = aUserName;
+
+
+    const cfg = {
+        method: "GET",
+        headers: {
+            "authorization": aToken
+        }
+    }
+
+    try {
+        const result = await fetchData(url, cfg);
+
+       const listOfComments = [];
+
+         for(let value of result){
+            if(value.start_of_thread === false && value.thread === aThreadID){
+            const commentObj = {
+                heading: `Comment by: ${username}`,
+                message: value.message,
+                thread: value.thread
+            }
+                listOfComments.push(new UserCommentModel(commentObj));
+            }
+        }
+
+        return listOfComments;
+
+    } catch (error){
+        errorHandler(error)
+    }
+}
+
+
+
+
+export async function deleteThread(aMessageID, aToken){
+
+
+    const url = urlMap.messageURL + "?key=" + groupKey + "&message_id=" + aMessageID;
+
+    const cfg = {
+        method: "DELETE",
+        headers: {
+            "authorization": aToken
+        }
+    }
+
+    try{
+        const result = await fetchData(url, cfg);
+        
+        return result
+    } catch(error){
+        errorHandler(error)
+    }
+
+}

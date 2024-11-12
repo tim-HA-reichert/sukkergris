@@ -8,10 +8,10 @@ const html = `
         <label for="thread-title">Topic Title: </label>
         <input type="text" id="thread-title" name="thread-title"
             placeholder="Give your topic a name!">
-
+            
         <label for="thread-text">Topic Description: </label>
-        <input type="text" id="thread-text" name="thread-text"
-            placeholder="Describe the topic.">
+        <textarea type="text" id="thread-text" name="thread-text"
+            placeholder="Describe the topic."> </textarea>
 
         <button type="submit"> Submit to forums! </button>
     </form>

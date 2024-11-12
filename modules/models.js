@@ -133,7 +133,7 @@ export class NewProductModel{
 
 
 //===========================================
-//New recipe model
+//Forum models
 //===========================================
 
 export class UserThreadModel{
@@ -142,13 +142,32 @@ export class UserThreadModel{
         this.update(newthreadObject);
     }
 //----------------------------------------
-    update(newRecipe){
-        this.date = newRecipe.date;
-        this.heading = newRecipe.heading;
-        this.id = newRecipe.id;
-        this.message = newRecipe.message;
-        this.start_of_thread = newRecipe.start_of_thread;
-        this.thread = newRecipe.thread;
-        this.user_id = newRecipe.user_id;
+    update(newThread){
+        this.date = newThread.date;
+        this.heading = newThread.heading;
+        this.id = newThread.id;
+        this.message = newThread.message;
+        this.start_of_thread = true;
+        this.thread = newThread.thread;
+        this.user_id = newThread.user_id;
     }
 }
+
+export class UserCommentModel{
+
+    constructor(newUserCommentObject){
+        this.update(newUserCommentObject)
+    }
+
+
+    update(newComment){
+        this.heading = newComment.heading;
+        this.message = newComment.message;
+        this.start_of_thread = false;
+        this.thread = newComment.thread;
+    }
+
+
+
+}
+

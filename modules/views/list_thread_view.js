@@ -1,7 +1,6 @@
 const html = `
 <h2>User forum</h2>
     <div id="threadContainer"> </div> 
-<hr>
 `;
 
 
@@ -32,10 +31,7 @@ export class ThreadListView extends HTMLElement {
                 <p>${value.message}</p>
                 <hr>
             `;
-
-            //Need to add: delete-button. 
-            //Consider adding delete-button to user-homepage instead. 
-
+            
             theDiv.addEventListener('click', evt => {
                 const wishToInspectEvent = new CustomEvent("wish-to-inspect", {composed: true, bubbles:true, detail: value});
                 console.log(wishToInspectEvent);
