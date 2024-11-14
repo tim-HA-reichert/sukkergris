@@ -378,7 +378,6 @@ export async function addUser (aForm){
     }catch(error){
         errorHandler(error);
     }
-
 }
 
 export async function getAllUsers(aToken, aUserID){
