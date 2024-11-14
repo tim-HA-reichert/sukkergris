@@ -30,13 +30,14 @@ export class ThreadListView extends HTMLElement {
             theDiv.innerHTML = `
                 <h3>${value.heading}</h3>
                 <p>${value.message}</p>
-                <p>Posted: ${value.date}</p>
+                
+                <h6>Posted by: ${value.user_id}</h6> 
+                <p>Date: ${value.date}</p>
                 <hr>
             `;
             
             theDiv.addEventListener('click', evt => {
                 const wishToInspectEvent = new CustomEvent("wish-to-inspect", {composed: true, bubbles:true, detail: value});
-                console.log(wishToInspectEvent);
                 this.dispatchEvent(wishToInspectEvent);
             });
 

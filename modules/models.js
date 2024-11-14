@@ -107,7 +107,6 @@ export class LoginDataModel {
         this.street = data.street;
         this.zipcode = data.zipcode;
     }
-
 }
 
 
@@ -190,5 +189,4 @@ export class userModel {
         this.username = newUser.username;
         this.zipcode = newUser.zipcode;
     }
-
 }

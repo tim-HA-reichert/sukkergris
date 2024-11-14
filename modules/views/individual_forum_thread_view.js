@@ -61,7 +61,7 @@ export class IndividualThreadView extends HTMLElement{
         theDiv.innerHTML = `
             <h1>${chosenThread.heading}</h1>
             <p>${chosenThread.message}</p>
-            <h6>thread by:A user(TBA)</h6>
+            <h6>thread by: ${chosenThread.user_id}</h6>
         `;  
         this.chosenThread.appendChild(theDiv);
     }
@@ -70,7 +70,6 @@ export class IndividualThreadView extends HTMLElement{
         this.commentContainer.innerHTML = "";
 
         const comments = await commentData;
-        console.log(comments);
 
         for(let value of comments){
             const commentDiv = document.createElement("div");

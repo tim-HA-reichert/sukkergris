@@ -38,6 +38,9 @@ export function shortenDate (dateInp) {
 
 //Add a function to match user_id and id, so we can assign username to posters on forums. 
 
+export function matchID(aUserId, IDtoMatch){
+    return username = (aUserId.user_id === IDtoMatch.id) ? IDtoMatch.username : console.log("ID not found");
+};
 
 //-----------------------------------------------------------
 // more utility-functions here if needed...

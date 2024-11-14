@@ -57,7 +57,7 @@ adminPanelView.addEventListener("admin-products", function(evt){
 adminPanelView.addEventListener("admin-users", e => {
     viewContainer.innerHTML = "";
     api.getAllUsers(adminToken).then((userList) => {
-        console.log(userList);
+
         allUserView.listUsers(userList);
         viewContainer.appendChild(allUserView);
     });

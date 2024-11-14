@@ -168,7 +168,6 @@ export async function getChocolateDetails(chosenChocolateID) {
                 number_of_ratings: chocoDet.number_of_ratings
                 //fikk hjelp av chatGPT for .push og chosenCat array.
             };
-            console.log(chocoDet);
             return new ChocolateModel(chocoObj);
         };
         //     return chosenCat;
@@ -384,6 +383,9 @@ export async function addUser (aForm){
 
 export async function getAllUsers(aToken, aUserID){
     let url;
+
+    //Terniary version
+    // = aUserID ?  urlMap.listAllUsersURL + "?key=" + groupKey + "&userid=" + aUserID : urlMap.listAllUsersURL + "?key=" + groupKey + "&userid=";
 
     if(aUserID){
         url = urlMap.listAllUsersURL + "?key=" + groupKey + "&userid=" + aUserID;

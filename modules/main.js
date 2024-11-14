@@ -134,7 +134,6 @@ loginView.addEventListener('log-in', function(evt) {
     addUserPromise.then((aUserModel) => {        //Etter at promiset er ferdig, kjøres koden under
         userModel = aUserModel;
         startUp();
-        console.log(userModel);
         navButtons.isUserLogged(userModel);
         navButtons.activeUser(api.getUserImage(userModel));
     });
