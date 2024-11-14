@@ -1,4 +1,3 @@
-
 //this module contains the functions in the service layer
 //----------------------------------------------------------
 
@@ -61,54 +60,46 @@ export async function getCategories() {
 //----------------------------------------------------------
 // return a list (array) of dummy-products based on category
 //----------------------------------------------------------
-export async function getChocolateByCategory(category, userExist) {
+export async function getChocolatesByCategory(category, aUser) {
     const url = urlMap.chosenCategoryURL + "?key=" + groupKey + "&category_id=" + category;
     //Category er et tall, som er lik categoryID til eventListener i category_list_view.js
 
 
+
     try {
-        const data = await fetchData(url);
-        //data er en liste med sjokolade. Ufiltrert liste. 
-
+        let data = null
+        
         const chosenCat = [];
-
-        if (userExist) {
-            //Sjekk hvis bruker eksisterer, hvis vis alle sjokoladene
-            for (let chocoCat of data) {
-                if (chocoCat.category_id === category) {
-                    const chocoObj = {
-                        chocoID: chocoCat.id,
-                        chocoName: chocoCat.name,
-                        categoryID: chocoCat.category_id,
-                        description: chocoCat.description,
-                        details: chocoCat.details,
-                        thumb: chocoCat.thumb,
-                        price: chocoCat.price
-                    };
-                    //fikk hjelp av chatGPT for .push og chosenCat array. 
-                    chosenCat.push(new ChocolateModel(chocoObj));
-                };
-            };
+        
+        if (aUser) {
+            const cfg = {
+                method: "GET",
+                headers: {
+                    "authorization": aUser.token
+                }
+            }
+            data = await fetchData(url, cfg);
+        }
+        else if (!aUser) {
+            data = await fetchData(url);
+            //data er en liste med sjokolade. Ufiltrert liste. 
         }
 
-        else {
-            //Legg til hvis sjokoladen bare kan vises uten å være logget inn 
-            for (let chocoCat of data) {
-                if (chocoCat.category_id === category && chocoCat.reserved_members == false) {
-                    const chocoObj = {
-                        chocoID: chocoCat.id,
-                        chocoName: chocoCat.name,
-                        categoryID: chocoCat.category_id,
-                        description: chocoCat.description,
-                        details: chocoCat.details,
-                        thumb: chocoCat.thumb,
-                        price: chocoCat.price
-                    };
-                    //fikk hjelp av chatGPT for .push og chosenCat array. 
-                    chosenCat.push(new ChocolateModel(chocoObj));
+        for (let chocoCat of data) {
+            if (chocoCat.category_id === category) {
+                const chocoObj = {
+                    chocoID: chocoCat.id,
+                    chocoName: chocoCat.name,
+                    categoryID: chocoCat.category_id,
+                    description: chocoCat.description,
+                    details: chocoCat.details,
+                    thumb: chocoCat.thumb,
+                    price: chocoCat.price
                 };
+                //fikk hjelp av chatGPT for .push og chosenCat array. 
+                chosenCat.push(new ChocolateModel(chocoObj));
             };
-        }
+        };
 
         return chosenCat;
 
@@ -116,6 +107,7 @@ export async function getChocolateByCategory(category, userExist) {
         errorHandler(error);
     }
 }
+
 
 //----------------------------------------------------------
 // return details about chosen chocolate
@@ -161,11 +153,24 @@ export async function adjustableChocolateList(category) {
 //----------------------------------------------------------
 // return details about chosen chocolate
 //----------------------------------------------------------
-export async function getChocolateDetails(chosenChocolateID) {
+export async function getChocolateDetails(chosenChocolateID, aUser) {
     const url = urlMap.chosenProductURL + "?id=" + chosenChocolateID + "&key=" + groupKey;
+    let data = null
 
     try {
-        const data = await fetchData(url);
+
+        if (aUser) {
+            const cfg = {
+                method: "GET",
+                headers: {
+                    "authorization": aUser.token
+                }
+            }
+            data = await fetchData(url, cfg);
+        }
+        else if (!aUser) {
+            data = await fetchData(url);
+        }
 
         for (let chocoDet of data) {
             let chocoObj = {
