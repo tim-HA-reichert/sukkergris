@@ -70,7 +70,7 @@ function startUp () {
 
 //-----------------------------------------------
 categoryListView.addEventListener('categoryselect', function (evt) {    
-    const chocolateCategoryPromise = api.getChocolateByCategory(evt.detail.categoryID);
+    const chocolateCategoryPromise = api.getChocolatesByCategory(evt.detail.categoryID, userModel);
     chocolateListView.refresh(chocolateCategoryPromise);
     viewContainer.innerHTML = "";
     viewContainer.appendChild(chocolateListView);
@@ -85,7 +85,7 @@ btnShowCategoriesView.addEventListener('click', function (evt) {
 //---------------------------------------------- AddEventListener for trykking av spesefikk sjokolade
 chocolateListView.addEventListener('chocolateselect', function (evt) {    
     viewContainer.innerHTML = "";
-    const detailProductPromise = api.getChocolateDetails(evt.detail.chocoID); //Lager et promise
+    const detailProductPromise = api.getChocolateDetails(evt.detail.chocoID, userModel); //Lager et promise    
 
     detailProductPromise.then((ChocolateModelClass) => {        //Etter at promiset er ferdig, kjøres koden under
         detailedProductView.refresh(ChocolateModelClass);
