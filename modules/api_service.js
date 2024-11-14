@@ -13,6 +13,7 @@ const imgKey = "GFTPOE21";
 
 
 const urlMap = {
+    imgURL: "https://sukkergris.onrender.com/images/",
     categoryURL: "https://sukkergris.onrender.com/webshop/categories",
     chosenCategoryURL: "https://sukkergris.onrender.com/webshop/products",
     chosenProductURL: "https://sukkergris.onrender.com/webshop/products",
@@ -98,7 +99,8 @@ export async function getChocolatesByCategory(category, aUser) {
                     categoryID: chocoCat.category_id,
                     description: chocoCat.description,
                     details: chocoCat.details,
-                    thumb: chocoCat.thumb,
+                    //Not working yet
+                    thumb: urlMap.imgURL + imgKey + "/small/" + chocoCat.thumb,
                     price: chocoCat.price
                 };
                 //fikk hjelp av chatGPT for .push og chosenCat array. 

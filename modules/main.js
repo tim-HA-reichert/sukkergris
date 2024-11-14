@@ -60,7 +60,7 @@ function startUp () {
     
     const categoryPromise = api.getCategories(); //retrieve the categories from the service layer as a promise
     categoryListView.refresh(categoryPromise); //send the promise to the view. The view will wait for the promise to resolve
-    
+
     viewContainer.innerHTML = "";
     viewContainer.appendChild(categoryListView);
 

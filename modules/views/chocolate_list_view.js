@@ -27,8 +27,9 @@ export class ChocolateListView extends HTMLElement {
 
             const theDiv = document.createElement("div");
             theDiv.innerHTML = `
+                <img src="${value.thumb}"/>
                 <h3>${value.chocoName}</h3>
-                <p>${value.price}</p>
+                <p>${value.price},-</p>
                 <hr>
             `;
 
