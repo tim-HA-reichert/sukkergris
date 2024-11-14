@@ -47,12 +47,12 @@ export class ChocolateModel {
 
     showDetailed() {        
         if (this.stock == 0) {
-            this.stock = "Out of stock"
-            this.expected_shipped = "Expected shipping date: " + shortenDate(this.expected_shipped)
+            this.stock = "Out of stock";
+            this.expected_shipped = "Expected shipping date: " + shortenDate(this.expected_shipped);
         }
         else {
-            this.stock = "In stock: " + this.stock
-            this.expected_shipped = ""
+            this.stock = "In stock: " + this.stock;
+            this.expected_shipped = "";
         }
     }
 
@@ -107,7 +107,6 @@ export class LoginDataModel {
         this.street = data.street;
         this.zipcode = data.zipcode;
     }
-
 }
 
 
@@ -129,6 +128,65 @@ export class NewProductModel{
          this.thumb = newProduct.thumb;
          this.price = newProduct.price;        
      }
+}
 
 
+//===========================================
+//Forum models
+//===========================================
+
+export class UserThreadModel{
+
+    constructor(newthreadObject){
+        this.update(newthreadObject);
+    }
+//----------------------------------------
+    update(newThread){
+        this.date = shortenDate(newThread.date);
+        this.heading = newThread.heading;
+        this.id = newThread.id;
+        this.message = newThread.message;
+        this.start_of_thread = true;
+        this.thread = newThread.thread;
+        this.user_id = newThread.user_id;
+    }
+}
+
+export class UserCommentModel{
+
+    constructor(newUserCommentObject){
+        this.update(newUserCommentObject)
+    }
+
+    update(newComment){
+        this.message = newComment.message;
+        this.start_of_thread = false;
+        this.thread = newComment.thread;
+        this.user_id = newComment.user_id;
+    }
+}
+
+
+//===========================================
+//User models
+//===========================================
+
+export class userModel {
+
+    constructor(newUserObject){
+        this.update(newUserObject);
+    }
+
+    update(newUser){
+        this.beenz = newUser.beenz;
+        this.city = newUser.city;
+        this.country = newUser.country;
+        this.full_name = newUser.full_name;
+        this.id = newUser.id;
+        this.street = newUser.street;
+        this.superuser = newUser.superuser;
+        this.thumb = newUser.thumb;
+        this.username = newUser.username;
+        this.zipcode = newUser.zipcode;
+    }
 }

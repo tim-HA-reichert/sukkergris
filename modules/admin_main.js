@@ -3,6 +3,7 @@ import { AdminLoginView } from "./views/admin_views/admin_login_view.js";
 import { AdminPanelView } from "./views/admin_views/admin_panel_view.js";
 import { adminProductsView } from "./views/admin_views/admin_product_view.js";
 import { changeProductView } from "./views/admin_views/admin_product_change_view.js";
+import { UserListView } from "./views/admin_views/admin_users_view.js";
 
 
 const viewContainer = document.getElementById("viewContainer");
@@ -12,6 +13,7 @@ const homeBtn = document.getElementById("back-to-admin-start");
 const adminLoginView = new AdminLoginView();
 const adminPanelView = new AdminPanelView();
 const adminProducts = new adminProductsView();
+const allUserView = new UserListView();
 
 const changeProductInfo = new changeProductView();
 
@@ -52,6 +54,29 @@ adminPanelView.addEventListener("admin-products", function(evt){
     viewContainer.appendChild(adminProducts);
 });
 
+adminPanelView.addEventListener("admin-users", e => {
+    viewContainer.innerHTML = "";
+    api.getAllUsers(adminToken).then((userList) => {
+
+        allUserView.listUsers(userList);
+        viewContainer.appendChild(allUserView);
+    });
+});
+
+
+
+allUserView.addEventListener("delete-user", e => {
+    viewContainer.innerHTML = "";
+
+    api.deleteUser(adminToken, e.detail).then((result) => {
+        const refreshUserList = api.getAllUsers(adminToken);
+        allUserView.listUsers(refreshUserList);
+        viewContainer.appendChild(allUserView);
+    });
+});
+
+
+
 adminProducts.addEventListener("add-product", function(evt){
     api.adminProducts(adminToken, evt.detail).then(response => {
         adjustableChocolateList = api.adjustableChocolateList();
@@ -89,3 +114,5 @@ changeProductInfo.addEventListener("change-product", function(evt){
         this.form.reset();
     });
 });
+
+

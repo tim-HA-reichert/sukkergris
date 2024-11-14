@@ -1,7 +1,7 @@
 //import { dialog } from './main.js';
-import { MessageView } from "./views/message_view.js";
+import { SystemMessageView } from "./views/system_message_view.js";
 
-const messageDialog = new MessageView();
+const messageDialog = new SystemMessageView();
 document.body.appendChild(messageDialog);
 
 //-------------------------------------------------------------
