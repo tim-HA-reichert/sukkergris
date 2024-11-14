@@ -61,7 +61,7 @@ export class IndividualThreadView extends HTMLElement{
         theDiv.innerHTML = `
             <h1>${chosenThread.heading}</h1>
             <p>${chosenThread.message}</p>
-            <h6>thread by: ${chosenThread.user_id}</h6>
+            <h6>thread by: ${chosenThread.username}</h6>
         `;  
         this.chosenThread.appendChild(theDiv);
     }
@@ -77,7 +77,7 @@ export class IndividualThreadView extends HTMLElement{
 //Need to find a way to match value.user_id to id from another model.  
             commentDiv.innerHTML = `
                 <p>${value.message}</p>
-                <h6>Posted by user: ${value.user_id}</h6>
+                <h6>Posted by user: ${value.username}</h6>
                 <hr>
                 `;
 

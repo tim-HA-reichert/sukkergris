@@ -138,9 +138,6 @@ export async function adjustableChocolateList(category) {
     }
 }
 
-
-
-
 //----------------------------------------------------------
 // return details about chosen chocolate
 //----------------------------------------------------------
@@ -234,7 +231,6 @@ export async function getChocolateBySearch(searchValue){
         }
         
 }
-
 
 //----------------------------------------------------------
 // admin and user log-in
@@ -494,9 +490,9 @@ export async function changeProduct (adminToken, aForm){
 
 //Need to make seperate function for specific threads. 
 //Vi kan prøve å sammenfatte de, men jeg tror det blir messy. 
-export async function listThreads(aToken, postAll, ifAsc){
+export async function listThreads(aToken, postAll, usernames){
 
-    const url = urlMap.messageURL + "?key=" + groupKey + "&all=" + postAll + "&asc=" + ifAsc;
+    const url = urlMap.messageURL + "?key=" + groupKey + "&all=" + postAll + "&asc=" + true;
     
 
     const cfg = {
@@ -520,8 +516,20 @@ export async function listThreads(aToken, postAll, ifAsc){
                 message: value.message,
                 thread: value.thread,
                 user_id: value.user_id
-                }         
-           threadList.push(new UserThreadModel(threadObj));
+                }
+
+                // Match user_id with the users list to generate username object key. 
+                const userInList = usernames.find((user) => user.id === value.user_id);
+                if(userInList){
+                    const threadItem = new UserThreadModel(threadObj);
+                    threadItem.setUsername(userInList);
+                    threadList.push(threadItem);
+                } else{
+                    console.log("could not match user id.")
+                } 
+            
+
+           //threadList.push(new UserThreadModel(threadObj));
         }
     }
         return threadList;
@@ -613,11 +621,7 @@ export async function addThreadComment(aToken, aThreadID, aCommentForm){
     }
 }
 
-
-
-
-
-export async function listComments(aToken, aThreadID){
+export async function listComments(aToken, aThreadID, usernames){
     const url = urlMap.messageURL + "?key=" + groupKey + "&thread=" + aThreadID;
 
     const cfg = {
@@ -638,9 +642,20 @@ export async function listComments(aToken, aThreadID){
                 message: value.message,
                 thread: value.thread,
                 user_id: value.user_id,
+
             }
-                listOfComments.push(new UserCommentModel(commentObj));
-            }
+
+             // Match user_id with the users list to generate username object key. 
+             const userInList = usernames.find((user) => user.id === value.user_id);
+             if (userInList) {
+               const userComments = new UserCommentModel(commentObj);
+               userComments.setUsername(userInList);
+               listOfComments.push(userComments);
+             } else {
+               console.log("Could not match userID.");
+             }
+        }
+            
         }
 
         return listOfComments;

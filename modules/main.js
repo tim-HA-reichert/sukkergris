@@ -154,22 +154,29 @@ navButtons.addEventListener("search-for-products", function(evt){
 //---------------------------------------------
 navButtons.addEventListener("go-to-threads", e => {
     viewContainer.innerHTML = "";
-   api.listThreads(userModel.token, true, true).then((threadList) =>{
-    allThreadsView.loadThreads(threadList);
-    viewContainer.appendChild(allThreadsView);
-   });
+
+    api.getAllUsers(userModel.token).then((usernames) => {
+
+        const postAll = true;
+   api.listThreads(userModel.token, postAll, usernames).then((threadList) =>{
+            allThreadsView.loadThreads(threadList);
+            viewContainer.appendChild(allThreadsView);
+        });
+    });
 });
 
 allThreadsView.addEventListener("wish-to-inspect", e => {
     viewContainer.innerHTML ="";
     threadInfo = e.detail;
-    singleThreadView.refresh(e.detail).then((result) => {
-        const commentContent = api.listComments(userModel.token, threadInfo.thread);
-        singleThreadView.comment(commentContent);
-        viewContainer.appendChild(singleThreadView);
-    });
-    
+    singleThreadView.refresh(e.detail).then(() => {
 
+    api.getAllUsers(userModel.token).then(usernames => {
+
+            const commentContent = api.listComments(userModel.token, threadInfo.thread, usernames);
+            singleThreadView.comment(commentContent); 
+            viewContainer.appendChild(singleThreadView);
+        });
+    });
 });
 
 singleThreadView.addEventListener("submit-comment", e => {
@@ -185,7 +192,6 @@ singleThreadView.addEventListener("submit-comment", e => {
 singleThreadView.addEventListener("delete-thread", e => {
     api.deleteThread(threadInfo.id, userModel.token);
 })
-
 
 //----------------------------------------------
 navButtons.addEventListener("create-thread", e => {

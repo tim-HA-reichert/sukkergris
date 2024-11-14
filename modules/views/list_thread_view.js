@@ -31,7 +31,7 @@ export class ThreadListView extends HTMLElement {
                 <h3>${value.heading}</h3>
                 <p>${value.message}</p>
                 
-                <h6>Posted by: ${value.user_id}</h6> 
+                <h6>Posted by: ${value.username}</h6> 
                 <p>Date: ${value.date}</p>
                 <hr>
             `;

@@ -1,4 +1,4 @@
-import { shortenDate } from "./utilities.js";
+import { shortenDate, matchID } from "./utilities.js";
 
 //=====================================================
 export class CategoryModel {
@@ -149,6 +149,16 @@ export class UserThreadModel{
         this.start_of_thread = true;
         this.thread = newThread.thread;
         this.user_id = newThread.user_id;
+        //Waiting to be filled by userModel.username.
+        this.username = null;
+    }
+
+    setUsername(user){
+        if (user) {
+            this.username = user.username;
+          } else {
+            this.username = 'No username found. Model.js';
+          }
     }
 }
 
@@ -163,6 +173,16 @@ export class UserCommentModel{
         this.start_of_thread = false;
         this.thread = newComment.thread;
         this.user_id = newComment.user_id;
+        //Waiting to be filled by userModel.username.
+        this.username = null;
+    }
+
+    setUsername(user){
+        if (user) {
+            this.username = user.username;
+          } else {
+            this.username = 'No username found. Model.js';
+          }
     }
 }
 
