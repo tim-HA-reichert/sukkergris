@@ -28,6 +28,7 @@ export function createBasicAuthString(username, password) {
     return "basic " + b64Str; 
 }
 
+//Shorten date function -------------------------------------
 export function shortenDate (dateInp) {
     const dateData = dateInp;
     const dateShortened = dateData.split("T")[0];
@@ -35,16 +36,8 @@ export function shortenDate (dateInp) {
     return dateModified
 }
 
-export function removeTimeLetters(dateData){
+//Add a function to match user_id and id, so we can assign username to posters on forums. 
 
-    const dateShortened = dateData.substring(0, 10);
-    const timeShortened = dateData.substring(11, 19);
-    const dateModified = dateShortened.replace(/-/g, ".");
-
-    const dateAndTime = `${dateModified} at ${timeShortened}` ;
-
-    return dateAndTime
-}
 
 //-----------------------------------------------------------
 // more utility-functions here if needed...

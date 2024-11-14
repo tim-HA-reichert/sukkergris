@@ -578,12 +578,12 @@ after the user has pressed the submit button.
 The first issue is in the way we save the aUserNameID (in a global variable). 
 
 The second issue is unknown for now. Perhaps it is because the global variable isn't "made" before we press submit. */
-export async function addThreadComment(aToken, aThreadID, aUsernameID, aCommentForm){
+export async function addThreadComment(aToken, aThreadID, aCommentForm){
 
     const url = urlMap.messageURL + "?key=" + groupKey + "&thread=" + aThreadID;
 
         const data = {
-            commentHeading: `Comment by: ${aUsernameID}`,
+            commentHeading: `A user comment in thread${aThreadID}`,
             commentText: aCommentForm.get("comment-text"),
         }
 

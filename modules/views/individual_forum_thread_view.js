@@ -2,7 +2,6 @@ const html = `
 <div id="chosen-thread"> </div>
 <hr>
 <div id="comment-container"> </div>
-<hr>
 
 <h5>Care to comment?</h5>
 
@@ -71,17 +70,16 @@ export class IndividualThreadView extends HTMLElement{
         this.commentContainer.innerHTML = "";
 
         const comments = await commentData;
-
+        console.log(comments);
 
         for(let value of comments){
             const commentDiv = document.createElement("div");
-                console.log(value);
 
-//value.heading is showing as undefined. 
-
+//Need to find a way to match value.user_id to id from another model.  
             commentDiv.innerHTML = `
                 <p>${value.message}</p>
-                <h6>${value.heading}</h6>
+                <h6>Posted by user: ${value.user_id}</h6>
+                <hr>
                 `;
 
             this.commentContainer.appendChild(commentDiv);

@@ -1,4 +1,4 @@
-import { shortenDate, removeTimeLetters } from "./utilities.js";
+import { shortenDate } from "./utilities.js";
 
 //=====================================================
 export class CategoryModel {
@@ -160,7 +160,6 @@ export class UserCommentModel{
     }
 
     update(newComment){
-        this.heading = newComment.heading;
         this.message = newComment.message;
         this.start_of_thread = false;
         this.thread = newComment.thread;

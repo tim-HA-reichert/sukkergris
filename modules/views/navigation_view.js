@@ -3,19 +3,24 @@ const html = `
         <input type="text" placeholder="Search.." name="searchBar" id="searchBar">
             <button type="submit" id="searchBtn">Search</button>
         </form>
-        <button id="btnGoToCart">Go to shopping cart</button>
+
+<div id="nav-wrapper">
+        
     
 
 <div id="navigationContainer"></div>
-
+</div>
     <template id="logged-in">
-        <img id="userPicture" src="" alt="users profile picture">
-
+        <button id="btnGoToCart">Go to shopping cart</button>
+        
         <button id="user-forum-button">Read our user forum!</button>
         <button id="create-thread-btn">Create a new topic!</button>
+        <img id="userPicture" src="" alt="users profile picture">
     </template>
 
     <template id="not-logged-in">
+        <button id="btnGoToCart">Go to shopping cart</button>    
+        
         <button id="btnLogin">Login</button>
         <button id="btnAddUser">Create User</button>
     </template>
@@ -40,8 +45,6 @@ export class NavigationView extends HTMLElement {
         this.notLoggedIn = this.shadowRoot.getElementById("not-logged-in");
 
         this.searchForm = this.shadowRoot.getElementById("search-form");
-        this.btnGoToCart = this.shadowRoot.getElementById('btnGoToCart');
-       
 
         this.searchForm.addEventListener("submit", (e) =>{
             e.preventDefault();
@@ -49,13 +52,6 @@ export class NavigationView extends HTMLElement {
             const formData = new FormData(this.searchForm);
             const searchEvent = new CustomEvent("search-for-products", {composed: true, bubbles:true, detail: formData});
             this.dispatchEvent(searchEvent);
-        });
-
-
-
-        this.btnGoToCart.addEventListener("click", (e) =>{
-            const cartEvent = new CustomEvent("go-to-cart", {composed: true, bubbles:true, detail: e});
-            this.dispatchEvent(cartEvent);
         });
 }
 
@@ -70,6 +66,7 @@ export class NavigationView extends HTMLElement {
         
         //If not logged in, do this: 
         if(!aUser){
+            this.btnGoToCart = this.shadowRoot.getElementById('btnGoToCart');
             this.btnLogin = this.shadowRoot.getElementById("btnLogin");
             this.btnAddUser = this.shadowRoot.getElementById("btnAddUser");
 
@@ -82,6 +79,12 @@ export class NavigationView extends HTMLElement {
                 const theEvent = new CustomEvent("log-in", {composed: true, bubbles:true, detail: e});
                 this.dispatchEvent(theEvent);
             });
+
+            this.btnGoToCart.addEventListener("click", (e) =>{
+                const cartEvent = new CustomEvent("go-to-cart", {composed: true, bubbles:true, detail: e});
+                this.dispatchEvent(cartEvent);
+            });
+
         } 
     }
 
@@ -90,6 +93,7 @@ export class NavigationView extends HTMLElement {
         this.userPicture = this.shadowRoot.getElementById("userPicture");
         this.createThread = this.shadowRoot.getElementById("create-thread-btn");
         this.userForum = this.shadowRoot.getElementById("user-forum-button");
+        this.btnGoToCart = this.shadowRoot.getElementById('btnGoToCart');
         
         this.userPicture.src = pictureData;
     
@@ -102,6 +106,12 @@ export class NavigationView extends HTMLElement {
             const recipeEvent = new CustomEvent("go-to-threads", {composed: true, bubbles:true, detail: e});
             this.dispatchEvent(recipeEvent);
         });
+   
+        this.btnGoToCart.addEventListener("click", (e) =>{
+            const cartEvent = new CustomEvent("go-to-cart", {composed: true, bubbles:true, detail: e});
+            this.dispatchEvent(cartEvent);
+        });
+   
     }
 } //end of class
 

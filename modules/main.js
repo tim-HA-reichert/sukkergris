@@ -175,7 +175,7 @@ allThreadsView.addEventListener("wish-to-inspect", e => {
 
 singleThreadView.addEventListener("submit-comment", e => {
 
-    api.addThreadComment(userModel.token, threadInfo.thread, userModel.username, e.detail);
+    api.addThreadComment(userModel.token, threadInfo.thread, e.detail);
     const commentContent = api.listComments(userModel.token, threadInfo.thread);
 
     singleThreadView.comment(commentContent).then((result)=>{

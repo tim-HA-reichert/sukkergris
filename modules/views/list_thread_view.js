@@ -1,5 +1,6 @@
 const html = `
 <h2>User forum</h2>
+<hr>
     <div id="threadContainer"> </div> 
 `;
 
