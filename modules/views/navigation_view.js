@@ -5,9 +5,6 @@ const html = `
         </form>
 
 <div id="nav-wrapper">
-        
-    
-
 <div id="navigationContainer"></div>
 </div>
     <template id="logged-in">
@@ -60,7 +57,7 @@ export class NavigationView extends HTMLElement {
 
         //Choose what to render
         //"aUser" is provided in main.js
-        let template =  aUser ? this.loggedIn : this.notLoggedIn;
+        let template = aUser ? this.loggedIn : this.notLoggedIn;
             const clone = template.content.cloneNode(true);
             this.navigationContainer.appendChild(clone);
         
