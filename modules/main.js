@@ -82,22 +82,39 @@ btnShowCategoriesView.addEventListener('click', function (evt) {
     viewContainer.appendChild(categoryListView);
 });
 
-//---------------------------------------------- AddEventListener for trykking av spesefikk sjokolade
+//---------------------------------------------- Detailed Sjokolade View
 chocolateListView.addEventListener('chocolateselect', function (evt) {    
     viewContainer.innerHTML = "";
     const detailProductPromise = api.getChocolateDetails(evt.detail.chocoID, userModel); //Lager et promise    
 
     detailProductPromise.then((ChocolateModelClass) => {        //Etter at promiset er ferdig, kjøres koden under
-        detailedProductView.refresh(ChocolateModelClass);
+        detailedProductView.refresh(ChocolateModelClass, userModel);
         ChocolateModelClass.showDetailed();
         viewContainer.appendChild(detailedProductView);
     })
 });
 //---------------------------------------------- Lytter til addItem knapp
-detailedProductView.addEventListener('addItem', function (evt) {    
+detailedProductView.addEventListener('addItem', evt => {    
     orderModel.addItem(evt.detail);
     api.manageOrderModel(orderModel)
 
+});
+
+//---------------------------------------------- Lytter til add review
+detailedProductView.addEventListener('left-comment', evt => {    
+    const addProductCommentPromise = api.addProductComment(evt.detail, userModel.token)
+
+    addProductCommentPromise.then((response) => {
+        // detailedProductView.refreshAfterComment(response)
+    })
+});
+//---------------------------------------------- Lytter show comments
+detailedProductView.addEventListener('show-product-comments', evt => {    
+    const showCommentsPromise = api.showComments(evt.detail)
+
+    showCommentsPromise.then((commentList) => {
+        detailedProductView.showComments(commentList)
+    })
 });
 
 //----------------------------------------------
@@ -109,28 +126,27 @@ navButtons.addEventListener('go-to-cart', function(evt) {
 });
 //---------------------------------------------- Lytter til Create User knapp
 
-navButtons.addEventListener('add-new-user', function(evt) {
+navButtons.addEventListener('add-new-user', () => {
     viewContainer.innerHTML = "";
     viewContainer.appendChild(addUserView);
 });
 
 //---------------------------------------------- Lytter til add-user submit
 
-addUserView.addEventListener('add-user', function(evt) {
+addUserView.addEventListener('add-user', evt => {
     api.addUser(evt.detail);
 });
 
 //---------------------------------------------- Lytter til login knapp
 
-navButtons.addEventListener('log-in', function(evt) {
+navButtons.addEventListener('log-in', () => {
     viewContainer.innerHTML = "";
     viewContainer.appendChild(loginView);
 });
 //---------------------------------------------- Lytter til login submit
 
-loginView.addEventListener('log-in', function(evt) {
-    const addUserPromise = api.logIn(evt.detail, "user");
-    
+loginView.addEventListener('log-in', evt => {
+    const addUserPromise = api.logIn(evt.detail, "user");    
     addUserPromise.then((aUserModel) => {        //Etter at promiset er ferdig, kjøres koden under
         userModel = aUserModel;
         startUp();
@@ -140,7 +156,7 @@ loginView.addEventListener('log-in', function(evt) {
 });
 
 //----------------------------------------------
-navButtons.addEventListener("search-for-products", function(evt){
+navButtons.addEventListener("search-for-products", evt => {
     evt.preventDefault();
     viewContainer.innerHTML = "";
     const searchValue = evt.detail;
@@ -158,7 +174,7 @@ navButtons.addEventListener("go-to-threads", e => {
     api.getAllUsers(userModel.token).then((usernames) => {
 
         const postAll = true;
-   api.listThreads(userModel.token, postAll, usernames).then((threadList) =>{
+        api.listThreads(userModel.token, postAll, usernames).then((threadList) =>{
             allThreadsView.loadThreads(threadList);
             viewContainer.appendChild(allThreadsView);
         });

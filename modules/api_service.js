@@ -28,6 +28,7 @@ const urlMap = {
     deleteUserURL: "https://sukkergris.onrender.com/users",
     userLoginURL: "https://sukkergris.onrender.com/users/login",
     userImageURL: "https://sukkergris.onrender.com/images/",
+    productCommentsURL: "https://sukkergris.onrender.com/webshop/comments", 
     //Message URL's
     messageURL: "https://sukkergris.onrender.com/msgboard/messages",  
     // add more URL' here...
@@ -153,7 +154,61 @@ export async function adjustableChocolateList(category) {
 }
 
 //----------------------------------------------------------
-// return details about chosen chocolate
+// Adds comment to product
+//----------------------------------------------------------
+export async function addProductComment(aData, aToken) {
+    const url = urlMap.productCommentsURL + "?key=" + groupKey;
+    const form = aData.formData     
+
+    try {
+        const cfg = {
+            method: "POST",
+            headers: {
+                "authorization": aToken,
+                "content-type": "application/json",
+            },
+            body: JSON.stringify({
+                comment_text: form.get("comment-text"), //OPTIONAL
+                product_id: aData.chocoID, //REQUIRED
+                rating: form.get("inpStars") //OPTIONAL
+            })
+        }
+        const data = await fetchData(url, cfg);
+
+        if(data.msg == "Insert/update comment ok") {
+            messageHandler("Review", "Review added successfully")
+        } else {
+            messageHandler("Review", "Failed to add review, try again")
+        }
+        return data
+    } catch (error) {
+        errorHandler(error);
+    }
+}
+
+
+//----------------------------------------------------------
+// Shows product comments
+//----------------------------------------------------------
+export async function showComments(productID) {
+    const url = urlMap.productCommentsURL + "?key=" + groupKey + "&product_id=" + productID; 
+    try {
+        const data = await fetchData(url);
+
+        if(data.length == 0 ) {
+            messageHandler("Comments", "No comments added to product")
+            return false
+        } else {
+            return data
+        }
+    } catch (error) {
+        errorHandler(error);
+    }
+}
+
+
+//----------------------------------------------------------
+// Return details about chosen chocolate
 //----------------------------------------------------------
 export async function getChocolateDetails(chosenChocolateID, aUser) {
     const url = urlMap.chosenProductURL + "?id=" + chosenChocolateID + "&key=" + groupKey;
@@ -201,15 +256,6 @@ export async function getChocolateDetails(chosenChocolateID, aUser) {
     }
 }
 
-//----------------------------------------------------------
-// Manages OrderModel
-//----------------------------------------------------------
-
-export function manageOrderModel(aOrderModel) { //klasse som parameter
-    const classOrderModel = aOrderModel; //Refererer til klassen som er definert i main.js
-
-    // classOrderModel.addItem("test") //eksempel på hvordan man kan kjøre en funksjon fra klassen
-}
 
 //----------------------------------------------------------
 // Search function
