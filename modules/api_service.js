@@ -30,8 +30,11 @@ const urlMap = {
     userLoginURL: "https://sukkergris.onrender.com/users/login",
     userImageURL: "https://sukkergris.onrender.com/images/",
     //Message URL's
-    messageURL: "https://sukkergris.onrender.com/msgboard/messages",  
+    messageURL: "https://sukkergris.onrender.com/msgboard/messages",
+    meowBeenzURL: "https://sukkergris.onrender.com/users/beenz", 
     // add more URL' here...
+    placeOrderURL: "https://sukkergris.onrender.com/webshop/orders"
+
 }
 
 //----------------------------------------------------------
@@ -569,11 +572,13 @@ export async function listThreads(aToken, postAll, usernames){
 }
 
 //-----------------------------------------------
-// Add a message
+// Forum functions
 //-----------------------------------------------
 
+//-----------------------------------------------
+// Add new forum-topc
+//-----------------------------------------------
 
-//If no thread is provided, a new thread with a integer ID that comes after the last integer is created. 
 export async function addThreads(aToken, threadForm){
 
     const url = urlMap.messageURL + "?key=" + groupKey + "&thread=";
@@ -609,13 +614,11 @@ export async function addThreads(aToken, threadForm){
     }
 }
 
-//If no thread is provided, a new thread with a integer ID that comes after the last integer is created. 
+//-----------------------------------------------
+// Comment on thread
+//-----------------------------------------------
 
-/*Current bug: "Comment by" only shows the name of the currently logged in user, 
-after the user has pressed the submit button. 
-The first issue is in the way we save the aUserNameID (in a global variable). 
 
-The second issue is unknown for now. Perhaps it is because the global variable isn't "made" before we press submit. */
 export async function addThreadComment(aToken, aThreadID, aCommentForm){
 
     const url = urlMap.messageURL + "?key=" + groupKey + "&thread=" + aThreadID;
@@ -650,6 +653,11 @@ export async function addThreadComment(aToken, aThreadID, aCommentForm){
     }
 }
 
+//-----------------------------------------------
+// List all comments
+//-----------------------------------------------
+
+
 export async function listComments(aToken, aThreadID, usernames){
     const url = urlMap.messageURL + "?key=" + groupKey + "&thread=" + aThreadID;
 
@@ -661,7 +669,7 @@ export async function listComments(aToken, aThreadID, usernames){
     }
 
     try {
-        const result = await fetchData(url, cfg);
+       const result = await fetchData(url, cfg);
 
        const listOfComments = [];
 
@@ -683,9 +691,8 @@ export async function listComments(aToken, aThreadID, usernames){
              } else {
                console.log("Could not match userID.");
              }
-        }
-            
-        }
+        }        
+    }
 
         return listOfComments;
 
@@ -695,7 +702,9 @@ export async function listComments(aToken, aThreadID, usernames){
 }
 
 
-
+//-----------------------------------------------
+// Delete thread 
+//-----------------------------------------------
 
 export async function deleteThread(aMessageID, aToken){
     const url = urlMap.messageURL + "?key=" + groupKey + "&message_id=" + aMessageID;
@@ -716,3 +725,43 @@ export async function deleteThread(aMessageID, aToken){
     }
 
 }
+
+
+
+//-----------------------------------------------
+// MeowMeowBeenz (rating of other users) functions
+//-----------------------------------------------
+
+
+
+
+export async function placeOrder(aToken, aOrderForm){
+    const url = urlMap.placeOrderURL + "?key=" + groupKey;
+
+    const contentToJson = {
+        content: aOrderForm.get("content")
+    };
+
+    JSON.stringify(contentToJson);
+
+    const cfg = {
+        method: "POST",
+        headers: {
+            "authorization" : aToken,
+        },
+        body: aOrderForm,
+    }
+
+
+    try{
+
+        const result = await fetchData(url, cfg);
+
+        console.log(result);
+
+        return result
+    }catch(error){
+        errorHandler(error);
+    }
+}
+

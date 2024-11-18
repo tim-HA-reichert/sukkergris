@@ -39,6 +39,7 @@ export class changeProductView extends HTMLElement{
 
     this.form.addEventListener('submit', evt => {
         evt.preventDefault();
+        
         const formData = new FormData(this.form);
 
         const changeEvent = new CustomEvent("change-product", {

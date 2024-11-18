@@ -15,6 +15,7 @@ export class ChocolateListView extends HTMLElement {
         this.attachShadow({mode: "open"});
         this.shadowRoot.innerHTML = html;
         this.listContainer = this.shadowRoot.getElementById("listContainer");
+
     }
 
     //---------------------------------------
@@ -33,7 +34,10 @@ export class ChocolateListView extends HTMLElement {
                 <hr>
             `;
 
+            //theDiv.classList.add("single-choco-wrapper");
+            
             this.listContainer.appendChild(theDiv);
+        
 
             theDiv.addEventListener('click', evt => {
                 const chocolateDetailEvent = new CustomEvent("chocolateselect", {composed: true, bubbles:true, detail: value});

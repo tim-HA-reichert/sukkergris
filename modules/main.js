@@ -156,9 +156,9 @@ navButtons.addEventListener("go-to-threads", e => {
     viewContainer.innerHTML = "";
 
     api.getAllUsers(userModel.token).then((usernames) => {
-
         const postAll = true;
-   api.listThreads(userModel.token, postAll, usernames).then((threadList) =>{
+
+        api.listThreads(userModel.token, postAll, usernames).then((threadList) =>{
             allThreadsView.loadThreads(threadList);
             viewContainer.appendChild(allThreadsView);
         });
