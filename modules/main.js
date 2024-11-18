@@ -101,20 +101,21 @@ detailedProductView.addEventListener('addItem', evt => {
 });
 
 //---------------------------------------------- Lytter til add review
-detailedProductView.addEventListener('left-comment', evt => {    
-    const addProductCommentPromise = api.addProductComment(evt.detail, userModel.token)
-
-    addProductCommentPromise.then((response) => {
-        // detailedProductView.refreshAfterComment(response)
+detailedProductView.addEventListener('left-review', evt => {    
+    const addProductReviewPromise = api.addProductReview(evt.detail, userModel.token)
+    addProductReviewPromise.then((response) => {
+        detailedProductView.updateLive();
     })
 });
-//---------------------------------------------- Lytter show comments
-detailedProductView.addEventListener('show-product-comments', evt => {    
-    const showCommentsPromise = api.showComments(evt.detail)
+//---------------------------------------------- Lytter show reviews
+detailedProductView.addEventListener('show-product-reviews', evt => {    
+    api.getAllUsers(userModel.token).then(usernames => {
+        const showReviewsPromise = api.showReviews(evt.detail, usernames)
+        showReviewsPromise.then((reviewList) => {
+            detailedProductView.showReviews(reviewList)
+        })
+    });
 
-    showCommentsPromise.then((commentList) => {
-        detailedProductView.showComments(commentList)
-    })
 });
 
 //----------------------------------------------

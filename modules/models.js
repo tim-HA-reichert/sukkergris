@@ -210,3 +210,38 @@ export class userModel {
         this.zipcode = newUser.zipcode;
     }
 }
+
+
+
+
+
+//===========================================
+//Review Model
+//===========================================
+
+export class ReviewModel{
+
+    constructor(newReviewObject){
+        this.update(newReviewObject)
+    }
+
+    update(reviewObject){
+        this.comment_text = reviewObject.comment_text;
+        this.date = reviewObject.date;
+        this.id = reviewObject.id;
+        this.product_id = reviewObject.product_id;
+        this.rating = reviewObject.rating //Waiting to be filled by userModel.username.
+        
+        this.user_id = reviewObject.user_id;
+
+        this.username = null;
+    }
+
+    setUsername(user){
+        if (user) {
+            this.username = user.username;
+          } else {
+            this.username = 'No username found. Model.js';
+          }
+    }
+}

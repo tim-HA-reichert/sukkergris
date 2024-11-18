@@ -4,7 +4,7 @@
 import { fetchData } from "./utilities.js";
 import { createBasicAuthString } from "./utilities.js";
 import { CategoryModel, ChocolateModel, LoginDataModel, 
-    UserThreadModel, UserCommentModel, userModel } from "./models.js";
+    UserThreadModel, UserCommentModel, userModel, ReviewModel } from "./models.js";
 import { errorHandler } from "./error_handler.js";
 import { messageHandler } from "./messageHandler.js";
 
@@ -28,7 +28,7 @@ const urlMap = {
     deleteUserURL: "https://sukkergris.onrender.com/users",
     userLoginURL: "https://sukkergris.onrender.com/users/login",
     userImageURL: "https://sukkergris.onrender.com/images/",
-    productCommentsURL: "https://sukkergris.onrender.com/webshop/comments", 
+    productReviewsURL: "https://sukkergris.onrender.com/webshop/comments", 
     //Message URL's
     messageURL: "https://sukkergris.onrender.com/msgboard/messages",  
     // add more URL' here...
@@ -156,8 +156,8 @@ export async function adjustableChocolateList(category) {
 //----------------------------------------------------------
 // Adds comment to product
 //----------------------------------------------------------
-export async function addProductComment(aData, aToken) {
-    const url = urlMap.productCommentsURL + "?key=" + groupKey;
+export async function addProductReview(aData, aToken) {
+    const url = urlMap.productReviewsURL + "?key=" + groupKey;
     const form = aData.formData     
 
     try {
@@ -168,7 +168,7 @@ export async function addProductComment(aData, aToken) {
                 "content-type": "application/json",
             },
             body: JSON.stringify({
-                comment_text: form.get("comment-text"), //OPTIONAL
+                comment_text: form.get("review-text"), //OPTIONAL
                 product_id: aData.chocoID, //REQUIRED
                 rating: form.get("inpStars") //OPTIONAL
             })
@@ -188,18 +188,42 @@ export async function addProductComment(aData, aToken) {
 
 
 //----------------------------------------------------------
-// Shows product comments
+// Shows product reviews
 //----------------------------------------------------------
-export async function showComments(productID) {
-    const url = urlMap.productCommentsURL + "?key=" + groupKey + "&product_id=" + productID; 
+export async function showReviews(productID, usernames) {
+    const url = urlMap.productReviewsURL + "?key=" + groupKey + "&product_id=" + productID;
+
     try {
         const data = await fetchData(url);
 
         if(data.length == 0 ) {
-            messageHandler("Comments", "No comments added to product")
+            messageHandler("Reviews", "No reviews added to product")
             return false
         } else {
-            return data
+
+            const threadList = [];            
+
+            for(let element of data){
+                    const reviewObject = {
+                        comment_text: element.comment_text,
+                        date: element.date, 
+                        id: element.id,
+                        product_id: element.product_id,
+                        rating: element.rating,
+                        user_id: element.user_id
+                        }
+        
+                        // Match user_id with the users list to generate username object key. 
+                        const userInList = usernames.find((user) => user.id === element.user_id);
+
+                        if(userInList){
+                            const threadItem = new ReviewModel(reviewObject);
+                            threadItem.setUsername(userInList);
+                            threadList.push(threadItem);
+                        }
+                        
+            }
+            return threadList
         }
     } catch (error) {
         errorHandler(error);
@@ -494,6 +518,28 @@ export async function getAllUsers(aToken, aUserID){
         errorHandler(error);
     }
 }
+
+// export async function getUserTest(aUserID){
+//     let url = urlMap.listAllUsersURL + "?key=" + groupKey + "&userid=" + aUserID;
+
+//     try{
+//         const cfg = {
+//             method: "GET",
+//             headers: {
+//                 "authorization": aToken
+//             }
+//         }
+
+//         const result = await fetchData(url, cfg);
+//         console.log(result);
+        
+
+//         // const userList = [];
+
+//     }catch(error){
+//         errorHandler(error);
+//     }
+// }
 
 
 
