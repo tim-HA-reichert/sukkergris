@@ -1,4 +1,3 @@
-
 const html = `
     <h2>Categories</h2>
     <div id="listContainer"></div>

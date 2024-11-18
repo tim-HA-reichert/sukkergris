@@ -1,10 +1,10 @@
-
 //this module contains the functions in the service layer
 //----------------------------------------------------------
 
 import { fetchData } from "./utilities.js";
 import { createBasicAuthString } from "./utilities.js";
-import { CategoryModel, ChocolateModel, LoginDataModel } from "./models.js";
+import { CategoryModel, ChocolateModel, LoginDataModel, 
+    UserThreadModel, UserCommentModel, userModel } from "./models.js";
 import { errorHandler } from "./error_handler.js";
 import { messageHandler } from "./messageHandler.js";
 
@@ -13,6 +13,7 @@ const imgKey = "GFTPOE21";
 
 
 const urlMap = {
+    imgURL: "https://sukkergris.onrender.com/images/",
     categoryURL: "https://sukkergris.onrender.com/webshop/categories",
     chosenCategoryURL: "https://sukkergris.onrender.com/webshop/products",
     chosenProductURL: "https://sukkergris.onrender.com/webshop/products",
@@ -22,10 +23,14 @@ const urlMap = {
     adminProductsURL: "https://sukkergris.onrender.com/webshop/products",
     deleteProductURL: "https://sukkergris.onrender.com/webshop/products",
     changeProductURL: "https://sukkergris.onrender.com/webshop/products",
-    //
+    //User URL's
     AddUserURL: "https://sukkergris.onrender.com/users",
+    listAllUsersURL: "https://sukkergris.onrender.com/users",
+    deleteUserURL: "https://sukkergris.onrender.com/users",
     userLoginURL: "https://sukkergris.onrender.com/users/login",
-    userImageURL: "https://sukkergris.onrender.com/images/"
+    userImageURL: "https://sukkergris.onrender.com/images/",
+    //Message URL's
+    messageURL: "https://sukkergris.onrender.com/msgboard/messages",  
     // add more URL' here...
 }
 
@@ -61,16 +66,30 @@ export async function getCategories() {
 //----------------------------------------------------------
 // return a list (array) of dummy-products based on category
 //----------------------------------------------------------
-export async function getChocolateByCategory(category) {
+export async function getChocolatesByCategory(category, aUser) {
     const url = urlMap.chosenCategoryURL + "?key=" + groupKey + "&category_id=" + category;
     //Category er et tall, som er lik categoryID til eventListener i category_list_view.js
 
 
-    try {
-        const data = await fetchData(url);
-        //data er en liste med sjokolade. Ufiltrert liste. 
 
+    try {
+        let data = null
+        
         const chosenCat = [];
+        
+        if (aUser) {
+            const cfg = {
+                method: "GET",
+                headers: {
+                    "authorization": aUser.token
+                }
+            }
+            data = await fetchData(url, cfg);
+        }
+        else if (!aUser) {
+            data = await fetchData(url);
+            //data er en liste med sjokolade. Ufiltrert liste. 
+        }
 
         for (let chocoCat of data) {
             if (chocoCat.category_id === category) {
@@ -80,13 +99,14 @@ export async function getChocolateByCategory(category) {
                     categoryID: chocoCat.category_id,
                     description: chocoCat.description,
                     details: chocoCat.details,
-                    thumb: chocoCat.thumb,
+                    //Not working yet
+                    thumb: urlMap.imgURL + imgKey + "/small/" + chocoCat.thumb,
                     price: chocoCat.price
                 };
                 //fikk hjelp av chatGPT for .push og chosenCat array. 
                 chosenCat.push(new ChocolateModel(chocoObj));
-                }; 
-            }; 
+            };
+        };
 
         return chosenCat;
 
@@ -94,6 +114,7 @@ export async function getChocolateByCategory(category) {
         errorHandler(error);
     }
 }
+
 
 //----------------------------------------------------------
 // return details about chosen chocolate
@@ -123,27 +144,37 @@ export async function adjustableChocolateList(category) {
                 };
                 //fikk hjelp av chatGPT for .push og chosenCat array. 
                 chocoDeleteList.push(new ChocolateModel(chocoObj));
-                }; 
-            }; 
+            };
+        };
 
-            return chocoDeleteList;
+        return chocoDeleteList;
 
     } catch (error) {
         errorHandler(error);
     }
 }
 
-
-
-
 //----------------------------------------------------------
 // return details about chosen chocolate
 //----------------------------------------------------------
-export async function getChocolateDetails(chosenChocolateID) {
+export async function getChocolateDetails(chosenChocolateID, aUser) {
     const url = urlMap.chosenProductURL + "?id=" + chosenChocolateID + "&key=" + groupKey;
+    let data = null
 
     try {
-        const data = await fetchData(url);
+
+        if (aUser) {
+            const cfg = {
+                method: "GET",
+                headers: {
+                    "authorization": aUser.token
+                }
+            }
+            data = await fetchData(url, cfg);
+        }
+        else if (!aUser) {
+            data = await fetchData(url);
+        }
 
         for (let chocoDet of data) {
             let chocoObj = {
@@ -174,17 +205,6 @@ export async function getChocolateDetails(chosenChocolateID) {
 }
 
 //----------------------------------------------------------
-// return all dummy-products
-//----------------------------------------------------------
-
-export async function getAllDummies() {
-
-    const url = urlMap.chosenCategoryURL + "?key=" + groupKey;
-
-    //more code here...
-}
-
-//----------------------------------------------------------
 // Manages OrderModel
 //----------------------------------------------------------
 
@@ -192,19 +212,18 @@ export function manageOrderModel(aOrderModel) { //klasse som parameter
     const classOrderModel = aOrderModel; //Refererer til klassen som er definert i main.js
 
     // classOrderModel.addItem("test") //eksempel på hvordan man kan kjøre en funksjon fra klassen
-
-
 }
 
 //----------------------------------------------------------
 // Search function
 //----------------------------------------------------------
 
-export async function getChocolateBySearch(searchValue){
+export async function getChocolateBySearch(searchValue) {
     //Use value from searchbar to filter chocolates. 
     //Add a onclick to searchBtn to trigger this function. 
+    let searchFor = searchValue.get("searchBar");
 
-    const url = urlMap.chosenCategoryURL + "?search=" + searchValue + "&key=" + groupKey;   
+    const url = urlMap.chosenCategoryURL + "?search=" + searchFor + "&key=" + groupKey;   
         try {
             const data = await fetchData(url);
         
@@ -213,13 +232,13 @@ export async function getChocolateBySearch(searchValue){
             //"i" for removing case-sensitivty. 
             //new RegExp is a javaScript function that creates a regular expression from parameter. 
             //Allows us to use .test, which tests searchValue against a chosen object. 
-            const regexSearchTest = new RegExp(searchValue, "i"); 
+            const regexSearchTest = new RegExp(searchFor, "i"); 
 
 
-            for(let chocoCat of data){
-                regexSearchTest.test(chocoCat.name)  
-                    {               
-                    const chocoObj = {
+        for (let chocoCat of data) {
+            regexSearchTest.test(chocoCat.name)
+            {
+                const chocoObj = {
                     chocoID: chocoCat.id,
                     chocoName: chocoCat.name,
                     categoryID: chocoCat.category_id,
@@ -227,22 +246,21 @@ export async function getChocolateBySearch(searchValue){
                     details: chocoCat.details,
                     thumb: chocoCat.thumb,
                     price: chocoCat.price
-                    };
+                };
                 chosenCat.push(new ChocolateModel(chocoObj));
-                    };
-                };
+            };
+        };
 
-                if(chosenCat.length === 0){
-                    messageHandler("Nothing matches your search, please try again.");
-                };
-                return chosenCat;
-                
-        } catch(error) {
-            errorHandler(error);
-        }
-        
+        if (chosenCat.length === 0) {
+            messageHandler("Nothing matches your search, please try again.");
+        };
+        return chosenCat;
+
+    } catch (error) {
+        errorHandler(error);
+    }
+
 }
-
 
 //----------------------------------------------------------
 // admin and user log-in
@@ -305,7 +323,7 @@ export function getUserImage(userModel) {
 // Add a new product
 //----------------------------------------------------------
 
-export async function adminProducts (aToken, aNewProductForm){
+export async function adminProducts(aToken, aNewProductForm) {
 
     const url = urlMap.adminProductsURL + "?key=" + groupKey;
 
@@ -313,15 +331,15 @@ export async function adminProducts (aToken, aNewProductForm){
     const formData = aNewProductForm;
 
 
-    try{
-        
-    const cfg = {
-        method: "POST",
-        headers: {
-            "authorization": adminToken
-        },
-        body: formData
-    }
+    try {
+
+        const cfg = {
+            method: "POST",
+            headers: {
+                "authorization": adminToken
+            },
+            body: formData
+        }
 
         const result = await fetchData(url, cfg);
 
@@ -337,17 +355,45 @@ export async function adminProducts (aToken, aNewProductForm){
 // Delete a product made by admin 
 //----------------------------------------------------------
 
-export async function deleteProduct (adminToken, productID){
+export async function deleteProduct(adminToken, productID) {
 
-        const url = urlMap.deleteProductURL + "?id=" + productID + "&key=" + groupKey;
+    const url = urlMap.deleteProductURL + "?id=" + productID + "&key=" + groupKey;
 
-    try{
+    try {
 
         const cfg = {
             method: "DELETE",
             headers: {
                 "authorization": adminToken
-            },        
+            },
+        }
+
+        const result = await fetchData(url, cfg);
+
+        messageHandler(result);
+        return result;
+
+    } catch (error) {
+        errorHandler(error);
+    }
+
+}
+
+//----------------------------------------------------------
+// User functions
+//----------------------------------------------------------
+
+export async function addUser (aForm){
+
+    const url = urlMap.AddUserURL + "?key=" + groupKey;
+
+    const formData = aForm;
+
+    try{
+
+        const cfg = {
+            method: "POST",
+            body: formData
         }
 
         const result = await fetchData(url, cfg);
@@ -358,12 +404,86 @@ export async function deleteProduct (adminToken, productID){
     }catch(error){
         errorHandler(error);
     }
-
 }
 
+export async function getAllUsers(aToken, aUserID){
+    let url;
+
+    //Terniary version
+    // = aUserID ?  urlMap.listAllUsersURL + "?key=" + groupKey + "&userid=" + aUserID : urlMap.listAllUsersURL + "?key=" + groupKey + "&userid=";
+
+    if(aUserID){
+        url = urlMap.listAllUsersURL + "?key=" + groupKey + "&userid=" + aUserID;
+    } else {
+        url = urlMap.listAllUsersURL + "?key=" + groupKey + "&userid=";
+    }
+
+    try{
+        const cfg = {
+            method: "GET",
+            headers: {
+                "authorization": aToken
+            }
+        }
+
+        const result = await fetchData(url, cfg);
+
+        const userList = [];
+
+        for(let value of result){
+            const userObj = {
+                city: value.city,
+                heading: value.country, 
+                full_name: value.full_name,
+                id: value.id,
+                street: value.street,
+                superuser: value.superuser,
+                thumb: value.thumb,
+                username: value.username,
+                zipcode: value.zipcode
+                }         
+           userList.push(new userModel(userObj));        
+    }
+
+        return userList;
+
+    }catch(error){
+        errorHandler(error);
+    }
+}
+
+
+
+export async function deleteUser(adminToken, aUserId){
+    const url = urlMap.deleteUserURL + "?key=" + groupKey + "&id=" + aUserId;
+
+    const cfg = {
+        method: "DELETE",
+        headers: {
+            "authorization": adminToken
+        }
+    }
+
+    try{
+        const result = await fetchData(url, cfg);
+
+        messageHandler(result);
+        return result;
+
+    }catch(error){
+        errorHandler(error);
+    }
+}
+
+
+
+
 //----------------------------------------------------------
-// Change a product
+// Product functions
 //----------------------------------------------------------
+
+
+
 
 export async function changeProduct (adminToken, aForm){
 
@@ -372,7 +492,7 @@ export async function changeProduct (adminToken, aForm){
     let formData = aForm;
 
 
-    try{
+    try {
 
         const cfg = {
             method: "PUT",
@@ -389,10 +509,211 @@ export async function changeProduct (adminToken, aForm){
         return result;
 
 
+    } catch (error) {
+        errorHandler(error);
+    }
+}
+
+//-----------------------------------------------
+// Forum functions
+//-----------------------------------------------
+
+//Need to make seperate function for specific threads. 
+//Vi kan prøve å sammenfatte de, men jeg tror det blir messy. 
+export async function listThreads(aToken, postAll, usernames){
+
+    const url = urlMap.messageURL + "?key=" + groupKey + "&all=" + postAll + "&asc=" + true;
+    
+
+    const cfg = {
+        method: "GET",
+        headers: {
+            "authorization": aToken
+        }
+    }
+    
+    try{
+        const result = await fetchData(url, cfg);
+
+        const threadList = [];
+
+        for(let value of result){
+            if(value.start_of_thread === true){
+            const threadObj = {
+                date: value.date,
+                heading: value.heading, 
+                id: value.id,
+                message: value.message,
+                thread: value.thread,
+                user_id: value.user_id
+                }
+
+                // Match user_id with the users list to generate username object key. 
+                const userInList = usernames.find((user) => user.id === value.user_id);
+                if(userInList){
+                    const threadItem = new UserThreadModel(threadObj);
+                    threadItem.setUsername(userInList);
+                    threadList.push(threadItem);
+                } else{
+                    console.log("could not match user id.")
+                } 
+            
+
+           //threadList.push(new UserThreadModel(threadObj));
+        }
+    }
+        return threadList;
+
     } catch (error){
         errorHandler(error);
     }
+}
+
+//-----------------------------------------------
+// Add a message
+//-----------------------------------------------
 
 
+//If no thread is provided, a new thread with a integer ID that comes after the last integer is created. 
+export async function addThreads(aToken, threadForm){
+
+    const url = urlMap.messageURL + "?key=" + groupKey + "&thread=";
+
+        const data = {
+            threadHeading: threadForm.get("thread-title"),
+            messageText: threadForm.get("thread-text"),
+        }
+
+        const cfg = {
+            method: "POST",
+            headers: {
+                "authorization": aToken,
+                "content-type": "application/json",
+            },
+            body: JSON.stringify({
+                heading: data.threadHeading,
+                message_text: data.messageText
+            })
+        }
+
+        try{
+
+        const result = await fetchData(url, cfg);
+        result.start_of_thread = true;
+
+        messageHandler("Forum", "Added new topic of discussion!");
+
+        return result;
+
+    } catch (error){
+        errorHandler(error);
+    }
+}
+
+//If no thread is provided, a new thread with a integer ID that comes after the last integer is created. 
+
+/*Current bug: "Comment by" only shows the name of the currently logged in user, 
+after the user has pressed the submit button. 
+The first issue is in the way we save the aUserNameID (in a global variable). 
+
+The second issue is unknown for now. Perhaps it is because the global variable isn't "made" before we press submit. */
+export async function addThreadComment(aToken, aThreadID, aCommentForm){
+
+    const url = urlMap.messageURL + "?key=" + groupKey + "&thread=" + aThreadID;
+
+        const data = {
+            commentHeading: `A user comment in thread${aThreadID}`,
+            commentText: aCommentForm.get("comment-text"),
+        }
+
+        const cfg = {
+            method: "POST",
+            headers: {
+                "authorization": aToken,
+                "content-type": "application/json",
+            },
+            body: JSON.stringify({
+                heading: data.commentHeading,
+                message_text: data.commentText
+            })
+        }
+
+        try{
+
+        const result = await fetchData(url, cfg);
+
+        messageHandler("Forum", "Thanks for furthering discussions about candy.");
+        
+       return result;
+
+    } catch (error){
+        errorHandler(error);
+    }
+}
+
+export async function listComments(aToken, aThreadID, usernames){
+    const url = urlMap.messageURL + "?key=" + groupKey + "&thread=" + aThreadID;
+
+    const cfg = {
+        method: "GET",
+        headers: {
+            "authorization": aToken
+        }
+    }
+
+    try {
+        const result = await fetchData(url, cfg);
+
+       const listOfComments = [];
+
+         for(let value of result){
+            if(value.start_of_thread === false && value.thread === aThreadID){
+            const commentObj = {
+                message: value.message,
+                thread: value.thread,
+                user_id: value.user_id,
+
+            }
+
+             // Match user_id with the users list to generate username object key. 
+             const userInList = usernames.find((user) => user.id === value.user_id);
+             if (userInList) {
+               const userComments = new UserCommentModel(commentObj);
+               userComments.setUsername(userInList);
+               listOfComments.push(userComments);
+             } else {
+               console.log("Could not match userID.");
+             }
+        }
+            
+        }
+
+        return listOfComments;
+
+    } catch (error){
+        errorHandler(error)
+    }
+}
+
+
+
+
+export async function deleteThread(aMessageID, aToken){
+    const url = urlMap.messageURL + "?key=" + groupKey + "&message_id=" + aMessageID;
+
+    const cfg = {
+        method: "DELETE",
+        headers: {
+            "authorization": aToken
+        }
+    }
+
+    try{
+        const result = await fetchData(url, cfg);
+        
+        return result
+    } catch(error){
+        errorHandler(error)
+    }
 
 }

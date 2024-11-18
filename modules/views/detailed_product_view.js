@@ -40,15 +40,15 @@ export class DetailedProductView extends HTMLElement {
                 
             `;
         if (itemObject.number_of_ratings > 0) {
-            theDiv.innerHTML += `<p> Customer rating: ${itemObject.rating} </p>`
+            const ratingToNumber = Number(itemObject.rating)
+            const ratingToFixed = ratingToNumber.toFixed(1)
+            theDiv.innerHTML += `<p> Customer rating: ${ratingToFixed}
+                </p>`
         }
 
         this.listContainer.appendChild(theDiv);
 
         const btnAddItem = this.shadowRoot.getElementById("btnAddItem");
-        if (itemObject.stock === "Out of stock") {
-            btnAddItem.style.display = "none"
-        }
 
         btnAddItem.addEventListener('click', evt => {
             const theEvent = new CustomEvent("addItem", { composed: true, bubbles: true, detail: itemObject });
