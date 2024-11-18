@@ -109,12 +109,19 @@ detailedProductView.addEventListener('left-review', evt => {
 });
 //---------------------------------------------- Lytter show reviews
 detailedProductView.addEventListener('show-product-reviews', evt => {    
-    api.getAllUsers(userModel.token).then(usernames => {
-        const showReviewsPromise = api.showReviews(evt.detail, usernames)
-        showReviewsPromise.then((reviewList) => {
-            detailedProductView.showReviews(reviewList)
-        })
-    });
+    if(userModel) {
+        api.getAllUsers(userModel.token).then(usernames => {
+            const showReviewsPromise = api.showReviews(evt.detail, usernames, userModel)
+            showReviewsPromise.then((reviewList) => {
+                detailedProductView.showReviews(reviewList)
+            })
+        });
+    } else {
+        const showReviewsPromise = api.showReviews(evt.detail)
+            showReviewsPromise.then((reviewList) => {
+                detailedProductView.showReviews(reviewList)
+            })
+    }
 
 });
 

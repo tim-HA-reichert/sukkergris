@@ -244,4 +244,8 @@ export class ReviewModel{
             this.username = 'No username found. Model.js';
           }
     }
+
+    setAnonymous () {
+        this.username = "Anonymous"
+    }
 }

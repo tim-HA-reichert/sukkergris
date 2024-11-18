@@ -174,6 +174,7 @@ export async function addProductReview(aData, aToken) {
             })
         }
         const data = await fetchData(url, cfg);
+        // console.log(form.get("inpStars"));
 
         if(data.msg == "Insert/update comment ok") {
             messageHandler("Review", "Review added successfully")
@@ -190,11 +191,12 @@ export async function addProductReview(aData, aToken) {
 //----------------------------------------------------------
 // Shows product reviews
 //----------------------------------------------------------
-export async function showReviews(productID, usernames) {
+export async function showReviews(productID, usernames, userModel) {
     const url = urlMap.productReviewsURL + "?key=" + groupKey + "&product_id=" + productID;
 
     try {
         const data = await fetchData(url);
+        
 
         if(data.length == 0 ) {
             messageHandler("Reviews", "No reviews added to product")
@@ -204,25 +206,30 @@ export async function showReviews(productID, usernames) {
             const threadList = [];            
 
             for(let element of data){
-                    const reviewObject = {
-                        comment_text: element.comment_text,
-                        date: element.date, 
-                        id: element.id,
-                        product_id: element.product_id,
-                        rating: element.rating,
-                        user_id: element.user_id
-                        }
-        
-                        // Match user_id with the users list to generate username object key. 
-                        const userInList = usernames.find((user) => user.id === element.user_id);
-
-                        if(userInList){
-                            const threadItem = new ReviewModel(reviewObject);
-                            threadItem.setUsername(userInList);
-                            threadList.push(threadItem);
-                        }
-                        
+                const reviewObject = {
+                    comment_text: element.comment_text,
+                    date: element.date, 
+                    id: element.id,
+                    product_id: element.product_id,
+                    rating: element.rating,
+                    user_id: element.user_id
+                }
+                
+                if(userModel) {
+                    // Match user_id with the users list to generate username object key. 
+                    const userInList = usernames.find((user) => user.id === element.user_id);
+                    if(userInList){
+                        const threadItem = new ReviewModel(reviewObject);
+                        threadItem.setUsername(userInList);
+                        threadList.push(threadItem);
+                    }
+                } else {
+                    const threadItem = new ReviewModel(reviewObject);
+                    threadItem.setAnonymous();
+                    threadList.push(threadItem)
+                }
             }
+            
             return threadList
         }
     } catch (error) {

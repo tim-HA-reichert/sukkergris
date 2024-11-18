@@ -57,7 +57,7 @@ export class DetailedProductView extends HTMLElement {
                     <br>
 
                     <label for="temp">Give a number of stars:</label>
-                    <input type="number" id="inpStars" min="1" max="5"/>
+                    <input type="number" id="inpStars" name="inpStars" min="1" max="5">
 
                     <br>
 
@@ -142,21 +142,20 @@ export class DetailedProductView extends HTMLElement {
 
         if (areviewList) {
             this.reviewContainer.innerHTML = "";
-            console.log("denne kjører joooo daaa");
 
             areviewList.forEach(element => {
-
-                console.log(element);
 
                 const reviewDiv = document.createElement("div");
                 reviewDiv.innerHTML = `
                 <hr>
-                <h1>UserID: ${element.username}</h1>
-                <h4>Date: ${shortenDate(element.date)}</h4>
+                <h1>${element.username}</h1>
+                <h4>${shortenDate(element.date)}</h4>
                 <h3>${stars[element.rating]}</h3>
                 <p>${element.comment_text}</p>
                 <hr>
                 `
+                // console.log(element.rating);
+
                 this.reviewContainer.appendChild(reviewDiv);
             });
         };
