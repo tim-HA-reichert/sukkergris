@@ -32,6 +32,7 @@ const urlMap = {
     //Message URL's
     messageURL: "https://sukkergris.onrender.com/msgboard/messages",  
     // add more URL' here...
+    placeOrderURL: "https://sukkergris.onrender.com/webshop/orders",
 }
 
 //----------------------------------------------------------
