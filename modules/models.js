@@ -1,4 +1,4 @@
-import { shortenDate, matchID } from "./utilities.js";
+import { shortenDate } from "./utilities.js";
 
 //=====================================================
 export class CategoryModel {
@@ -191,7 +191,7 @@ export class UserThreadModel{
     }
 }
 
-export class UserCommentModel{
+export class UserCommentModel {
 
     constructor(newUserCommentObject){
         this.update(newUserCommentObject)

@@ -34,9 +34,7 @@ const userContainer = document.getElementById("user-container");
 
 const btnShowCategoriesView = document.getElementById('btnShowCategories');
 
-
 const valueChecker = document.getElementById("value-checker");
-
 
 
 
@@ -77,8 +75,8 @@ function startUp () {
 }
 
 //-----------------------------------------------
-valueChecker.addEventListener("click", e => {
-console.log(orderModel.cartArray);
+valueChecker.addEventListener("click", async e => {
+
 });
 
 categoryListView.addEventListener('categoryselect', function (evt) {    
@@ -166,29 +164,24 @@ navButtons.addEventListener("search-for-products", function(evt){
 //RECIPES
 //---------------------------------------------
 navButtons.addEventListener("go-to-threads", e => {
-    viewContainer.innerHTML = "";
-
     api.getAllUsers(userModel.token).then((usernames) => {
-
+    viewContainer.innerHTML = "";
         const postAll = true;
-   api.listThreads(userModel.token, postAll, usernames).then((threadList) =>{
-            allThreadsView.loadThreads(threadList);
+        const threadListPromise = api.listThreads(userModel.token, postAll, usernames);
+            allThreadsView.loadThreads(threadListPromise);
             viewContainer.appendChild(allThreadsView);
-        });
     });
 });
 
 allThreadsView.addEventListener("wish-to-inspect", e => {
     viewContainer.innerHTML ="";
-    threadInfo = e.detail;
-    singleThreadView.refresh(e.detail).then(() => {
+    api.getAllUsers(userModel.token).then((usernames) => {
+        threadInfo = e.detail;
+        singleThreadView.refresh(e.detail);
 
-    api.getAllUsers(userModel.token).then(usernames => {
-
-            const commentContent = api.listComments(userModel.token, threadInfo.thread, usernames);
+        const commentContent = api.listComments(userModel.token, threadInfo.thread, usernames);
             singleThreadView.comment(commentContent); 
             viewContainer.appendChild(singleThreadView);
-        });
     });
 });
 

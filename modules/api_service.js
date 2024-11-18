@@ -271,8 +271,7 @@ export async function logIn(aForm, accountType) {
 
     const url = urlMap[`${accountType}LoginURL`] + "?key=" + groupKey; //Får tilgang til URLMapping, bruker brackets ([]) for å få tilgang til objekt element.
 
-    //See if you can use loginModel here. Or if loginModel is for new users?
-    //OR rather: store login data in LoginDataModel, such as admintoken. 
+    
     const loginCred = {
         username: aForm.get("username"),
         password: aForm.get("password"),
@@ -290,7 +289,6 @@ export async function logIn(aForm, accountType) {
     try {
         const result = await fetchData(url, cfg);
         messageHandler("Login", "User logged in successfully");
-
         const loginDataObj = {
             superuser: result.logindata.superuser,
             thumb: result.logindata.thumb,
@@ -429,6 +427,7 @@ export async function getAllUsers(aToken, aUserID){
 
         const result = await fetchData(url, cfg);
 
+
         const userList = [];
 
         for(let value of result){
@@ -536,6 +535,9 @@ export async function listThreads(aToken, postAll, usernames){
     try{
         const result = await fetchData(url, cfg);
 
+        console.log(result);
+
+
         const threadList = [];
 
         for(let value of result){
@@ -558,9 +560,7 @@ export async function listThreads(aToken, postAll, usernames){
                 } else{
                     console.log("could not match user id.")
                 } 
-            
 
-           //threadList.push(new UserThreadModel(threadObj));
         }
     }
         return threadList;
@@ -676,7 +676,7 @@ export async function listComments(aToken, aThreadID, usernames){
 
             }
 
-             // Match user_id with the users list to generate username object key. 
+             // Match user_id with the users list to generate username . 
              const userInList = usernames.find((user) => user.id === value.user_id);
              if (userInList) {
                const userComments = new UserCommentModel(commentObj);
