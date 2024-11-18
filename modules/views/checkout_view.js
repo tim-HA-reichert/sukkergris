@@ -2,6 +2,8 @@
 const html = `
     <h2>Checkout</h2>
 
+
+
     <div id="checkoutFormContainer">
         <form id="checkoutForm" action="">
             <label for="name">Name:</label>
@@ -34,10 +36,20 @@ const html = `
             placeholder="Enter your country">
             <br>
 
+            <label for="content">
+
+            <div id="orderContentContainer"> </div>
+
+
+            <input type="submit" value="Place Order">
+
+
         </form>
     </div>
 
+
     <div id="listContainer"></div>
+
 
     <dialog id="placeOrderDialog">
         <h2>Order placed!</h2>
@@ -63,12 +75,27 @@ export class CheckoutView extends HTMLElement {
         this.listContainer = this.shadowRoot.getElementById("listContainer");
         this.placeOrderDialog = this.shadowRoot.getElementById("placeOrderDialog");
 
+        this.form = this.shadowRoot.getElementById("checkoutForm");
+
+
         this.shadowRoot.addEventListener("click", (evt) => {
             if (evt.target.id === "btnPlaceOrder") {
                 this.placeOrderDialog.showModal();
             } else if (evt.target.id === "btnCloseDialog") {
                 this.placeOrderDialog.close();
             }
+        });
+
+
+        this.form.addEventListener("submit", e => {
+            e.preventDefault();
+
+            const formData = new FormData(this.form);
+
+            const orderEvent = new CustomEvent("place-order", {
+                composed: true, bubbles: true, detail: formData
+            });
+            this.dispatchEvent(orderEvent);
         });
     }
 

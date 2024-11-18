@@ -34,6 +34,12 @@ const userContainer = document.getElementById("user-container");
 
 const btnShowCategoriesView = document.getElementById('btnShowCategories');
 
+
+const valueChecker = document.getElementById("value-checker");
+
+
+
+
 const categoryListView = new CategoryListView();
 const chocolateListView = new ChocolateListView();
 const detailedProductView = new DetailedProductView();
@@ -71,6 +77,10 @@ function startUp () {
 }
 
 //-----------------------------------------------
+valueChecker.addEventListener("click", e => {
+console.log(orderModel.cartArray);
+});
+
 categoryListView.addEventListener('categoryselect', function (evt) {    
     const chocolateCategoryPromise = api.getChocolatesByCategory(evt.detail.categoryID, userModel);
     chocolateListView.refresh(chocolateCategoryPromise);

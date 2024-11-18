@@ -43,6 +43,7 @@ export class ChocolateModel {
         this.expected_shipped = obj.expected_shipped;
         this.rating = obj.rating;
         this.number_of_ratings = obj.number_of_ratings
+        this.quantity = 0;
     }
 
     showDetailed() {        
@@ -72,7 +73,21 @@ export class OrderModel {
     }
 
     addItem(item) {
-        this.cartArray.push(item);
+        if(this.cartArray.length == 0){
+            this.cartArray.push(item);
+        }
+
+        const existingItem = this.cartArray.find(cartElement => cartElement.chocoID === item.chocoID);
+
+        if (existingItem) {
+            // If existingItem exists, increase quantity
+            existingItem.quantity += 1;
+        } else {
+            // If existingItem doesn't exist, push new item
+            this.cartArray.push(item);
+            //Prevent quantity to start at 0 when adding new item.
+            item.quantity++;
+        }      
     }
 
     updateQuantity(index, newQuantity) {

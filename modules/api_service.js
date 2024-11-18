@@ -717,3 +717,37 @@ export async function deleteThread(aMessageID, aToken){
     }
 
 }
+
+
+
+//Not complete
+export async function placeOrder(aToken, aOrderForm){
+    const url = urlMap.placeOrderURL + "?key=" + groupKey;
+
+    const contentToJson = {
+        content: aOrderForm.get("content")
+    };
+
+    JSON.stringify(contentToJson);
+
+    const cfg = {
+        method: "POST",
+        headers: {
+            "authorization" : aToken,
+        },
+        body: aOrderForm,
+    }
+
+
+    try{
+
+        const result = await fetchData(url, cfg);
+
+        console.log(result);
+
+        return result
+    }catch(error){
+        errorHandler(error);
+    }
+}
+
