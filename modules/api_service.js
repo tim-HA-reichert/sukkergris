@@ -163,7 +163,7 @@ export async function getChocolateDetails(chosenChocolateID) {
                 number_of_ratings: chocoDet.number_of_ratings
                 //fikk hjelp av chatGPT for .push og chosenCat array.
             };
-            console.log(chocoDet);
+            
             return new ChocolateModel(chocoObj);
         };
         //     return chosenCat;

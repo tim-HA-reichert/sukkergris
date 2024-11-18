@@ -22,6 +22,7 @@ import { AddUserView } from "./views/add_user_view.js";
 import { LoginView } from "./views/user_login_view.js";
 
 import { OrderModel } from "./models.js";
+import { CheckoutView } from "./views/checkout_view.js";
 
 const viewContainer = document.getElementById('viewContainer');            
 
@@ -38,6 +39,7 @@ const categoryListView = new CategoryListView();
 const chocolateListView = new ChocolateListView();
 const detailedProductView = new DetailedProductView();
 const shoppingCartView = new ShoppingCartView();
+const checkoutView = new CheckoutView();
 const addUserView = new AddUserView();
 const loginView = new LoginView();
 
@@ -101,10 +103,11 @@ btnShowCreateDummyView.addEventListener('click', function(evt) {
 //----------------------------------------------
 
 btnGoToCart.addEventListener('click', function(evt) {
-    shoppingCartView.refresh(orderModel);
+    shoppingCartView.refresh(orderModel, checkoutView);
     viewContainer.innerHTML = "";
     viewContainer.appendChild(shoppingCartView);
 });
+
 //---------------------------------------------- Lytter til Create User knapp
 
 btnAddUser.addEventListener('click', function(evt) {

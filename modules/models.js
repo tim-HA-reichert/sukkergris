@@ -75,7 +75,21 @@ export class OrderModel {
         this.cartArray.push(item);
     }
 
-    emptyCart () {
+    updateQuantity(index, newQuantity) {
+        const item = this.cartArray[index];
+        if (item) {
+            item.quantity = newQuantity; //Updates the quantity
+            item.totalPrice = item.price * newQuantity; //Updates the total price
+        }
+    }
+
+    deleteItem(index) {
+        if (index >= 0 && index < this.cartArray.length) {
+            this.cartArray.splice(index, 1);
+        }
+    }
+
+    emptyCart() {
         this.cartArray = [];
     }
 }
