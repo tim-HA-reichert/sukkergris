@@ -32,7 +32,7 @@ const urlMap = {
     //Message URL's
     messageURL: "https://sukkergris.onrender.com/msgboard/messages",  
     // add more URL' here...
-    placeOrderURL: "https://sukkergris.onrender.com/webshop/orders",
+    orderURL: "https://sukkergris.onrender.com/webshop/orders",
 }
 
 //----------------------------------------------------------
@@ -720,35 +720,71 @@ export async function deleteThread(aMessageID, aToken){
 }
 
 
-
-//Not complete
 export async function placeOrder(aToken, aOrderForm){
-    const url = urlMap.placeOrderURL + "?key=" + groupKey;
+    const url = urlMap.orderURL + "?key=" + groupKey;
 
-    const contentToJson = {
-        content: aOrderForm.get("content")
+    let formObject = Object.fromEntries(aOrderForm);
+    formObject.content = JSON.parse(formObject.content);
+
+    const headers = {
+        "content-type": "application/json",
     };
 
-    JSON.stringify(contentToJson);
+    if (aToken) {
+        headers.authorization = aToken;
+    }
 
     const cfg = {
         method: "POST",
-        headers: {
-            "authorization" : aToken,
-        },
-        body: aOrderForm,
+        headers: headers,
+        body: JSON.stringify(formObject),
     }
 
-
     try{
-
         const result = await fetchData(url, cfg);
-
         console.log(result);
-
         return result
-    }catch(error){
+    } catch(error) {
         errorHandler(error);
     }
 }
 
+export async function listOrders(aToken){
+    const url = urlMap.orderURL + "?key=" + groupKey;
+
+//If adminToken is used, all orders are listed
+    const cfg = {
+        method: "GET",
+        headers: {
+            "authorization": aToken
+        }
+    }
+
+    try{
+        const result = await fetchData(url, cfg);
+        console.log(result);
+        return result
+    } catch(error){
+        errorHandler(error);
+    }
+}
+
+export async function deleteOrder(aToken, aOrderID){
+    const url = urlMap.orderURL + "?key=" + groupKey + "&id=" + aOrderID;
+
+    const cfg = {
+        method: "DELETE",
+        headers: {
+            "authorization": aToken
+        }
+    }
+
+    try{
+        const result = await fetchData(url, cfg);
+        console.log(result);
+        return result
+    }catch(error){
+        errorHandler(error);
+    }
+
+}

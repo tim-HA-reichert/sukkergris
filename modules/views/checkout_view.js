@@ -2,12 +2,9 @@
 const html = `
     <h2>Checkout</h2>
 
-
-
-    <div id="checkoutFormContainer">
-        <form id="checkoutForm" action="">
-            <label for="name">Name:</label>
-            <input required type="text" id="name" name="name"
+        <form id="checkout-form" action="">
+            <label for="name">Your full name:</label>
+            <input required type="text" id="customer_name" name="customer_name"
             placeholder="Enter your full name">
             <br>
 
@@ -16,8 +13,8 @@ const html = `
             placeholder="Enter your email address">
             <br>
 
-            <label for="streetAddress">Street address:</label>
-            <input required type="text" id="streetAddress" name="streetAddress"
+            <label for="street">Street address:</label>
+            <input required type="text" id="street" name="street"
             placeholder="Enter your street address">
             <br>
 
@@ -26,8 +23,8 @@ const html = `
             placeholder="Enter your city">
             <br>
 
-            <label for="zip">ZIP code:</label>
-            <input required type="text" id="zip" name="zip"
+            <label for="zipcode">ZIP code:</label>
+            <input required type="text" id="zipcode" name="zipcode"
             placeholder="Enter your ZIP code">
             <br>
 
@@ -36,29 +33,18 @@ const html = `
             placeholder="Enter your country">
             <br>
 
-            <label for="content">
+            <label for="phone">Phone: </label>
+            <input required type="text" id="phone" name="phone"
+            placeholder="Enter your phone number">
+            <br>
+
+
+            <input type="hidden" id="content" name="content">
 
             <div id="orderContentContainer"> </div>
-
-
-            <input type="submit" value="Place Order">
-
-
-        </form>
-    </div>
-
-
-    <div id="listContainer"></div>
-
-
-    <dialog id="placeOrderDialog">
-        <h2>Order placed!</h2>
-        <p>Thank you for your order!
-        Unfortunately, our developer hasn't yet figured out
-        how to send orders to the server, so your order went
-        straight into the void.</p>
-        <button id="btnCloseDialog">Close</button>
-    </dialog>
+        
+            <div id="listContainer"></div>
+</form>
 `;
 
 
@@ -72,21 +58,11 @@ export class CheckoutView extends HTMLElement {
 
         this.attachShadow({mode: "open"});
         this.shadowRoot.innerHTML = html;
+        
+        this.form = this.shadowRoot.getElementById("checkout-form");
         this.listContainer = this.shadowRoot.getElementById("listContainer");
-        this.placeOrderDialog = this.shadowRoot.getElementById("placeOrderDialog");
 
-        this.form = this.shadowRoot.getElementById("checkoutForm");
-
-
-        this.shadowRoot.addEventListener("click", (evt) => {
-            if (evt.target.id === "btnPlaceOrder") {
-                this.placeOrderDialog.showModal();
-            } else if (evt.target.id === "btnCloseDialog") {
-                this.placeOrderDialog.close();
-            }
-        });
-
-
+        
         this.form.addEventListener("submit", e => {
             e.preventDefault();
 
@@ -106,6 +82,20 @@ export class CheckoutView extends HTMLElement {
         this.listContainer.innerHTML = "";
         let sum = 0;
 
+        //Array to hold items
+        const orderedItems = [];
+
+        //Populate the orderedItems array
+        for(const items of cart.cartArray){
+            orderedItems.push({
+            chocoID: items.chocoID,
+            categoryID: items.categoryID,
+            quantity: items.quantity,
+            price: items.price * items.quantity,
+            }
+        )
+    }
+
         //Henter inn cart data fra orderen
         cart.cartArray.forEach((item, index) => {
 
@@ -120,11 +110,16 @@ export class CheckoutView extends HTMLElement {
             this.listContainer.appendChild(divCart);
         });
 
+        //Update hidden input for content with orderedItems array
+        const contentInput = this.shadowRoot.getElementById("content");
+        //Convert to JSON before entering into cfg.body
+        contentInput.value = JSON.stringify(orderedItems);
+
         //Cart summary
         const divCartBottom = document.createElement("div");
         divCartBottom.innerHTML = `
             <p>Sum: ${sum + ",-"}</p>
-            <button id="btnPlaceOrder">Place Order</button>
+            <input type="submit" value="Place Order">
         `;
         this.listContainer.appendChild(divCartBottom);
     }

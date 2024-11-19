@@ -4,6 +4,7 @@ import { AdminPanelView } from "./views/admin_views/admin_panel_view.js";
 import { adminProductsView } from "./views/admin_views/admin_product_view.js";
 import { changeProductView } from "./views/admin_views/admin_product_change_view.js";
 import { UserListView } from "./views/admin_views/admin_users_view.js";
+import { OrderListView } from "./views/admin_views/admin_orders_view.js";
 
 
 const viewContainer = document.getElementById("viewContainer");
@@ -14,6 +15,7 @@ const adminLoginView = new AdminLoginView();
 const adminPanelView = new AdminPanelView();
 const adminProducts = new adminProductsView();
 const allUserView = new UserListView();
+const orderListView = new OrderListView();
 
 const changeProductInfo = new changeProductView();
 
@@ -47,12 +49,11 @@ homeBtn.addEventListener("click", function(evt){
 });
 
 
-//Administration of products
-adminPanelView.addEventListener("admin-products", function(evt){
-    viewContainer.innerHTML = "";
-    adminProducts.chocoDeletionList(adjustableChocolateList);
-    viewContainer.appendChild(adminProducts);
-});
+
+//---------------------------------------------------------------
+//User administration
+//----------------------------------------------------------------
+
 
 adminPanelView.addEventListener("admin-users", e => {
     viewContainer.innerHTML = "";
@@ -75,6 +76,15 @@ allUserView.addEventListener("delete-user", e => {
     });
 });
 
+//---------------------------------------------------------------
+//Product administration
+//----------------------------------------------------------------
+
+adminPanelView.addEventListener("admin-products", function(evt){
+    viewContainer.innerHTML = "";
+    adminProducts.chocoDeletionList(adjustableChocolateList);
+    viewContainer.appendChild(adminProducts);
+});
 
 
 adminProducts.addEventListener("add-product", function(evt){
@@ -116,3 +126,23 @@ changeProductInfo.addEventListener("change-product", function(evt){
 });
 
 
+//---------------------------------------------------------------
+//Order administration
+//----------------------------------------------------------------
+
+adminPanelView.addEventListener("admin-orders", e => {
+    viewContainer.innerHTML="";
+    api.listOrders(adminToken).then((result) => {
+            orderListView.getOrders(result);
+            viewContainer.appendChild(orderListView);
+    });
+});
+
+orderListView.addEventListener("delete-order", e => {
+    api.deleteOrder(adminToken, e.detail).then((result) => {
+        const refreshList = api.listOrders(adminToken);
+        orderListView.getOrders(refreshList);
+
+        viewContainer.appendChild(orderListView);
+    })
+})

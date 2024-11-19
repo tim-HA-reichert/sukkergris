@@ -75,9 +75,12 @@ function startUp () {
 }
 
 //-----------------------------------------------
-valueChecker.addEventListener("click", async e => {
+valueChecker.addEventListener("click", e => {   
 
+    console.log(orderModel.cartArray);
 });
+
+
 
 categoryListView.addEventListener('categoryselect', function (evt) {    
     const chocolateCategoryPromise = api.getChocolatesByCategory(evt.detail.categoryID, userModel);
@@ -208,3 +211,21 @@ navButtons.addEventListener("create-thread", e => {
 newThreadView.addEventListener("submit-new-thread", e => {
     api.addThreads(userModel.token, e.detail);
 });
+
+
+shoppingCartView.addEventListener("go-to-checkout", e => {
+    viewContainer.innerHTML = "";
+    checkoutView.refresh(orderModel);
+    viewContainer.appendChild(checkoutView);
+});
+
+
+checkoutView.addEventListener("place-order", e => {
+    console.log(e.detail);
+        if(userModel){
+            api.placeOrder(userModel.token, e.detail);
+        } else {
+            api.placeOrder(null, e.detail);
+        }
+});
+

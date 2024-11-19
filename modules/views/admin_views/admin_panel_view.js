@@ -1,7 +1,7 @@
 const html = `
 <h2>Admin Panel</h2>
 <div id="buttonContainer"> 
-    <button value="products"         id="admin-products">Add new product</button>
+    <button value="products"         id="admin-products">Add/Delete/Change Products</button>
     <button value="orders"           id="admin-orders">Orders</button>
     <button value="users"            id="admin-users">Users</button>
     <button value="comments/reviews" id="admin-comments">User comments/reviews</button>

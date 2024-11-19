@@ -17,10 +17,12 @@ export class ShoppingCartView extends HTMLElement {
         
         //Listeners for emptying cart or proceeding to checkout
         this.shadowRoot.addEventListener("click", (evt) => {
+
             if (evt.target.id === "btnGoToCheckout") {
-                this.checkoutView.refresh(this.cart);
-                viewContainer.innerHTML = "";
-                viewContainer.appendChild(this.checkoutView);
+                const checkoutEvent = new CustomEvent("go-to-checkout",
+                    {composed: true, bubbles: true, detail:evt});
+
+                this.dispatchEvent(checkoutEvent);
             }
 
             else if (evt.target.id === "btnEmptyCart") {
