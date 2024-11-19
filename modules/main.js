@@ -78,8 +78,7 @@ function startUp () {
 
 //-----------------------------------------------
 valueChecker.addEventListener("click", e => {   
-
-    console.log(orderModel.cartArray);
+    console.log(userModel);
 });
 
 
@@ -217,8 +216,13 @@ newThreadView.addEventListener("submit-new-thread", e => {
 
 shoppingCartView.addEventListener("go-to-checkout", e => {
     viewContainer.innerHTML = "";
-    checkoutView.refresh(orderModel);
-    viewContainer.appendChild(checkoutView);
+    checkoutView.refresh(orderModel).then(() => {
+        if(userModel){
+            checkoutView.loggedInUser(userModel);
+        } 
+        viewContainer.appendChild(checkoutView);
+    });
+    
 });
 
 
@@ -226,7 +230,13 @@ checkoutView.addEventListener("place-order", e => {
     console.log(e.detail);
         if(userModel){
             //For logged in users. 
-            api.placeOrder(userModel.token, e.detail);
+            api.placeOrder(userModel.token, e.detail).then((result) => {
+                if(result.msg === "insert order ok"){
+                    viewContainer.innerHTML = "";
+                    orderConfirmView.refresh(result.record, orderModel);
+                    viewContainer.appendChild(orderConfirmView);
+                }
+            });
         } else {
             //For guest users. 
             api.placeOrder(null, e.detail).then((result) => {
@@ -234,8 +244,6 @@ checkoutView.addEventListener("place-order", e => {
                     viewContainer.innerHTML = "";
                     orderConfirmView.refresh(result.record, orderModel);
                     viewContainer.appendChild(orderConfirmView);
-
-                console.log(result.msg);
             }
             });
         };

@@ -1,4 +1,3 @@
-
 const html = `
     <h2>Checkout</h2>
 
@@ -34,7 +33,7 @@ const html = `
             <br>
 
             <label for="phone">Phone: </label>
-            <input required type="text" id="phone" name="phone"
+            <input type="text" id="phone" name="phone"
             placeholder="Enter your phone number">
             <br>
 
@@ -123,6 +122,18 @@ export class CheckoutView extends HTMLElement {
         `;
         this.listContainer.appendChild(divCartBottom);
     }
+
+    async loggedInUser(userDataPromise){
+        const userdata = await userDataPromise;
+    
+        this.shadowRoot.getElementById('email').value = userdata.username;
+        this.shadowRoot.getElementById('street').value = userdata.street;
+        this.shadowRoot.getElementById('city').value = userdata.city;
+        this.shadowRoot.getElementById('zipcode').value = userdata.zipcode;
+        this.shadowRoot.getElementById('country').value = userdata.country;  
+
+    }
+
 
 } //end of class
 

@@ -3,7 +3,6 @@ const html = `
 <div id="viewContainer"></div>
 `;
 
-
 export class OrderConfirmView extends HTMLElement {
 
     //--------------------------------------------
@@ -15,7 +14,6 @@ export class OrderConfirmView extends HTMLElement {
         this.viewContainer = this.shadowRoot.getElementById("viewContainer");
     }
 
-
     async refresh(userData, cartItems){
 
         this.viewContainer.innerHTML = "";
@@ -26,18 +24,24 @@ export class OrderConfirmView extends HTMLElement {
             confirmationDiv.innerHTML = `
                 <h2>Your order has been recieved!</h2>
                 <h3>Your order number is: ${user.ordernumber}</3>
-                <p>${user.customer_name}</p>
-                <p>${user.email}</p>
-                <p>${user.phone}</p>
-                <p>${user.country}, ${user.city}, ${user.zipcode}, ${user.street}</p>
+                <p>Full name: ${user.customer_name}</p>
+                <p>Email: ${user.email}</p>
+                <p id="user-phone"></p>
+                <p>Address: ${user.country}, ${user.city}, ${user.zipcode}, ${user.street}</p>
 
                 <h4>Chosen shipping method: ${user.shipping_id}</h4>
                     <hr>
 
                 <h2>Your Order:</h2>
             `;
-        this.viewContainer.appendChild(confirmationDiv);
+        if(user.phone != null){
+            let phone = confirmationDiv.querySelector("#user-phone");
+            phone.innerHTML = `
+                Phone number: ${user.phone}
+            `;
+        }
 
+        this.viewContainer.appendChild(confirmationDiv);
 
         cartItems.cartArray.forEach((item, index) => {
 
