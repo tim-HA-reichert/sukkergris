@@ -96,8 +96,6 @@ chocolateListView.addEventListener('chocolateselect', function (evt) {
 //---------------------------------------------- Lytter til addItem knapp
 detailedProductView.addEventListener('addItem', evt => {    
     orderModel.addItem(evt.detail);
-    api.manageOrderModel(orderModel)
-
 });
 
 //---------------------------------------------- Lytter til add review
