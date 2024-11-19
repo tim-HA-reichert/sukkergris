@@ -78,7 +78,7 @@ function startUp () {
 
 //-----------------------------------------------
 valueChecker.addEventListener("click", e => {   
-    console.log(userModel);
+    api.listShipmentMethods();
 });
 
 

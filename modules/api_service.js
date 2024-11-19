@@ -33,6 +33,7 @@ const urlMap = {
     messageURL: "https://sukkergris.onrender.com/msgboard/messages",  
     // add more URL' here...
     orderURL: "https://sukkergris.onrender.com/webshop/orders",
+    shipmentURL: "https://sukkergris.onrender.com/logistics/shippingtypes"
 }
 
 //----------------------------------------------------------
@@ -783,6 +784,26 @@ export async function deleteOrder(aToken, aOrderID){
         const result = await fetchData(url, cfg);
         console.log(result);
         return result
+    }catch(error){
+        errorHandler(error);
+    }
+
+}
+
+//-----------------------------------------------------------
+//List shipment methods
+//-----------------------------------------------------------
+
+
+export async function listShipmentMethods(){
+    const url = urlMap.shipmentURL + "?key=" + groupKey;
+
+    try{
+
+        const result = await fetchData(url);
+        console.log(result);
+        return result
+        
     }catch(error){
         errorHandler(error);
     }
