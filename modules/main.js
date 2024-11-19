@@ -28,6 +28,7 @@ import { IndividualThreadView } from "./views/individual_forum_thread_view.js";
 
 import { OrderModel } from "./models.js";
 import { CheckoutView } from "./views/checkout_view.js";
+import { OrderConfirmView } from "./views/order_confirmation_view.js";
 
 const viewContainer = document.getElementById('viewContainer');            
 const userContainer = document.getElementById("user-container");
@@ -54,6 +55,7 @@ const allThreadsView = new ThreadListView();
 const singleThreadView = new IndividualThreadView();
 let threadInfo = null;
 
+const orderConfirmView = new OrderConfirmView();
 
 const orderModel = new OrderModel();
 let userModel = null;
@@ -116,7 +118,7 @@ detailedProductView.addEventListener('addItem', function (evt) {
 //----------------------------------------------
 
 navButtons.addEventListener('go-to-cart', function(evt) {
-    shoppingCartView.refresh(orderModel, checkoutView);
+    shoppingCartView.refresh(orderModel);
     viewContainer.innerHTML = "";
     viewContainer.appendChild(shoppingCartView);
 });
@@ -223,9 +225,22 @@ shoppingCartView.addEventListener("go-to-checkout", e => {
 checkoutView.addEventListener("place-order", e => {
     console.log(e.detail);
         if(userModel){
+            //For logged in users. 
             api.placeOrder(userModel.token, e.detail);
         } else {
-            api.placeOrder(null, e.detail);
-        }
+            //For guest users. 
+            api.placeOrder(null, e.detail).then((result) => {
+                if(result.msg === "insert order ok"){
+                    viewContainer.innerHTML = "";
+                    orderConfirmView.refresh(result.record, orderModel);
+                    viewContainer.appendChild(orderConfirmView);
+
+                console.log(result.msg);
+            }
+            });
+        };
 });
+
+
+
 

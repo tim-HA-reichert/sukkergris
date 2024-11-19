@@ -724,7 +724,7 @@ export async function placeOrder(aToken, aOrderForm){
     const url = urlMap.orderURL + "?key=" + groupKey;
 
     let formObject = Object.fromEntries(aOrderForm);
-    formObject.content = JSON.parse(formObject.content);
+   
 
     const headers = {
         "content-type": "application/json",
