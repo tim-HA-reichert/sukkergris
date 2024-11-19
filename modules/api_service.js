@@ -199,7 +199,6 @@ export async function showReviews(productID, usernames, userModel) {
         
 
         if(data.length == 0 ) {
-            messageHandler("Reviews", "No reviews added to product")
             return false
         } else {
 

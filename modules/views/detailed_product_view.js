@@ -141,23 +141,29 @@ export class DetailedProductView extends HTMLElement {
     async showReviews(areviewList) {
 
         if (areviewList) {
-            this.reviewContainer.innerHTML = "";
-
+            this.reviewContainer.innerHTML = "<h1>Reviews<h1><hr>";
+            
             areviewList.forEach(element => {
-
+                
                 const reviewDiv = document.createElement("div");
                 reviewDiv.innerHTML = `
-                <hr>
-                <h1>${element.username}</h1>
+                <h2>${element.username}</h2>
                 <h4>${shortenDate(element.date)}</h4>
                 <h3>${stars[element.rating]}</h3>
                 <p>${element.comment_text}</p>
                 <hr>
                 `
-                // console.log(element.rating);
-
                 this.reviewContainer.appendChild(reviewDiv);
             });
+            
+        } else {
+            this.reviewContainer.innerHTML = "<h1>Reviews<h1><hr>";
+            const reviewDiv = document.createElement("div");
+            reviewDiv.innerHTML = `
+                <h2>No reviews added to this product</h2>
+                <hr>
+                `
+                this.reviewContainer.appendChild(reviewDiv);
         };
 
     };
