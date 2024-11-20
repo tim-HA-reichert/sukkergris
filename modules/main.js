@@ -227,13 +227,14 @@ shoppingCartView.addEventListener("go-to-checkout", e => {
 
 
 checkoutView.addEventListener("place-order", e => {
-    console.log(e.detail);
+    let userInfo; 
         if(userModel){
             //For logged in users. 
             api.placeOrder(userModel.token, e.detail).then((result) => {
                 if(result.msg === "insert order ok"){
                     viewContainer.innerHTML = "";
-                    orderConfirmView.refresh(result.record, orderModel);
+                    userInfo = result.record;
+                    orderConfirmView.refresh(userInfo, orderModel);
                     viewContainer.appendChild(orderConfirmView);
                 }
             });
@@ -242,7 +243,8 @@ checkoutView.addEventListener("place-order", e => {
             api.placeOrder(null, e.detail).then((result) => {
                 if(result.msg === "insert order ok"){
                     viewContainer.innerHTML = "";
-                    orderConfirmView.refresh(result.record, orderModel);
+                    userInfo = result.record;
+                    orderConfirmView.refresh(userInfo, orderModel);
                     viewContainer.appendChild(orderConfirmView);
             }
             });
