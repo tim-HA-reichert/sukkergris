@@ -96,21 +96,44 @@ btnShowCategoriesView.addEventListener('click', function (evt) {
     viewContainer.appendChild(categoryListView);
 });
 
-//---------------------------------------------- AddEventListener for trykking av spesefikk sjokolade
+//---------------------------------------------- Detailed Sjokolade View
 chocolateListView.addEventListener('chocolateselect', function (evt) {    
     viewContainer.innerHTML = "";
     const detailProductPromise = api.getChocolateDetails(evt.detail.chocoID, userModel); //Lager et promise    
 
     detailProductPromise.then((ChocolateModelClass) => {        //Etter at promiset er ferdig, kjøres koden under
-        detailedProductView.refresh(ChocolateModelClass);
+        detailedProductView.refresh(ChocolateModelClass, userModel);
         ChocolateModelClass.showDetailed();
         viewContainer.appendChild(detailedProductView);
     })
 });
 //---------------------------------------------- Lytter til addItem knapp
-detailedProductView.addEventListener('addItem', function (evt) {    
+detailedProductView.addEventListener('addItem', evt => {    
     orderModel.addItem(evt.detail);
-    api.manageOrderModel(orderModel)
+});
+
+//---------------------------------------------- Lytter til add review
+detailedProductView.addEventListener('left-review', evt => {    
+    const addProductReviewPromise = api.addProductReview(evt.detail, userModel.token)
+    addProductReviewPromise.then((response) => {
+        detailedProductView.updateLive();
+    })
+});
+//---------------------------------------------- Lytter show reviews
+detailedProductView.addEventListener('show-product-reviews', evt => {    
+    if(userModel) {
+        api.getAllUsers(userModel.token).then(usernames => {
+            const showReviewsPromise = api.showReviews(evt.detail, usernames, userModel)
+            showReviewsPromise.then((reviewList) => {
+                detailedProductView.showReviews(reviewList)
+            })
+        });
+    } else {
+        const showReviewsPromise = api.showReviews(evt.detail)
+            showReviewsPromise.then((reviewList) => {
+                detailedProductView.showReviews(reviewList)
+            })
+    }
 
 });
 
@@ -124,28 +147,27 @@ navButtons.addEventListener('go-to-cart', function(evt) {
 
 //---------------------------------------------- Lytter til Create User knapp
 
-navButtons.addEventListener('add-new-user', function(evt) {
+navButtons.addEventListener('add-new-user', () => {
     viewContainer.innerHTML = "";
     viewContainer.appendChild(addUserView);
 });
 
 //---------------------------------------------- Lytter til add-user submit
 
-addUserView.addEventListener('add-user', function(evt) {
+addUserView.addEventListener('add-user', evt => {
     api.addUser(evt.detail);
 });
 
 //---------------------------------------------- Lytter til login knapp
 
-navButtons.addEventListener('log-in', function(evt) {
+navButtons.addEventListener('log-in', () => {
     viewContainer.innerHTML = "";
     viewContainer.appendChild(loginView);
 });
 //---------------------------------------------- Lytter til login submit
 
-loginView.addEventListener('log-in', function(evt) {
-    const addUserPromise = api.logIn(evt.detail, "user");
-    
+loginView.addEventListener('log-in', evt => {
+    const addUserPromise = api.logIn(evt.detail, "user");    
     addUserPromise.then((aUserModel) => {        //Etter at promiset er ferdig, kjøres koden under
         userModel = aUserModel;
         startUp();
@@ -155,7 +177,7 @@ loginView.addEventListener('log-in', function(evt) {
 });
 
 //----------------------------------------------
-navButtons.addEventListener("search-for-products", function(evt){
+navButtons.addEventListener("search-for-products", evt => {
     evt.preventDefault();
     viewContainer.innerHTML = "";
     const searchValue = evt.detail;
