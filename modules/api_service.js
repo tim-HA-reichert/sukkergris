@@ -178,7 +178,6 @@ export async function addProductReview(aData, aToken) {
             })
         }
         const data = await fetchData(url, cfg);
-        // console.log(form.get("inpStars"));
 
         if(data.msg == "Insert/update comment ok") {
             messageHandler("Review", "Review added successfully")
@@ -590,9 +589,7 @@ export async function changeProduct (adminToken, aForm){
 //-----------------------------------------------
 // Forum functions
 //-----------------------------------------------
-
-//Need to make seperate function for specific threads. 
-//Vi kan prøve å sammenfatte de, men jeg tror det blir messy. 
+ 
 export async function listThreads(aToken, postAll, usernames){
 
     const url = urlMap.messageURL + "?key=" + groupKey + "&all=" + postAll + "&asc=" + true;
@@ -866,11 +863,8 @@ export async function listShipmentMethods(){
     const url = urlMap.shipmentURL + "?key=" + groupKey;
 
     try{
-
         const result = await fetchData(url);
-        console.log(result);
         return result
-        
     }catch(error){
         errorHandler(error);
     }

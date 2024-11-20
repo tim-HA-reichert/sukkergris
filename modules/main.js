@@ -60,6 +60,8 @@ const orderConfirmView = new OrderConfirmView();
 const orderModel = new OrderModel();
 let userModel = null;
 
+//Laster inn shipmenttyper for å forhindre lag i checkout. 
+const shipmentTypes = api.listShipmentMethods();
 
 //startup----------------------------------------
 startUp();
@@ -78,11 +80,11 @@ function startUp () {
 
 //-----------------------------------------------
 valueChecker.addEventListener("click", e => {   
-    api.listShipmentMethods();
+    console.log(shipmentTypes)
 });
 
 
-
+//-----------------------------------------------
 categoryListView.addEventListener('categoryselect', function (evt) {    
     const chocolateCategoryPromise = api.getChocolatesByCategory(evt.detail.categoryID, userModel);
     chocolateListView.refresh(chocolateCategoryPromise);
@@ -238,10 +240,17 @@ newThreadView.addEventListener("submit-new-thread", e => {
 
 shoppingCartView.addEventListener("go-to-checkout", e => {
     viewContainer.innerHTML = "";
-    checkoutView.refresh(orderModel).then(() => {
+    
+    checkoutView.totalPrice(orderModel).then(() => {
+
+        checkoutView.addShipment(shipmentTypes);
+        checkoutView.saveCart(orderModel);
+
         if(userModel){
-            checkoutView.loggedInUser(userModel);
+            checkoutView.loggedInUserInfo(userModel);
         } 
+
+        //checkoutView.sumTotal(orderModel, shipment);
         viewContainer.appendChild(checkoutView);
     });
     
@@ -256,7 +265,7 @@ checkoutView.addEventListener("place-order", e => {
                 if(result.msg === "insert order ok"){
                     viewContainer.innerHTML = "";
                     userInfo = result.record;
-                    orderConfirmView.refresh(userInfo, orderModel);
+                    orderConfirmView.refresh(userInfo, orderModel, shipmentTypes);
                     viewContainer.appendChild(orderConfirmView);
                 }
             });
@@ -266,7 +275,7 @@ checkoutView.addEventListener("place-order", e => {
                 if(result.msg === "insert order ok"){
                     viewContainer.innerHTML = "";
                     userInfo = result.record;
-                    orderConfirmView.refresh(userInfo, orderModel);
+                    orderConfirmView.refresh(userInfo, orderModel, shipmentTypes);
                     viewContainer.appendChild(orderConfirmView);
             }
             });
