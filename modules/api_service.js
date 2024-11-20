@@ -485,9 +485,6 @@ export async function addUser (aForm){
 export async function getAllUsers(aToken, aUserID){
     let url;
 
-    //Terniary version
-    // = aUserID ?  urlMap.listAllUsersURL + "?key=" + groupKey + "&userid=" + aUserID : urlMap.listAllUsersURL + "?key=" + groupKey + "&userid=";
-
     if(aUserID){
         url = urlMap.listAllUsersURL + "?key=" + groupKey + "&userid=" + aUserID;
     } else {
@@ -528,29 +525,6 @@ export async function getAllUsers(aToken, aUserID){
         errorHandler(error);
     }
 }
-
-// export async function getUserTest(aUserID){
-//     let url = urlMap.listAllUsersURL + "?key=" + groupKey + "&userid=" + aUserID;
-
-//     try{
-//         const cfg = {
-//             method: "GET",
-//             headers: {
-//                 "authorization": aToken
-//             }
-//         }
-
-//         const result = await fetchData(url, cfg);
-//         console.log(result);
-        
-
-//         // const userList = [];
-
-//     }catch(error){
-//         errorHandler(error);
-//     }
-// }
-
 
 
 export async function deleteUser(adminToken, aUserId){
@@ -712,11 +686,6 @@ export async function addThreads(aToken, threadForm){
 
 //If no thread is provided, a new thread with a integer ID that comes after the last integer is created. 
 
-/*Current bug: "Comment by" only shows the name of the currently logged in user, 
-after the user has pressed the submit button. 
-The first issue is in the way we save the aUserNameID (in a global variable). 
-
-The second issue is unknown for now. Perhaps it is because the global variable isn't "made" before we press submit. */
 export async function addThreadComment(aToken, aThreadID, aCommentForm){
 
     const url = urlMap.messageURL + "?key=" + groupKey + "&thread=" + aThreadID;
