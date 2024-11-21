@@ -1,4 +1,3 @@
-//import { dialog } from './main.js';
 import { SystemMessageView } from "./views/system_message_view.js";
 
 const messageDialog = new SystemMessageView();

@@ -355,6 +355,7 @@ export async function logIn(aForm, accountType) {
     }
 
     const authString = createBasicAuthString(loginCred.username, loginCred.password);
+    sessionStorage.setItem("authString", `${authString}`)    
 
     const cfg = {
         method: "POST",
@@ -364,8 +365,56 @@ export async function logIn(aForm, accountType) {
     }
 
     try {
-        const result = await fetchData(url, cfg);
-        messageHandler("Login", "User logged in successfully");
+
+        
+        const result = await fetchData(url, cfg);        
+        
+        if(result.msg === "login OK") {
+            messageHandler("Login", "User logged in successfully");
+            const loginDataObj = {
+                superuser: result.logindata.superuser,
+                thumb: result.logindata.thumb,
+                token: result.logindata.token,
+                userid: result.logindata.userid,
+                username: result.logindata.username,
+                city: result.logindata.city,
+                country: result.logindata.country,
+                full_name: result.logindata.full_name,
+                street: result.logindata.street,
+                zipcode: result.logindata.zipcode,
+            };
+            const loginData = new LoginDataModel(loginDataObj);
+    
+            return loginData;
+        } else {
+            throw new Error(result.msg)
+        }
+
+
+
+    } catch (error) {
+        errorHandler(error);
+    };
+};
+
+//----------------------------------------------------------
+// active user login
+//----------------------------------------------------------
+
+export async function activeUser(aAuthString) {
+
+    const url = urlMap.userLoginURL + "?key=" + groupKey; //Får tilgang til URLMapping, bruker brackets ([]) for å få tilgang til objekt element.
+
+    const cfg = {
+        method: "POST",
+        headers: {
+            "authorization": aAuthString
+        }
+    }
+    
+    try {
+        const result = await fetchData(url, cfg);        
+        
         const loginDataObj = {
             superuser: result.logindata.superuser,
             thumb: result.logindata.thumb,
@@ -378,8 +427,43 @@ export async function logIn(aForm, accountType) {
             street: result.logindata.street,
             zipcode: result.logindata.zipcode,
         };
+
         const loginData = new LoginDataModel(loginDataObj);
+
         return loginData;
+
+
+    } catch (error) {
+        errorHandler(error);
+    };
+};
+
+//----------------------------------------------------------
+// Change User Information
+//----------------------------------------------------------
+
+export async function changeUserInformation(aInformationForm, aToken) {
+
+    const url = urlMap.AddUserURL + "?key=" + groupKey;
+
+    const formData = aInformationForm;
+
+    try{
+
+        const cfg = {
+            method: "PUT",
+            headers: {
+                "authorization": aToken,
+            },
+            body: formData
+        }
+
+        const result = await fetchData(url, cfg);        
+        if(result.msg == "update user ok") {
+            messageHandler("User Information", "Updated the user information");
+        }
+
+        return result;
 
 
     } catch (error) {
@@ -463,7 +547,7 @@ export async function addUser (aForm){
 
     const url = urlMap.AddUserURL + "?key=" + groupKey;
 
-    const formData = aForm;
+    const formData = aForm;    
 
     try{
 
@@ -474,8 +558,12 @@ export async function addUser (aForm){
 
         const result = await fetchData(url, cfg);
 
-        messageHandler(result);
-        return result;
+        if(result.msg === "insert user ok") {
+            messageHandler("User Added", "Added user " + result.record.username);
+            return result;
+        } else {
+            throw new Error("Error adding user", "Try again later")
+        }
 
     }catch(error){
         errorHandler(error);
@@ -553,24 +641,50 @@ export async function getAllUsers(aToken, aUserID){
 
 
 
-export async function deleteUser(adminToken, aUserId){
-    const url = urlMap.deleteUserURL + "?key=" + groupKey + "&id=" + aUserId;
-
-    const cfg = {
-        method: "DELETE",
-        headers: {
-            "authorization": adminToken
+export async function deleteUser(aUser, aToken, aUserId){
+    if(aUser === "admin"){
+        const url = urlMap.deleteUserURL + "?key=" + groupKey + "&id=" + aUserId;
+    
+        const cfg = {
+            method: "DELETE",
+            headers: {
+                "authorization": aToken
+            }
+        }
+    
+        try{
+            const result = await fetchData(url, cfg);
+    
+            messageHandler(result);
+            return result;
+    
+        }catch(error){
+            errorHandler(error);
         }
     }
 
-    try{
-        const result = await fetchData(url, cfg);
+    else if(aUser === "user") {
+        const url = urlMap.deleteUserURL + "?key=" + groupKey;        
+    
+        const cfg = {
+            method: "DELETE",
+            headers: {
+                "authorization": aToken
+            }
+        }
+    
+        try{
+            const result = await fetchData(url, cfg);
+    
+            if(result.msg === "delete user ok") {
+                messageHandler("User Deleted", "Deleted user " + result.record.username)
+            }            
 
-        messageHandler(result);
-        return result;
-
-    }catch(error){
-        errorHandler(error);
+            return result;
+    
+        }catch(error){
+            errorHandler(error);
+        }
     }
 }
 
@@ -899,7 +1013,6 @@ export async function listShipmentMethods(){
     try{
 
         const result = await fetchData(url);
-        console.log(result);
         return result
         
     }catch(error){

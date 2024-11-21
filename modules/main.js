@@ -20,17 +20,21 @@ import { ShoppingCartView } from "./views/shopping_cart_view.js";
 import { DetailedProductView } from "./views/detailed_product_view.js";
 import { AddUserView } from "./views/add_user_view.js";
 import { LoginView } from "./views/user_login_view.js";
+import { UserSettingsView } from "./views/user_settings_view.js";
+
+import { messageHandler } from "./messageHandler.js";
+
 
 import { NavigationView } from "./views/navigation_view.js";
 import { CreateNewThreadView } from "./views/create_thread_view.js";
 import { ThreadListView } from "./views/list_thread_view.js";
-import { IndividualThreadView } from "./views/individual_forum_thread_view.js"; 
+import { IndividualThreadView } from "./views/individual_forum_thread_view.js";
 
 import { OrderModel } from "./models.js";
 import { CheckoutView } from "./views/checkout_view.js";
 import { OrderConfirmView } from "./views/order_confirmation_view.js";
 
-const viewContainer = document.getElementById('viewContainer');            
+const viewContainer = document.getElementById('viewContainer');
 const userContainer = document.getElementById("user-container");
 
 const btnShowCategoriesView = document.getElementById('btnShowCategories');
@@ -46,6 +50,7 @@ const shoppingCartView = new ShoppingCartView();
 const checkoutView = new CheckoutView();
 const addUserView = new AddUserView();
 const loginView = new LoginView();
+const userSettingsView = new UserSettingsView();
 
 //Attach content based on if user is logged in
 const navButtons = new NavigationView();
@@ -64,26 +69,37 @@ let userModel = null;
 //startup----------------------------------------
 startUp();
 
-function startUp () {
-    
+function startUp() {
+
     const categoryPromise = api.getCategories(); //retrieve the categories from the service layer as a promise
     categoryListView.refresh(categoryPromise); //send the promise to the view. The view will wait for the promise to resolve
 
     viewContainer.innerHTML = "";
     viewContainer.appendChild(categoryListView);
 
+    if (sessionStorage.getItem("authString")) {
+        const loginUserPromise = api.activeUser(sessionStorage.getItem("authString"));
+
+        loginUserPromise.then((aUserModel) => {        //Etter at promiset er ferdig, kjøres koden under
+            userModel = aUserModel;
+            navButtons.isUserLogged(userModel);
+            navButtons.activeUser(api.getUserImage(userModel));
+        });
+    }
+
     navButtons.isUserLogged(userModel)
     userContainer.appendChild(navButtons);
+
 }
 
 //-----------------------------------------------
-valueChecker.addEventListener("click", e => {   
+valueChecker.addEventListener("click", e => {
     api.listShipmentMethods();
 });
 
 
 
-categoryListView.addEventListener('categoryselect', function (evt) {    
+categoryListView.addEventListener('categoryselect', function (evt) {
     const chocolateCategoryPromise = api.getChocolatesByCategory(evt.detail.categoryID, userModel);
     chocolateListView.refresh(chocolateCategoryPromise);
     viewContainer.innerHTML = "";
@@ -97,7 +113,7 @@ btnShowCategoriesView.addEventListener('click', function (evt) {
 });
 
 //---------------------------------------------- Detailed Sjokolade View
-chocolateListView.addEventListener('chocolateselect', function (evt) {    
+chocolateListView.addEventListener('chocolateselect', function (evt) {
     viewContainer.innerHTML = "";
     const detailProductPromise = api.getChocolateDetails(evt.detail.chocoID, userModel); //Lager et promise    
 
@@ -108,20 +124,20 @@ chocolateListView.addEventListener('chocolateselect', function (evt) {
     })
 });
 //---------------------------------------------- Lytter til addItem knapp
-detailedProductView.addEventListener('addItem', evt => {    
+detailedProductView.addEventListener('addItem', evt => {
     orderModel.addItem(evt.detail);
 });
 
 //---------------------------------------------- Lytter til add review
-detailedProductView.addEventListener('left-review', evt => {    
+detailedProductView.addEventListener('left-review', evt => {
     const addProductReviewPromise = api.addProductReview(evt.detail, userModel.token)
     addProductReviewPromise.then((response) => {
         detailedProductView.updateLive();
     })
 });
 //---------------------------------------------- Lytter show reviews
-detailedProductView.addEventListener('show-product-reviews', evt => {    
-    if(userModel) {
+detailedProductView.addEventListener('show-product-reviews', evt => {
+    if (userModel) {
         api.getAllUsers(userModel.token).then(usernames => {
             const showReviewsPromise = api.showReviews(evt.detail, usernames, userModel)
             showReviewsPromise.then((reviewList) => {
@@ -130,16 +146,16 @@ detailedProductView.addEventListener('show-product-reviews', evt => {
         });
     } else {
         const showReviewsPromise = api.showReviews(evt.detail)
-            showReviewsPromise.then((reviewList) => {
-                detailedProductView.showReviews(reviewList)
-            })
+        showReviewsPromise.then((reviewList) => {
+            detailedProductView.showReviews(reviewList)
+        })
     }
 
 });
 
 //----------------------------------------------
 
-navButtons.addEventListener('go-to-cart', function(evt) {
+navButtons.addEventListener('go-to-cart', function (evt) {
     shoppingCartView.refresh(orderModel);
     viewContainer.innerHTML = "";
     viewContainer.appendChild(shoppingCartView);
@@ -167,12 +183,65 @@ navButtons.addEventListener('log-in', () => {
 //---------------------------------------------- Lytter til login submit
 
 loginView.addEventListener('log-in', evt => {
-    const addUserPromise = api.logIn(evt.detail, "user");    
+    const addUserPromise = api.logIn(evt.detail, "user");
     addUserPromise.then((aUserModel) => {        //Etter at promiset er ferdig, kjøres koden under
-        userModel = aUserModel;
-        startUp();
-        navButtons.isUserLogged(userModel);
-        navButtons.activeUser(api.getUserImage(userModel));
+        if (aUserModel) {
+            userModel = aUserModel;
+            startUp();
+            navButtons.isUserLogged(userModel);
+            navButtons.activeUser(api.getUserImage(userModel));
+        }
+    });
+});
+
+//---------------------------------------------- Lytter til Settings
+
+navButtons.addEventListener('go-to-settings', evt => {
+    viewContainer.innerHTML = "";
+    userSettingsView.refresh(userModel)
+    viewContainer.appendChild(userSettingsView)
+});
+
+//---------------------------------------------- Logout
+
+userSettingsView.addEventListener('logout-user', evt => {
+    viewContainer.innerHTML = "";
+    sessionStorage.removeItem("authString");
+    userModel = null;
+    messageHandler("Logout", "Logged out user")
+    startUp();
+});
+
+//---------------------------------------------- Change user information
+
+userSettingsView.addEventListener('changed-user-information', informationForm => {
+    const changeUserInformationPromise = api.changeUserInformation(informationForm.detail, userModel.token)
+    changeUserInformationPromise.then(() => {
+
+        const updateUserPromise = api.activeUser(sessionStorage.getItem("authString"));
+        updateUserPromise.then((aUserModel) => {
+            userModel = aUserModel;
+            navButtons.isUserLogged(userModel);
+            navButtons.activeUser(api.getUserImage(userModel));
+            userSettingsView.refresh(userModel)
+        });
+    })
+});
+
+//---------------------------------------------- Lytter til Delete User
+
+userSettingsView.addEventListener('delete-user', evt => {
+    // viewContainer.innerHTML = "";
+
+    const deleteUserPromise = api.deleteUser("user", userModel.token);
+    deleteUserPromise.then((userGotDeleted) => {        //Etter at promiset er ferdig, kjøres koden under
+        if (userGotDeleted) {
+            sessionStorage.removeItem("authString");
+            userModel = null;
+            startUp();
+        }
+        // navButtons.isUserLogged(userModel);
+        // navButtons.activeUser(api.getUserImage(userModel));
     });
 });
 
@@ -191,23 +260,23 @@ navButtons.addEventListener("search-for-products", evt => {
 //---------------------------------------------
 navButtons.addEventListener("go-to-threads", e => {
     api.getAllUsers(userModel.token).then((usernames) => {
-    viewContainer.innerHTML = "";
+        viewContainer.innerHTML = "";
         const postAll = true;
         const threadListPromise = api.listThreads(userModel.token, postAll, usernames);
-            allThreadsView.loadThreads(threadListPromise);
-            viewContainer.appendChild(allThreadsView);
+        allThreadsView.loadThreads(threadListPromise);
+        viewContainer.appendChild(allThreadsView);
     });
 });
 
 allThreadsView.addEventListener("wish-to-inspect", e => {
-    viewContainer.innerHTML ="";
+    viewContainer.innerHTML = "";
     api.getAllUsers(userModel.token).then((usernames) => {
         threadInfo = e.detail;
         singleThreadView.refresh(e.detail);
 
         const commentContent = api.listComments(userModel.token, threadInfo.thread, usernames);
-            singleThreadView.comment(commentContent); 
-            viewContainer.appendChild(singleThreadView);
+        singleThreadView.comment(commentContent);
+        viewContainer.appendChild(singleThreadView);
     });
 });
 
@@ -216,9 +285,9 @@ singleThreadView.addEventListener("submit-comment", e => {
     api.addThreadComment(userModel.token, threadInfo.thread, e.detail);
     const commentContent = api.listComments(userModel.token, threadInfo.thread);
 
-    singleThreadView.comment(commentContent).then((result)=>{
-            viewContainer.appendChild(singleThreadView);
-        });
+    singleThreadView.comment(commentContent).then((result) => {
+        viewContainer.appendChild(singleThreadView);
+    });
 });
 
 singleThreadView.addEventListener("delete-thread", e => {
@@ -239,36 +308,36 @@ newThreadView.addEventListener("submit-new-thread", e => {
 shoppingCartView.addEventListener("go-to-checkout", e => {
     viewContainer.innerHTML = "";
     checkoutView.refresh(orderModel).then(() => {
-        if(userModel){
+        if (userModel) {
             checkoutView.loggedInUser(userModel);
-        } 
+        }
         viewContainer.appendChild(checkoutView);
     });
-    
+
 });
 
 
 checkoutView.addEventListener("place-order", e => {
     console.log(e.detail);
-        if(userModel){
-            //For logged in users. 
-            api.placeOrder(userModel.token, e.detail).then((result) => {
-                if(result.msg === "insert order ok"){
-                    viewContainer.innerHTML = "";
-                    orderConfirmView.refresh(result.record, orderModel);
-                    viewContainer.appendChild(orderConfirmView);
-                }
-            });
-        } else {
-            //For guest users. 
-            api.placeOrder(null, e.detail).then((result) => {
-                if(result.msg === "insert order ok"){
-                    viewContainer.innerHTML = "";
-                    orderConfirmView.refresh(result.record, orderModel);
-                    viewContainer.appendChild(orderConfirmView);
+    if (userModel) {
+        //For logged in users. 
+        api.placeOrder(userModel.token, e.detail).then((result) => {
+            if (result.msg === "insert order ok") {
+                viewContainer.innerHTML = "";
+                orderConfirmView.refresh(result.record, orderModel);
+                viewContainer.appendChild(orderConfirmView);
             }
-            });
-        };
+        });
+    } else {
+        //For guest users. 
+        api.placeOrder(null, e.detail).then((result) => {
+            if (result.msg === "insert order ok") {
+                viewContainer.innerHTML = "";
+                orderConfirmView.refresh(result.record, orderModel);
+                viewContainer.appendChild(orderConfirmView);
+            }
+        });
+    };
 });
 
 
