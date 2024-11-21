@@ -108,6 +108,7 @@ export class CheckoutView extends HTMLElement {
 
     //-------------------------------
     async addShipment(shipmentData) {
+        this.shipment.innerHTML = "";
         const shipmentType = await shipmentData;
     
         const shipmentDiv = document.createElement("div");
