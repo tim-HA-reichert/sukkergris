@@ -69,7 +69,7 @@ adminPanelView.addEventListener("admin-users", e => {
 allUserView.addEventListener("delete-user", e => {
     viewContainer.innerHTML = "";
 
-    api.deleteUser(adminToken, e.detail).then((result) => {
+    api.deleteUser("admin", adminToken, e.detail).then((result) => {
         const refreshUserList = api.getAllUsers(adminToken);
         allUserView.listUsers(refreshUserList);
         viewContainer.appendChild(allUserView);

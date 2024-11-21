@@ -108,7 +108,10 @@ export class NavigationView extends HTMLElement {
             const cartEvent = new CustomEvent("go-to-cart", {composed: true, bubbles:true, detail: e});
             this.dispatchEvent(cartEvent);
         });
-   
+        this.userPicture.addEventListener("click", (e) =>{
+            const settingsEvent = new CustomEvent("go-to-settings", {composed: true, bubbles:true, detail: e});
+            this.dispatchEvent(settingsEvent);
+        });
     }
 } //end of class
 

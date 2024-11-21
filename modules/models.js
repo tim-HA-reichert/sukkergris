@@ -136,6 +136,8 @@ export class LoginDataModel {
         this.street = data.street;
         this.zipcode = data.zipcode;
     }
+
+
 }
 
 
