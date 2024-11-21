@@ -15,7 +15,7 @@ const html = `
             <br>
             
             <label for="fullName">Full name:</label>
-            <input required type="text" id="fullName" name="fullName"
+            <input required type="text" id="fullname" name="fullname"
                 placeholder="Enter your full name">
             <br>
                 
