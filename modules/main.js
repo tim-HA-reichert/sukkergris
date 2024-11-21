@@ -68,6 +68,8 @@ let userModel = null;
 //Laster inn shipmenttyper for å forhindre lag i checkout. 
 const shipmentTypes = api.listShipmentMethods();
 
+
+
 //startup----------------------------------------
 startUp();
 

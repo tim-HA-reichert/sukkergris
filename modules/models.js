@@ -63,13 +63,15 @@ export class OrderModel {
 
     //----------------------------------------
     constructor() {
-        this.cartArray = [];
+        const savedCart = localStorage.getItem('orderModel');
+        //Sjekker om det er data å hente fra localstorage
+        this.cartArray = savedCart ? JSON.parse(savedCart) : [];
     }
 
     //----------------------------------------
-    update() {
-        //check for valid values, santizing etc. can happen here.
-
+    _saveToLocalStorage() {
+        //Fått hjelp av Claude.ai for dette. 
+        localStorage.setItem('orderModel', JSON.stringify(this.cartArray));
     }
 
     addItem(item) {
@@ -88,6 +90,10 @@ export class OrderModel {
             //Prevent quantity to start at 0 when adding new item.
             item.quantity++;
         }      
+
+        this._saveToLocalStorage();
+
+
     }
 
     updateQuantity(index, newQuantity) {
@@ -96,16 +102,19 @@ export class OrderModel {
             item.quantity = newQuantity; //Updates the quantity
             item.totalPrice = item.price * newQuantity; //Updates the total price
         }
+        this._saveToLocalStorage();
     }
 
     deleteItem(index) {
         if (index >= 0 && index < this.cartArray.length) {
             this.cartArray.splice(index, 1);
         }
+        this._saveToLocalStorage();
     }
 
     emptyCart() {
         this.cartArray = [];
+        this._saveToLocalStorage();
     }
 }
 
