@@ -6,7 +6,7 @@ document.body.appendChild(messageDialog);
 
 export function errorHandler(error) {
     let errorMessage = "";
-    
+        
     switch (error.cause.http_code) {
         case 400:
             errorMessage = "Please check your input.";

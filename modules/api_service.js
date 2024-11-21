@@ -1,7 +1,7 @@
 //this module contains the functions in the service layer
 //----------------------------------------------------------
 
-import { fetchData } from "./utilities.js";
+import { fetchData, shortenDate} from "./utilities.js";
 import { createBasicAuthString } from "./utilities.js";
 import { CategoryModel, ChocolateModel, LoginDataModel, 
     UserThreadModel, UserCommentModel, userModel, ReviewModel } from "./models.js";
@@ -195,7 +195,7 @@ export async function addProductReview(aData, aToken) {
 
 
 //----------------------------------------------------------
-// Shows product reviews
+// Show product reviews
 //----------------------------------------------------------
 export async function showReviews(productID, usernames, userModel) {
     const url = urlMap.productReviewsURL + "?key=" + groupKey + "&product_id=" + productID;
@@ -235,6 +235,83 @@ export async function showReviews(productID, usernames, userModel) {
                 }
             }
             
+            return threadList
+        }
+    } catch (error) {
+        errorHandler(error);
+    }
+}
+
+
+//----------------------------------------------------------
+// Delete product review
+//----------------------------------------------------------
+export async function deleteReview(aToken, reviewID) {
+    const url = urlMap.productReviewsURL + "?key=" + groupKey + "&comment_id=" + reviewID;
+    const cfg = {
+        method: "DELETE",
+        headers: {
+            "authorization": aToken,
+        }
+    }
+
+    try {
+        const result = await fetchData(url, cfg);
+        
+        if(result.msg === "delete comment ok") {
+            messageHandler("Review Deleted", "Message: " + result.record.comment_text);
+            return true
+        }
+
+    } catch (error) {
+        errorHandler(error);  
+        return false
+    }
+}
+
+//----------------------------------------------------------
+// Admin show product reviews
+//----------------------------------------------------------
+export async function adminShowReviews(aAdminToken, usernames) {
+    const url = urlMap.productReviewsURL + "?key=" + groupKey
+
+    const cfg = {
+        method: "GET",
+        headers: {
+            "authorization": aAdminToken,
+        }
+    }    
+
+    try {
+        const data = await fetchData(url, cfg);
+
+        if(data.length == 0 ) {
+            return false
+        } else {            
+
+            const threadList = [];            
+
+            for(let value of data){
+                
+                const reviewObject = {
+                    comment_text: value.comment_text,
+                    date: shortenDate(value.date), 
+                    id: value.id,
+                    product_id: value.product_id,
+                    rating: value.rating,
+                    user_id: value.user_id
+                }
+
+                // Match user_id with the users list to generate username object key. 
+                const userInList = usernames.find((user) => user.id === value.user_id);
+                
+                if(userInList){                    
+                    const threadItem = new ReviewModel(reviewObject);                
+                    threadItem.setUsername(userInList);
+                    threadList.push(threadItem)
+                } 
+            }                        
+
             return threadList
         }
     } catch (error) {
@@ -369,9 +446,8 @@ export async function logIn(aForm, accountType) {
     try {
 
         
-        const result = await fetchData(url, cfg);        
-        
-        if(result.msg === "login OK") {
+        const result = await fetchData(url, cfg);           
+        if(result.msg === "login OK" || result.msg === "administrator login OK") {
             messageHandler("Login", "User logged in successfully");
             const loginDataObj = {
                 superuser: result.logindata.superuser,
