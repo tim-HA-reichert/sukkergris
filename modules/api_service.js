@@ -32,9 +32,12 @@ const urlMap = {
     productReviewsURL: "https://sukkergris.onrender.com/webshop/comments", 
     //Message URL's
     messageURL: "https://sukkergris.onrender.com/msgboard/messages",  
-    // add more URL' here...
+    //Shipment & Order URL's
     orderURL: "https://sukkergris.onrender.com/webshop/orders",
-    shipmentURL: "https://sukkergris.onrender.com/logistics/shippingtypes"
+    shipmentURL: "https://sukkergris.onrender.com/logistics/shippingtypes",
+    //Meow meow beenz
+    meowURL: "https://sukkergris.onrender.com/users/beenz",
+
 }
 
 //----------------------------------------------------------
@@ -588,11 +591,11 @@ export async function getAllUsers(aToken, aUserID){
 
         const result = await fetchData(url, cfg);
 
-
         const userList = [];
 
         for(let value of result){
             const userObj = {
+                beenz: value.beenz,
                 city: value.city,
                 heading: value.country, 
                 full_name: value.full_name,
@@ -719,9 +722,6 @@ export async function listThreads(aToken, postAll, usernames){
     try{
         const result = await fetchData(url, cfg);
 
-        console.log(result);
-
-
         const threadList = [];
 
         for(let value of result){
@@ -784,6 +784,7 @@ export async function addThreads(aToken, threadForm){
         try{
 
         const result = await fetchData(url, cfg);
+        console.log(result);
         result.start_of_thread = true;
 
         messageHandler("Forum", "Added new topic of discussion!");
@@ -922,6 +923,7 @@ export async function placeOrder(aToken, aOrderForm){
     try{
         const result = await fetchData(url, cfg);
         console.log(result);
+        
         return result
     } catch(error) {
         errorHandler(error);
@@ -942,6 +944,7 @@ export async function listOrders(aToken){
     try{
         const result = await fetchData(url, cfg);
         console.log(result);
+
         return result
     } catch(error){
         errorHandler(error);
@@ -961,6 +964,7 @@ export async function deleteOrder(aToken, aOrderID){
     try{
         const result = await fetchData(url, cfg);
         console.log(result);
+
         return result
     }catch(error){
         errorHandler(error);
@@ -972,7 +976,6 @@ export async function deleteOrder(aToken, aOrderID){
 //List shipment methods
 //-----------------------------------------------------------
 
-
 export async function listShipmentMethods(){
     const url = urlMap.shipmentURL + "?key=" + groupKey;
 
@@ -980,6 +983,36 @@ export async function listShipmentMethods(){
         const result = await fetchData(url);
         return result
     }catch(error){
+        errorHandler(error);
+    }
+
+}
+
+//------------------------------------------------------
+//Meow meow beenz API 
+//------------------------------------------------------
+
+export async function rateUser(aToken, userToRate, amountOfBeenz){
+    const url = urlMap.meowURL + "?key=" + groupKey;
+
+    const cfg = {
+        method: "PUT",
+        headers: {
+            "authorization": aToken,
+            "content-type": "application/json",
+        },
+        body: JSON.stringify({
+            userid: userToRate,
+            beenz: amountOfBeenz
+        })
+    }
+
+    try {
+        const result = await fetchData(url, cfg);
+        console.log(result);
+
+        return result;
+    } catch(error) {
         errorHandler(error);
     }
 

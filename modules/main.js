@@ -98,7 +98,6 @@ function startUp() {
 
 //-----------------------------------------------
 valueChecker.addEventListener("click", e => {   
-    console.log(shipmentTypes)
 });
 
 
@@ -274,14 +273,20 @@ navButtons.addEventListener("go-to-threads", e => {
 
 allThreadsView.addEventListener("wish-to-inspect", e => {
     viewContainer.innerHTML = "";
+
     api.getAllUsers(userModel.token).then((usernames) => {
+        console.log(usernames);
         threadInfo = e.detail;
-        singleThreadView.refresh(e.detail);
+        singleThreadView.refresh(threadInfo);
+        singleThreadView.currentRating(usernames, threadInfo);
+
+        singleThreadView.rateTheAuthor();
 
         const commentContent = api.listComments(userModel.token, threadInfo.thread, usernames);
         singleThreadView.comment(commentContent);
-        viewContainer.appendChild(singleThreadView);
     });
+    
+    viewContainer.appendChild(singleThreadView);
 });
 
 singleThreadView.addEventListener("submit-comment", e => {
@@ -293,6 +298,19 @@ singleThreadView.addEventListener("submit-comment", e => {
         viewContainer.appendChild(singleThreadView);
     });
 });
+
+
+singleThreadView.addEventListener("rate-author", e => {
+    let meowRating = e.detail.meowRating;
+    let ratedUser = e.detail.user;
+
+    api.rateUser(userModel.token, ratedUser, meowRating);
+
+})
+
+
+
+
 
 singleThreadView.addEventListener("delete-thread", e => {
     api.deleteThread(threadInfo.id, userModel.token);

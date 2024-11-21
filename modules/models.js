@@ -91,9 +91,8 @@ export class OrderModel {
             item.quantity++;
         }      
 
+        //Kaller på denne for at det skal lagres i localstorage.
         this._saveToLocalStorage();
-
-
     }
 
     updateQuantity(index, newQuantity) {
@@ -250,9 +249,6 @@ export class userModel {
         this.zipcode = newUser.zipcode;
     }
 }
-
-
-
 
 
 //===========================================
