@@ -259,9 +259,9 @@ export async function deleteReview(aToken, reviewID) {
 
     try {
         const result = await fetchData(url, cfg);
-        
+            console.log(result);
         if(result.msg === "delete comment ok") {
-            messageHandler("Review Deleted", "Message: " + result.record.comment_text);
+            messageHandler("Review Deleted", "Review ID: " + result.record.id);
             return true
         }
 
@@ -583,8 +583,8 @@ export async function adminProducts(aToken, aNewProductForm) {
         }
 
         const result = await fetchData(url, cfg);
-
-        messageHandler(result);
+        console.log(result);
+        messageHandler(`New product: ${result.record.name} added!`);
         return result;
 
     } catch (error) {
@@ -611,7 +611,7 @@ export async function deleteProduct(adminToken, productID) {
 
         const result = await fetchData(url, cfg);
 
-        messageHandler(result);
+        messageHandler(`Product: ${result.record.name} has been deleted`);
         return result;
 
     } catch (error) {
@@ -1027,7 +1027,6 @@ export async function listOrders(aToken){
 
     try{
         const result = await fetchData(url, cfg);
-        console.log(result);
 
         return result
     } catch(error){
@@ -1047,7 +1046,8 @@ export async function deleteOrder(aToken, aOrderID){
 
     try{
         const result = await fetchData(url, cfg);
-        console.log(result);
+
+        messageHandler(`Deleted order`, `Deleted order with ID: ${result.record.id}`);
 
         return result
     }catch(error){

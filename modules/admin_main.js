@@ -127,7 +127,6 @@ changeProductInfo.addEventListener("change-product", function(evt){
 
 adminPanelView.addEventListener("admin-orders", e => {
     viewContainer.innerHTML ="";
-    console.log(adminToken);
     api.listOrders(adminToken).then((result) => {
             orderListView.getOrders(result);
             viewContainer.appendChild(orderListView);

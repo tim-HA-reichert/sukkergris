@@ -29,14 +29,14 @@ export class UserListView extends HTMLElement {
         this.deleteUserBtn.addEventListener("click", e => {
             e.preventDefault();
 
-            this.deleteUserEvent(this.userToDelete.value);
+            this.deleteEvent(this.userToDelete.value);
 
             this.userToDelete.value = "";
         })
     
     }
 
-    deleteUserEvent(userId){
+    deleteEvent(userId){
         const deleteEvent = new CustomEvent("delete-user", { composed: true, bubbles: true, detail: userId });
         this.dispatchEvent(deleteEvent); 
     }
@@ -62,7 +62,7 @@ export class UserListView extends HTMLElement {
 
             const deleteButton = userDiv.querySelector(".user-entry-delete-btn");
             deleteButton.addEventListener("click", () => {
-                this.deleteUserEvent(value.id);
+                this.deleteEvent(value.id);
 
             });
 

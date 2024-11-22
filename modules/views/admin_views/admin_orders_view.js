@@ -30,7 +30,6 @@ export class OrderListView extends HTMLElement {
             e.preventDefault();
 
             this.deleteEvent(this.orderToDelete.value);
-
             this.orderToDelete.value = "";
         })
     
@@ -53,12 +52,23 @@ export class OrderListView extends HTMLElement {
 
             const orderDiv = document.createElement("div");
             orderDiv.innerHTML = `
-                <h2>Made by customer: ${value.customer_name}</h2> 
-                <h3>Order number: ${value.ordernumber}</h3>
-                <h4>Order ID: ${value.id}</h4>
-                <h4>Shipping ID: ${value.shipping_id}</h4>
+            <div class="user-order-wrapper">
+                <div class="user-info-wrapper">
+                    <h2>Made by customer: ${value.customer_name}</h2> 
+                    <h3>Order number: ${value.ordernumber}</h3>
+                    <h4>Order ID: ${value.id}</h4>
+                    <h4>Shipping ID: ${value.shipping_id}</h4>
+                </div>
+                <button class="user-order-delete-btn">Delete this user</button>
                 <hr>
+            </div>    
             `;
+
+            const deleteButton = orderDiv.querySelector(".user-order-delete-btn");
+            deleteButton.addEventListener("click", () => {
+                this.deleteEvent(value.id);
+            });
+
             this.orderContainer.appendChild(orderDiv);
         }
     }

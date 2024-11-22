@@ -71,10 +71,7 @@ export class adminProductsView extends HTMLElement {
         this.deleteButton.addEventListener("click", evt => {
             evt.preventDefault();  
 
-            const deleteEvent = new CustomEvent("delete-product", 
-                {composed: true, bubbles: true, detail: this.deleteProductID.value});
-
-            this.dispatchEvent(deleteEvent);
+            this.deleteEvent(this.deleteProductID.value);
 
             this.deleteProductID.value = "";
         });
@@ -89,6 +86,14 @@ export class adminProductsView extends HTMLElement {
         });
     }
 
+    async deleteEvent(aID){
+        const deleteEvent = new CustomEvent("delete-product", 
+            {composed: true, bubbles: true, detail:aID});
+
+        this.dispatchEvent(deleteEvent);
+    }
+
+
     async chocoDeletionList (dataPromise){
             this.listContainer.innerHTML = "";
     
@@ -98,11 +103,23 @@ export class adminProductsView extends HTMLElement {
     
                 const theDiv = document.createElement("div");
                 theDiv.innerHTML = `
-                    <h3>${value.chocoName}</h3>
-                    <p>Price: ${value.price},-</p>
-                    <p>ID: ${value.chocoID}</p>
-                    <hr>
+                <div class="choco-instance-wrapper">
+                    <div class="choco-info-wrapper">
+                        <h3>${value.chocoName}</h3>
+                        <p>Price: ${value.price},-</p>
+                        <p>ID: ${value.chocoID}</p>
+                    </div>
+                <button class="choco-entry-delete-btn">Delete this chocolate</button>
+                </div>
+                        <hr>
                 `;
+
+                const deleteButton = theDiv.querySelector(".choco-entry-delete-btn");
+                deleteButton.addEventListener("click", () => {
+                    this.deleteEvent(value.chocoID);
+                });
+
+
                 this.listContainer.appendChild(theDiv);
             }
         }//End of deleteChoco 

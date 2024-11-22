@@ -29,15 +29,18 @@ export class ReviewsView extends HTMLElement {
         this.btnDeleteReview.addEventListener("click", e => {
             e.preventDefault();
 
-            
-            const deleteReviewEvent = new CustomEvent("deleteReview", 
-                {composed: true, bubbles: true, detail: this.reviewToDelete.value});
-
-            this.dispatchEvent(deleteReviewEvent);
+            this.deleteEvent(this.reviewToDelete.value);
 
             this.reviewToDelete.value = "";
         })
     
+    }
+
+    deleteEvent(aID){
+        const deleteReviewEvent = new CustomEvent("deleteReview", 
+            {composed: true, bubbles: true, detail: aID});
+
+        this.dispatchEvent(deleteReviewEvent);
     }
 
 
@@ -49,6 +52,8 @@ export class ReviewsView extends HTMLElement {
     
                 const userDiv = document.createElement("div");
                 userDiv.innerHTML = `
+            <div class="user-review-wrapper">
+                <div class="review-info-wrapper">
                 <h3>Message id: ${value.id}</h3>
                     <h4>Product id: ${value.product_id}</h4>
                     <h3>Username: ${value.username}</h3>
@@ -56,8 +61,19 @@ export class ReviewsView extends HTMLElement {
                     <p>Date: ${value.date}</p>
                     <p>Review Text: ${value.comment_text}</p>
                     <p>Rating: ${value.rating}</p>
+               </div>
+               <button class="user-review-delete-btn">Delete this user</button>
                     <hr>
+            </div>
                 `;
+
+                const deleteButton = userDiv.querySelector(".user-review-delete-btn");
+                deleteButton.addEventListener("click", () => {
+                    this.deleteEvent(value.id);
+    
+                });
+
+
                 this.reviewContainer.appendChild(userDiv);
             }
         } else {
