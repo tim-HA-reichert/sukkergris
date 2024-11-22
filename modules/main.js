@@ -39,9 +39,6 @@ const userContainer = document.getElementById("user-container");
 
 const btnShowCategoriesView = document.getElementById('btnShowCategories');
 
-const valueChecker = document.getElementById("value-checker");
-
-
 
 const categoryListView = new CategoryListView();
 const chocolateListView = new ChocolateListView();
@@ -63,6 +60,8 @@ let threadInfo = null;
 const orderConfirmView = new OrderConfirmView();
 
 const orderModel = new OrderModel();
+
+
 let userModel = null;
 
 //Laster inn shipmenttyper for å forhindre lag i checkout. 
@@ -74,7 +73,6 @@ const shipmentTypes = api.listShipmentMethods();
 startUp();
 
 function startUp() {
-
     const categoryPromise = api.getCategories(); //retrieve the categories from the service layer as a promise
     categoryListView.refresh(categoryPromise); //send the promise to the view. The view will wait for the promise to resolve
 
@@ -95,11 +93,6 @@ function startUp() {
     userContainer.appendChild(navButtons);
 
 }
-
-//-----------------------------------------------
-valueChecker.addEventListener("click", e => {   
-});
-
 
 //-----------------------------------------------
 categoryListView.addEventListener('categoryselect', function (evt) {    
@@ -207,11 +200,20 @@ navButtons.addEventListener('go-to-settings', evt => {
 
 //---------------------------------------------- Logout
 
+navButtons.addEventListener('logout-user', evt => {
+    viewContainer.innerHTML = "";
+    sessionStorage.removeItem("authString");
+    userModel = null;
+    messageHandler("See you soon!", "You have been logged out.")
+    startUp();
+});
+
+
 userSettingsView.addEventListener('logout-user', evt => {
     viewContainer.innerHTML = "";
     sessionStorage.removeItem("authString");
     userModel = null;
-    messageHandler("Logout", "Logged out user")
+    messageHandler("See you soon!", "You have been logged out.")
     startUp();
 });
 
@@ -275,7 +277,6 @@ allThreadsView.addEventListener("wish-to-inspect", e => {
     viewContainer.innerHTML = "";
 
     api.getAllUsers(userModel.token).then((usernames) => {
-        console.log(usernames);
         threadInfo = e.detail;
         singleThreadView.refresh(threadInfo);
         singleThreadView.currentRating(usernames, threadInfo);

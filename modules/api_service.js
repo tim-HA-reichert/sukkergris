@@ -350,7 +350,6 @@ export async function logIn(aForm, accountType) {
 
     const url = urlMap[`${accountType}LoginURL`] + "?key=" + groupKey; //Får tilgang til URLMapping, bruker brackets ([]) for å få tilgang til objekt element.
 
-    
     const loginCred = {
         username: aForm.get("username"),
         password: aForm.get("password"),
@@ -369,10 +368,11 @@ export async function logIn(aForm, accountType) {
     try {
 
         
-        const result = await fetchData(url, cfg);        
-        
+        const result = await fetchData(url, cfg);      
+        //374 -> 393 skapte error for adminlogin  
+/*         
         if(result.msg === "login OK") {
-            messageHandler("Login", "User logged in successfully");
+            messageHandler("Welcome back!", "Sweetness for your tastebuds await, " + result.logindata.username);
             const loginDataObj = {
                 superuser: result.logindata.superuser,
                 thumb: result.logindata.thumb,
@@ -390,9 +390,13 @@ export async function logIn(aForm, accountType) {
             return loginData;
         } else {
             throw new Error(result.msg)
-        }
+        } */
 
-
+       if(result.logindata.superuser != true){
+            messageHandler("Welcome back!", "Sweetness for your tastebuds await, " + result.logindata.username);
+            }
+        return result
+        
 
     } catch (error) {
         errorHandler(error);
@@ -405,7 +409,7 @@ export async function logIn(aForm, accountType) {
 
 export async function activeUser(aAuthString) {
 
-    const url = urlMap.userLoginURL + "?key=" + groupKey; //Får tilgang til URLMapping, bruker brackets ([]) for å få tilgang til objekt element.
+    const url = urlMap.userLoginURL + "?key=" + groupKey; 
 
     const cfg = {
         method: "POST",
@@ -462,7 +466,7 @@ export async function changeUserInformation(aInformationForm, aToken) {
 
         const result = await fetchData(url, cfg);        
         if(result.msg == "update user ok") {
-            messageHandler("User Information", "Updated the user information");
+            messageHandler("User Info updated", "Refresh to see the changes!");
         }
 
         return result;
@@ -561,16 +565,21 @@ export async function addUser (aForm){
         const result = await fetchData(url, cfg);
 
         if(result.msg === "insert user ok") {
-            messageHandler("User Added", "Added user " + result.record.username);
+            messageHandler("Thank you for joining Sukkergris!", "Your username is: " + result.record.username);
             return result;
         } else {
-            throw new Error("Error adding user", "Try again later")
+            throw new Error("Error adding user", "Try again later");
         }
 
     }catch(error){
         errorHandler(error);
     }
 }
+
+
+
+
+
 
 export async function getAllUsers(aToken, aUserID){
     let url;

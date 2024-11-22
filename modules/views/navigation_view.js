@@ -12,6 +12,7 @@ const html = `
         
         <button id="user-forum-button">Read our user forum!</button>
         <button id="create-thread-btn">Create a new topic!</button>
+        <button id="btnLogout">Logout</button>
         <img id="userPicture" src="" alt="users profile picture">
     </template>
 
@@ -60,30 +61,37 @@ export class NavigationView extends HTMLElement {
         let template = aUser ? this.loggedIn : this.notLoggedIn;
             const clone = template.content.cloneNode(true);
             this.navigationContainer.appendChild(clone);
-        
-        //If not logged in, do this: 
-        if(!aUser){
-            this.btnGoToCart = this.shadowRoot.getElementById('btnGoToCart');
-            this.btnLogin = this.shadowRoot.getElementById("btnLogin");
-            this.btnAddUser = this.shadowRoot.getElementById("btnAddUser");
 
-            this.btnAddUser.addEventListener("click", (e) =>{
-                const theEvent = new CustomEvent("add-new-user", {composed: true, bubbles:true, detail: e});
-                this.dispatchEvent(theEvent);
-            });
+            if(!aUser) {
+                this.guestUser();
+            }
 
-            this.btnLogin.addEventListener("click", (e) =>{
-                const theEvent = new CustomEvent("log-in", {composed: true, bubbles:true, detail: e});
-                this.dispatchEvent(theEvent);
-            });
-
-            this.btnGoToCart.addEventListener("click", (e) =>{
-                const cartEvent = new CustomEvent("go-to-cart", {composed: true, bubbles:true, detail: e});
-                this.dispatchEvent(cartEvent);
-            });
-
-        } 
     }
+
+    guestUser(){
+        this.btnGoToCart = this.shadowRoot.getElementById('btnGoToCart');
+        this.btnLogin = this.shadowRoot.getElementById("btnLogin");
+        this.btnAddUser = this.shadowRoot.getElementById("btnAddUser");
+
+        this.btnAddUser.addEventListener("click", (e) =>{
+            const theEvent = new CustomEvent("add-new-user", {composed: true, bubbles:true, detail: e});
+            this.dispatchEvent(theEvent);
+        });
+
+        this.btnLogin.addEventListener("click", (e) =>{
+            const theEvent = new CustomEvent("log-in", {composed: true, bubbles:true, detail: e});
+            this.dispatchEvent(theEvent);
+        });
+
+        this.btnGoToCart.addEventListener("click", (e) =>{
+            const cartEvent = new CustomEvent("go-to-cart", {composed: true, bubbles:true, detail: e});
+            this.dispatchEvent(cartEvent);
+        });
+    }
+
+
+
+
 
     //seperate method for logged in users: 
     activeUser(pictureData){
@@ -91,6 +99,7 @@ export class NavigationView extends HTMLElement {
         this.createThread = this.shadowRoot.getElementById("create-thread-btn");
         this.userForum = this.shadowRoot.getElementById("user-forum-button");
         this.btnGoToCart = this.shadowRoot.getElementById('btnGoToCart');
+        this.btnLogout = this.shadowRoot.getElementById("btnLogout");
         
         this.userPicture.src = pictureData;
     
@@ -112,6 +121,12 @@ export class NavigationView extends HTMLElement {
             const settingsEvent = new CustomEvent("go-to-settings", {composed: true, bubbles:true, detail: e});
             this.dispatchEvent(settingsEvent);
         });
+
+        this.btnLogout.addEventListener("click", evt => {
+            const theEvent = new CustomEvent("logout-user", { composed: true, bubbles: true });
+            this.dispatchEvent(theEvent);
+        });
+
     }
 } //end of class
 

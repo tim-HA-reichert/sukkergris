@@ -87,9 +87,6 @@ export class IndividualThreadView extends HTMLElement{
         const authorID = await authorData;
         const selectAuthor = await authorToRate;
 
-        console.log(authorID);
-        console.log(selectAuthor);
-
         let rating = null;
 
         const ratingInfoDiv = document.createElement("div");
