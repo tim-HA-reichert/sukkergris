@@ -357,6 +357,7 @@ checkoutView.addEventListener("place-order", e => {
                     userInfo = result.record;
                     orderConfirmView.refresh(userInfo, orderModel, shipmentTypes);
                     viewContainer.appendChild(orderConfirmView);
+                    orderModel.emptyCart();
                 }
             });
         } else {
@@ -367,6 +368,7 @@ checkoutView.addEventListener("place-order", e => {
                     userInfo = result.record;
                     orderConfirmView.refresh(userInfo, orderModel, shipmentTypes);
                     viewContainer.appendChild(orderConfirmView);
+                    orderModel.emptyCart();
             }
         });
     }

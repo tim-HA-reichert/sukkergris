@@ -15,7 +15,7 @@ export class OrderConfirmView extends HTMLElement {
         this.viewContainer = this.shadowRoot.getElementById("viewContainer");
         this.sumContainer = this.shadowRoot.getElementById("sumContainer");
 
-        this.shipmentPrice = 0;
+        //this.shipmentPrice = 0;
         this.totalItemPrice = 0;
     }
 
@@ -52,17 +52,24 @@ export class OrderConfirmView extends HTMLElement {
                 <h4>Chosen shipping method: ${this.shipmentType}</h4>
                     <hr>
 
-                <h2>Your Order:</h2>
+              <!---  <h2>Your Order:</h2> -->
             `;
+//Vi kan gjøre dette for å få tak i sjokoladen igjen: 
+            console.log(JSON.parse(user.content));
+//Men spørs om det er vits. 
+
+
         if(user.phone != null){
             let phone = confirmationDiv.querySelector("#user-phone");
             phone.innerHTML = `
                 Phone number: ${user.phone}
             `;
         }
+this.viewContainer.appendChild(confirmationDiv);
 
-        this.viewContainer.appendChild(confirmationDiv);
 
+
+//Utfordring, eller drite i? Hvordan vise bestilte produkter i order confirm view? Vi tømmer carten før dette. 
         cartItems.cartArray.forEach((item, index) => {
 
             const divCart = document.createElement("div");
@@ -74,14 +81,14 @@ export class OrderConfirmView extends HTMLElement {
                 <hr>
             `;
             sum += parseInt(item.price) * parseInt(item.quantity);
-            this.totalItemPrice = sum;
+            //this.totalItemPrice = sum;
             this.viewContainer.appendChild(divCart);
         });
     
-        this.sumTotal();
+       // this.sumTotal();
 
     }
-
+/* 
     sumTotal(){       
         this.sumContainer.innerHTML = "";
                 //Cart summary
@@ -100,7 +107,7 @@ export class OrderConfirmView extends HTMLElement {
     }
 
 
-
+ */
 
 }
 
