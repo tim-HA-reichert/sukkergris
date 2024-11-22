@@ -29,15 +29,18 @@ export class OrderListView extends HTMLElement {
         this.deleteOrderBtn.addEventListener("click", e => {
             e.preventDefault();
 
-            
-            const deleteEvent = new CustomEvent("delete-order", 
-                {composed: true, bubbles: true, detail: this.orderToDelete.value});
-
-            this.dispatchEvent(deleteEvent);
+            this.deleteEvent(this.orderToDelete.value);
 
             this.orderToDelete.value = "";
         })
     
+    }
+
+    deleteEvent(aId){
+        const deleteEvent = new CustomEvent("delete-order", 
+            {composed: true, bubbles: true, detail: aId});
+
+        this.dispatchEvent(deleteEvent);
     }
 
 

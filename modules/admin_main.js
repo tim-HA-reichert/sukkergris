@@ -20,15 +20,20 @@ const orderListView = new OrderListView();
 const reviewsView = new ReviewsView();
 
 const changeProductInfo = new changeProductView();
+let adminToken = null;
 
+//Add stay-logged in for admin? Security concerns
+startup();
 //startup-------------------------------------------
-
+function startup(){
 viewContainer.innerHTML = "";
 viewContainer.appendChild(adminLoginView);
+}
+
 let adjustableChocolateList = api.adjustableChocolateList();
 
 //For storing the adminToken later
-let adminToken = null;
+
 
 //log in as admin-----------------------------------
 adminLoginView.addEventListener("log-in", function(evt){
@@ -36,6 +41,8 @@ adminLoginView.addEventListener("log-in", function(evt){
     const logInPromise = api.logIn(evt.detail, "admin");
     logInPromise.then((result) => {
         adminToken = result.token;
+        localStorage.setItem("adminToken", adminToken); // Save token
+        
             viewContainer.innerHTML ="";
             viewContainer.appendChild(adminPanelView)
             adminPanelView.refresh();  
@@ -51,16 +58,13 @@ homeBtn.addEventListener("click", function(evt){
 });
 
 
-
 //---------------------------------------------------------------
 //User administration
 //----------------------------------------------------------------
 
-
 adminPanelView.addEventListener("admin-users", e => {
     viewContainer.innerHTML = "";
     api.getAllUsers(adminToken).then((userList) => {
-
         allUserView.listUsers(userList);
         viewContainer.appendChild(allUserView);
     });
@@ -81,7 +85,6 @@ allUserView.addEventListener("delete-user", e => {
 //---------------------------------------------------------------
 //Product administration
 //----------------------------------------------------------------
-
 adminPanelView.addEventListener("admin-products", function(evt){
     viewContainer.innerHTML = "";
     adminProducts.chocoDeletionList(adjustableChocolateList);
@@ -92,13 +95,14 @@ adminPanelView.addEventListener("admin-products", function(evt){
 adminProducts.addEventListener("add-product", function(evt){
     api.adminProducts(adminToken, evt.detail).then(response => {
         adjustableChocolateList = api.adjustableChocolateList();
-
+        console.log(adminToken);
         adminProducts.chocoDeletionList(adjustableChocolateList);
         viewContainer.appendChild(adminProducts);
 
         this.form.reset();  
     });
 });
+
 
 adminProducts.addEventListener("delete-product", function(evt){
     api.deleteProduct(adminToken, evt.detail).then(response =>{
@@ -133,7 +137,8 @@ changeProductInfo.addEventListener("change-product", function(evt){
 //----------------------------------------------------------------
 
 adminPanelView.addEventListener("admin-orders", e => {
-    viewContainer.innerHTML="";
+    viewContainer.innerHTML ="";
+    console.log(adminToken);
     api.listOrders(adminToken).then((result) => {
             orderListView.getOrders(result);
             viewContainer.appendChild(orderListView);
@@ -155,8 +160,8 @@ orderListView.addEventListener("delete-order", e => {
 
 //---------------------------------------------- Lager admin-review
 adminPanelView.addEventListener("admin-reviews", e => {
-    viewContainer.innerHTML="";
-        api.getAllUsers(adminToken).then(usernames => {            
+        api.getAllUsers(adminToken).then(usernames => {
+            viewContainer.innerHTML="";            
             api.adminShowReviews(adminToken, usernames).then((reviewList) => {                
                 reviewsView.showReviews(reviewList);
                 viewContainer.appendChild(reviewsView);

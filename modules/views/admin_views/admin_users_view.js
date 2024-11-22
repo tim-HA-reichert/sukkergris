@@ -29,17 +29,17 @@ export class UserListView extends HTMLElement {
         this.deleteUserBtn.addEventListener("click", e => {
             e.preventDefault();
 
-            
-            const deleteEvent = new CustomEvent("delete-user", 
-                {composed: true, bubbles: true, detail: this.userToDelete.value});
-
-            this.dispatchEvent(deleteEvent);
+            this.deleteUserEvent(this.userToDelete.value);
 
             this.userToDelete.value = "";
         })
     
     }
 
+    deleteUserEvent(userId){
+        const deleteEvent = new CustomEvent("delete-user", { composed: true, bubbles: true, detail: userId });
+        this.dispatchEvent(deleteEvent); 
+    }
 
     async listUsers(dataPromise){
         this.userContainer.innerHTML = "";
@@ -50,10 +50,24 @@ export class UserListView extends HTMLElement {
 
             const userDiv = document.createElement("div");
             userDiv.innerHTML = `
-                <h3>username: ${value.username}</h3>
-                <h4>user id: ${value.id}</h4>
+            <div class="user-entry">
+                <div class="user-info">
+                    <h3>username: ${value.username}</h3>
+                    <h4>user id: ${value.id}</h4>
+                </div>
+                <button class="user-entry-delete-btn">Delete this user</button>
+            </div>
                 <hr>
             `;
+
+            const deleteButton = userDiv.querySelector(".user-entry-delete-btn");
+            deleteButton.addEventListener("click", () => {
+                this.deleteUserEvent(value.id);
+
+            });
+
+
+
             this.userContainer.appendChild(userDiv);
         }
     }

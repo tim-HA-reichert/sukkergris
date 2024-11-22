@@ -167,6 +167,8 @@ export async function addProductReview(aData, aToken) {
     const url = urlMap.productReviewsURL + "?key=" + groupKey;
     const form = aData.formData     
 
+    console.log(aData);
+
     try {
         const cfg = {
             method: "POST",
@@ -467,6 +469,7 @@ export async function logIn(aForm, accountType) {
        if(loginData.superuser != true){
             messageHandler("Welcome back!", "Sweetness for your tastebuds await, " + result.logindata.username);
             }
+            console.log(result);
             return loginData;
         
 
@@ -711,8 +714,8 @@ export async function deleteUser(aUser, aToken, aUserId){
     
         try{
             const result = await fetchData(url, cfg);
-    
-            messageHandler(result);
+
+            messageHandler("User Deleted", "Deleted user " + result.record.username)
             return result;
     
         }catch(error){
