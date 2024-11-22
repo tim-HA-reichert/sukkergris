@@ -9,6 +9,7 @@ import { ReviewsView } from "./views/admin_views/admin_review_view.js";
 
 
 const viewContainer = document.getElementById("viewContainer");
+const navContainer = document.getElementById("admin-navigation");
 
 const homeBtn = document.getElementById("back-to-admin-start");
 
@@ -44,19 +45,10 @@ adminLoginView.addEventListener("log-in", function(evt){
         localStorage.setItem("adminToken", adminToken); // Save token
         
             viewContainer.innerHTML ="";
-            viewContainer.appendChild(adminPanelView)
+            navContainer.appendChild(adminPanelView)
             adminPanelView.refresh();  
     });
 });
-
-//Back to start-page
-//This is only for quick navigation. Later, it needs to be restricted to log-in. 
-homeBtn.addEventListener("click", function(evt){
-    viewContainer.innerHTML ="";
-    viewContainer.appendChild(adminPanelView)
-    adminPanelView.refresh();  
-});
-
 
 //---------------------------------------------------------------
 //User administration
@@ -69,8 +61,6 @@ adminPanelView.addEventListener("admin-users", e => {
         viewContainer.appendChild(allUserView);
     });
 });
-
-
 
 allUserView.addEventListener("delete-user", e => {
     viewContainer.innerHTML = "";
@@ -102,7 +92,6 @@ adminProducts.addEventListener("add-product", function(evt){
         this.form.reset();  
     });
 });
-
 
 adminProducts.addEventListener("delete-product", function(evt){
     api.deleteProduct(adminToken, evt.detail).then(response =>{
