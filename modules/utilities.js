@@ -30,10 +30,10 @@ export function createBasicAuthString(username, password) {
 
 //Shorten date function -------------------------------------
 export function shortenDate (dateInp) {
-    const dateData = dateInp;
-    const dateShortened = dateData.split("T")[0];
-    const dateModified = dateShortened.replace(/-/g, ".");
-    return dateModified
+    
+    const dateData = new Date(dateInp);
+    const dateLocalized = dateData.toLocaleDateString();
+    return dateLocalized
 }
 
 //-----------------------------------------------------------
