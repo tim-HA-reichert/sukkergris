@@ -85,7 +85,6 @@ adminPanelView.addEventListener("admin-products", function(evt){
 adminProducts.addEventListener("add-product", function(evt){
     api.adminProducts(adminToken, evt.detail).then(response => {
         adjustableChocolateList = api.adjustableChocolateList();
-        console.log(adminToken);
         adminProducts.chocoDeletionList(adjustableChocolateList);
         viewContainer.appendChild(adminProducts);
 

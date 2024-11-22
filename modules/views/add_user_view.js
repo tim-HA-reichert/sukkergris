@@ -4,7 +4,7 @@ const html = `
     <div id="listContainer">
         <form id="add-user-form" action="">
         
-            <label for="username">Username:</label>
+            <label for="username">Username (email):</label>
             <input required type="text" id="username" name="username"
             placeholder="Enter your email">
             
@@ -44,7 +44,6 @@ const html = `
             
             <label for="img_file">Profile picture:</label>
             <input type="file" id="img_file" name="img_file">
-
             <hr>
 
             <div class="button-wrapper">
@@ -72,15 +71,13 @@ export class AddUserView extends HTMLElement {
         //Regex for email
         this.emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
-
         this.form.addEventListener("submit", evt => {
             evt.preventDefault();
             
             const formData = new FormData(this.form);
-            
+
 
             const emailCheck = formData.get("username");
-
 
             if (!this.emailRegex.test(emailCheck)) {
                 this.errorSpan.style.display = "block";
