@@ -446,10 +446,9 @@ export async function logIn(aForm, accountType) {
 
         
         const result = await fetchData(url, cfg);      
-        //374 -> 393 skapte error for adminlogin  
-/*         
-        if(result.msg === "login OK") {
-            messageHandler("Welcome back!", "Sweetness for your tastebuds await, " + result.logindata.username);
+        //if-setning 451 skapte error for admin login. 
+        
+        //if(result.msg === "login OK") {
             const loginDataObj = {
                 superuser: result.logindata.superuser,
                 thumb: result.logindata.thumb,
@@ -463,16 +462,12 @@ export async function logIn(aForm, accountType) {
                 zipcode: result.logindata.zipcode,
             };
             const loginData = new LoginDataModel(loginDataObj);
-    
-            return loginData;
-        } else {
-            throw new Error(result.msg)
-        } */
-
-       if(result.logindata.superuser != true){
+       
+        //} 
+       if(loginData.superuser != true){
             messageHandler("Welcome back!", "Sweetness for your tastebuds await, " + result.logindata.username);
             }
-        return result
+            return loginData;
         
 
     } catch (error) {
