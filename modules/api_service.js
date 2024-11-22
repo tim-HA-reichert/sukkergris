@@ -611,7 +611,7 @@ export async function deleteProduct(adminToken, productID) {
 
         const result = await fetchData(url, cfg);
 
-        messageHandler(`Product: ${result.record.name} has been deleted`);
+        messageHandler(`Product deleted.`, `Product with name: ${result.record.name} has been deleted`);
         return result;
 
     } catch (error) {

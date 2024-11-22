@@ -47,28 +47,35 @@ export class OrderListView extends HTMLElement {
         this.orderContainer.innerHTML = "";
 
         const data = await dataPromise;
+        if(data.length != 0){
+            for(let value of data){
 
-        for(let value of data){
+                const orderDiv = document.createElement("div");
+                orderDiv.innerHTML = `
+                <div class="user-order-wrapper">
+                    <div class="user-info-wrapper">
+                        <h2>Made by customer: ${value.customer_name}</h2> 
+                        <h3>Order number: ${value.ordernumber}</h3>
+                        <h4>Order ID: ${value.id}</h4>
+                        <h4>Shipping ID: ${value.shipping_id}</h4>
+                    </div>
+                    <button class="user-order-delete-btn">Delete this user</button>
+                    <hr>
+                </div>    
+                `;
 
+                const deleteButton = orderDiv.querySelector(".user-order-delete-btn");
+                deleteButton.addEventListener("click", () => {
+                    this.deleteEvent(value.id);
+                });
+
+                this.orderContainer.appendChild(orderDiv);
+            }
+        } else {
             const orderDiv = document.createElement("div");
             orderDiv.innerHTML = `
-            <div class="user-order-wrapper">
-                <div class="user-info-wrapper">
-                    <h2>Made by customer: ${value.customer_name}</h2> 
-                    <h3>Order number: ${value.ordernumber}</h3>
-                    <h4>Order ID: ${value.id}</h4>
-                    <h4>Shipping ID: ${value.shipping_id}</h4>
-                </div>
-                <button class="user-order-delete-btn">Delete this user</button>
-                <hr>
-            </div>    
+            <h3>No orders! We are going bankrupt!</h3>
             `;
-
-            const deleteButton = orderDiv.querySelector(".user-order-delete-btn");
-            deleteButton.addEventListener("click", () => {
-                this.deleteEvent(value.id);
-            });
-
             this.orderContainer.appendChild(orderDiv);
         }
     }

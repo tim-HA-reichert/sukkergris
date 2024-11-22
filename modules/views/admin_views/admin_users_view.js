@@ -43,31 +43,35 @@ export class UserListView extends HTMLElement {
 
     async listUsers(dataPromise){
         this.userContainer.innerHTML = "";
-
+        
         const data = await dataPromise;
+        if(data.length != 0){
+            for(let value of data){
+                const userDiv = document.createElement("div");
+                userDiv.innerHTML = `
+                <div class="user-entry">
+                    <div class="user-info">
+                        <h3>username: ${value.username}</h3>
+                        <h4>user id: ${value.id}</h4>
+                    </div>
+                    <button class="user-entry-delete-btn">Delete this user</button>
+                </div>
+                    <hr>
+                `;
 
-        for(let value of data){
+                const deleteButton = userDiv.querySelector(".user-entry-delete-btn");
+                deleteButton.addEventListener("click", () => {
+                    this.deleteEvent(value.id);
 
+                });
+
+            this.userContainer.appendChild(userDiv);
+            }
+        } else {
             const userDiv = document.createElement("div");
             userDiv.innerHTML = `
-            <div class="user-entry">
-                <div class="user-info">
-                    <h3>username: ${value.username}</h3>
-                    <h4>user id: ${value.id}</h4>
-                </div>
-                <button class="user-entry-delete-btn">Delete this user</button>
-            </div>
-                <hr>
+            <h3>No users in our community... sad</h3>
             `;
-
-            const deleteButton = userDiv.querySelector(".user-entry-delete-btn");
-            deleteButton.addEventListener("click", () => {
-                this.deleteEvent(value.id);
-
-            });
-
-
-
             this.userContainer.appendChild(userDiv);
         }
     }

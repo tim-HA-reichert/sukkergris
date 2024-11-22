@@ -99,6 +99,8 @@ export class adminProductsView extends HTMLElement {
     
             const data = await dataPromise; //wait for the promise to be resolved
     
+        if(data.length != 0){
+
             for (let value of data) {
     
                 const theDiv = document.createElement("div");
@@ -122,6 +124,14 @@ export class adminProductsView extends HTMLElement {
 
                 this.listContainer.appendChild(theDiv);
             }
+        } else {
+            const theDiv = document.createElement("div");
+            theDiv.innerHTML = `
+            <h3>No new chocolates added, maybe add some?</h3>
+            `;
+            this.listContainer.appendChild(theDiv);
+
+        }
         }//End of deleteChoco 
 
 } //end of class
