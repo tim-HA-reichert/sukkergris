@@ -1,7 +1,27 @@
 let html = `
+<style>
+
+#dialog{
+    background-color: transparent;
+    border: none;
+}
+
+#dialog-content{
+    background-color: white;
+    padding: 1rem;
+    border-style: solid;
+    border-radius: 1rem;
+    border-color: #dadada;
+    border-width: 4px;
+}
+
+</style>
+
     <dialog id="dialog">
-        <div id="message-container"> </div> 
-        <button id="btnDialogClose">Ok</button>
+        <div id="dialog-content">
+            <div id="message-container"> </div> 
+            <button id="btnDialogClose">Close</button>
+        </div> 
     </dialog>
 `
 export class SystemMessageView extends HTMLElement {
@@ -14,17 +34,28 @@ export class SystemMessageView extends HTMLElement {
         this.shadowRoot.innerHTML = html;
 
         this.dialog = this.shadowRoot.getElementById("dialog");
+        this.dialogContent = this.shadowRoot.getElementById("dialog-content");
         this.message = this.shadowRoot.getElementById("message-container");
         this.closeBtn = this.shadowRoot.getElementById("btnDialogClose");
 
         this.closeBtn.addEventListener("click", (e) => {
             this.dialog.close()
            });
-        }
 
+        this.dialog.addEventListener("click", (e) => this.closeOnClick(e));
+    
+    }
+
+        
     typeOfMessage(aMessage) {
         this.message.innerHTML = aMessage;
         this.dialog.showModal();
     }  
+
+    closeOnClick(evt){
+        if(evt.target === this.dialog){
+            this.dialog.close();
+        }
+    }
 }
 customElements.define("system-message-view", SystemMessageView);
