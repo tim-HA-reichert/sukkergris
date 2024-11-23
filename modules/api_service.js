@@ -145,7 +145,7 @@ export async function adjustableChocolateList(category) {
                     categoryID: chocoCat.category_id,
                     description: chocoCat.description,
                     details: chocoCat.details,
-                    thumb: chocoCat.thumb,
+                    thumb: urlMap.imgURL + imgKey + "/small/" + chocoCat.thumb,
                     price: chocoCat.price
                 };
                 //fikk hjelp av chatGPT for .push og chosenCat array. 
@@ -378,9 +378,13 @@ export async function getChocolateDetails(chosenChocolateID, aUser) {
 //----------------------------------------------------------
 
 export async function getChocolateBySearch(searchValue) {
-    //Use value from searchbar to filter chocolates. 
-    //Add a onclick to searchBtn to trigger this function. 
+    //Bruker verdi fra søkefelt. 
     let searchFor = searchValue.get("searchBar");
+    
+    if (searchFor.length <= 2) {
+        messageHandler("Please give us more letters to work with.");
+        return [];
+    }
 
     const url = urlMap.chosenCategoryURL + "?search=" + searchFor + "&key=" + groupKey;   
         try {
@@ -388,14 +392,14 @@ export async function getChocolateBySearch(searchValue) {
         
             const chosenCat = [];
 
-            //"i" for removing case-sensitivty. 
-            //new RegExp is a javaScript function that creates a regular expression from parameter. 
-            //Allows us to use .test, which tests searchValue against a chosen object. 
+            //"i" for at den ikke skal bry seg om store eller små bokstaver.. 
+            //new RegExp er en javaScript funksjon som lager regex utifra parameter. 
+            //Tillater oss å bruke .test, som tester regex mot et objekt.  
             const regexSearchTest = new RegExp(searchFor, "i"); 
 
 
         for (let chocoCat of data) {
-            regexSearchTest.test(chocoCat.name)
+            if(regexSearchTest.test(chocoCat.name) && searchFor.length > 2)
             {
                 const chocoObj = {
                     chocoID: chocoCat.id,
@@ -403,7 +407,7 @@ export async function getChocolateBySearch(searchValue) {
                     categoryID: chocoCat.category_id,
                     description: chocoCat.description,
                     details: chocoCat.details,
-                    thumb: chocoCat.thumb,
+                    thumb: urlMap.imgURL + imgKey + "/small/" + chocoCat.thumb,
                     price: chocoCat.price
                 };
                 chosenCat.push(new ChocolateModel(chocoObj));
@@ -412,7 +416,7 @@ export async function getChocolateBySearch(searchValue) {
 
         if (chosenCat.length === 0) {
             messageHandler("Nothing matches your search, please try again.");
-        };
+        }; 
         return chosenCat;
 
     } catch (error) {
