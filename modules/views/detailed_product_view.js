@@ -34,17 +34,19 @@ export class DetailedProductView extends HTMLElement {
 
         this.itemObject = await dataPromise;
         this.listContainer.innerHTML = "";
-        const theDiv = document.createElement("div");
+        const theDiv = document.createElement("div");        
 
         theDiv.innerHTML = `
                 <h1>${this.itemObject.chocoName}</h1>
                 <h3>${this.itemObject.heading}</h3>
                 <h3>${this.itemObject.categoryName}</h3>
-                <img src="${this.itemObject.image}">
-                <h1> HUSK discount </h1>
+                <div id="pictureContainer">
+                    <img src="${this.itemObject.image}">
+                    <h1 id="discountText" style="display: none;"></h1>
+                </div>
                 <h3>${this.itemObject.description}</h3>
                 <p>Price: ${this.itemObject.price},- kr</p>
-                <button id="btnAddItem">Buy this item</button>
+                <button id="btnAddItem">Add Item</button>
                 <p>${this.itemObject.stock}</p>
                 <p> ${this.itemObject.expected_shipped}</p>
                 <p id="starSymbols"><p>
@@ -103,7 +105,17 @@ export class DetailedProductView extends HTMLElement {
 
         //Lager events
         this.createEvents();
+        this.checkDiscount();
     };
+
+    //--------------------------------------- Sjekker om sjokolade har discount, og utfører metode.
+    checkDiscount() {
+        if(this.itemObject.discount !== "0") {
+            const discountText = this.shadowRoot.getElementById("discountText")
+            discountText.innerText = "-" +this.itemObject.discount + "%";
+            discountText.style = "display: block";
+        }
+    }
 
     //--------------------------------------- Lager events for view
     createEvents() {

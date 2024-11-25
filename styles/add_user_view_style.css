@@ -35,7 +35,7 @@
     justify-content: center; /* Justerer button tekst horisontalt */
     border-radius: 4px;
     border: none;
-    text-transform: uppercase;
+    font-size: 18px;
     align-content: center;
     background-color: green;
     color: white;

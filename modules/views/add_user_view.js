@@ -52,7 +52,7 @@ const html = `
 
             <div class="button-wrapper">
                 <button type="submit">
-                    Create User
+                    Register
                 </button>
             </div>
         </form>

@@ -15,12 +15,23 @@ h3 {
     padding-right: 500px;
 }
 
-#listContainer img {
+#pictureContainer {
     
     position: absolute;
     top: 0;
     right: 0;
     padding: 0px 100px 0px 10px;
+}
+
+
+#discountText {
+    position: absolute;
+    top: 0;
+    padding: 0px 100px 0px 10px;
+    color: whitesmoke;
+    padding: 8px 20px;
+    background-color: rgba(74, 74, 74, 0.7);
+    ;
 }
 
 #btnAddItem {
@@ -29,10 +40,13 @@ h3 {
     border-width: 1px;
     padding: 8px 10px;
     cursor: pointer;
+    background-color: rgb(38, 170, 38);
+    color: white;
 }
 
 #btnAddItem:hover {
-    background-color: rgba(0, 0, 0, 0.1);
+    opacity: .8; /* Fader knappen litt */
+
 }
 
 #btnShowreviews {

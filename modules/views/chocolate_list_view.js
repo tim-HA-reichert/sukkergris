@@ -31,7 +31,6 @@ export class ChocolateListView extends HTMLElement {
                 <img src="${value.thumb}"/>
                 <h3>${value.chocoName}</h3>
                 <p>${value.price},-</p>
-                <hr>
             `;
 
             this.listContainer.appendChild(theDiv);
