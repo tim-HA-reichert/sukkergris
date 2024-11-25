@@ -1,6 +1,8 @@
 const html = `
+<link rel="stylesheet" href="styles/list_thread_view_style.css">
+
+
 <h2>User forum</h2>
-<hr>
     <div id="threadContainer"> </div> 
 `;
 

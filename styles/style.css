@@ -18,6 +18,24 @@ header {
 }
 
 /* / / / / / SEARCH START / / / / /  */
+#nav-wrapper{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/*Importerte font fra google fonts*/
+#btn-company-name {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 36px;
+    font-family: "Young Serif", serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+
 
 #searchBar {
     font-size: large;
@@ -45,7 +63,7 @@ header {
 /* / / / / / SEARCH END / / / / / */
 
 #shopName {
-    margin-top: -60px; /* Litt jank atm */
+    /*margin-top: -60px; /* Litt jank atm */
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
     word-spacing: 0.3em;
 }
@@ -69,10 +87,7 @@ header {
     display: flex;
     justify-content: right;
     align-items: center;
-    gap: 10px; /* Mellomrom mellom buttons */
-    position: absolute; /* Trengs for å flytte den til høyre */
-    top: 51px; /* x piksler vekk fra toppen, og høyre v */
-    right: 100px;
+    gap: 10px;
 }
 
 #navigationContainer button:hover {
@@ -121,6 +136,14 @@ header {
     cursor: pointer;
 }
 
+#btnLogout{
+    font-size: 14px;
+    border-radius: 8px;
+    border-width: 1px;
+    padding: 8px 10px;
+    cursor: pointer;
+}
+
 #userPicture {
     width: 50px;
     border-radius: 50px;
@@ -128,7 +151,9 @@ header {
 
 /* / / / / / NAV USER BUTTONS END / / / / / */
 
-#user-container { /* Flytter søkefeltet til midten */
-    display: flex;
-    justify-content: center;
+@media(max-width: 1300px){
+    #nav-wrapper {
+        flex-direction: column;
+        gap: 1rem;
+    }
 }

@@ -1,4 +1,6 @@
 const html = `
+<link rel="stylesheet" href="styles/category_list_view_style.css">
+
     <h2>Categories</h2>
     <div id="listContainer"></div>
 `;

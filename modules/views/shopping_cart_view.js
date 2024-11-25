@@ -1,5 +1,6 @@
 
 const html = `
+<link rel="stylesheet" href="styles/shopping_cart_view_style.css">
     <h2>Shopping Cart</h2>
     <div id="listContainer"></div>
 `;
@@ -50,7 +51,9 @@ export class ShoppingCartView extends HTMLElement {
                 <h3>${item.chocoName}</h3>
                 <p>ID: ${item.chocoID}</p>
                 <p>Quantity: <input type="number" value="${item.quantity}" min="1" max="99" id="itemQuantity-${index}"> ${item.price * item.quantity},-</p>
-                <button id="btnDeleteProduct-${index}">Delete Product</button>
+                <div class="btn-container">
+                    <button class="btnDelProduct" id="btnDeleteProduct-${index}">Remove Item</button>
+                </div>
                 <hr>
             `;
 

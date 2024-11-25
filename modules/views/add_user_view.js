@@ -1,5 +1,9 @@
 
 const html = `
+    <link rel="stylesheet" href="styles/add_user_view_style.css">
+
+<div id="add-user-wrapper">
+
     <h2>Create User</h2>
     <div id="listContainer">
         <form id="add-user-form" action="">
@@ -53,6 +57,7 @@ const html = `
             </div>
         </form>
     </div>
+</div>
 `;
 
 

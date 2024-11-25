@@ -1,6 +1,8 @@
 import { shortenDate } from "../utilities.js";
 
 const html = `
+<link rel="stylesheet" href="styles/detailed_product_view_style.css">
+
     <h2>Product Details</h2>
     <div id="listContainer"></div>
 `;

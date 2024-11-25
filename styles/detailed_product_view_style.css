@@ -79,3 +79,7 @@ h3 {
     padding: 8px 10px;
     cursor: pointer;
 }
+
+.button-wrapper button:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+}

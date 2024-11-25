@@ -1,23 +1,27 @@
 const html = `
-<h2> User login </h2>
+<link rel="stylesheet" href="styles/user_login_view_style.css">
 
-    <div id="content-wrapper">
-        <form id="login-form" action="">
-            <label for="username">Username:</label>
-            <input required type="text" id="username" name="username"
-                placeholder="Enter your Username">
-            <br>
-            <label for="password">Password</label>
-            <input required type="password" id="password" name="password"
-                placeholder="Enter your Password">
+<div id="login-wrapper">
+    <h2> User login </h2>
 
-            <div class="button-wrapper">
-                <button type="submit">
-                    Log in
-                </button>
-            </div>
-        </form>
-    </div>   
+        <div id="content-wrapper">
+            <form id="login-form" action="">
+                <label for="username">Username:</label>
+                <input required type="text" id="username" name="username"
+                    placeholder="Enter your Username">
+                <br>
+                <label for="password">Password</label>
+                <input required type="password" id="password" name="password"
+                    placeholder="Enter your Password">
+
+                <div class="button-wrapper">
+                    <button id="btn-login" type="submit">
+                        Log in
+                    </button>
+                </div>
+            </form>
+        </div>   
+</div>
 `;
 
 

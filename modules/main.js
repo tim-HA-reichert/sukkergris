@@ -105,8 +105,6 @@ categoryListView.addEventListener('categoryselect', function (evt) {
 //---------------------------------------------- AddEventListener for Home knapp
 btnShowCategoriesView.addEventListener('click', function (evt) {
     viewContainer.innerHTML = "";
-    console.log(api.getUserComments(userModel.token));
-
     viewContainer.appendChild(categoryListView);
 });
 

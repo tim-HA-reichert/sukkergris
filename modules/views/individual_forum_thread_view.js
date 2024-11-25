@@ -1,34 +1,25 @@
 const html = `
-<style>
-    #star-container span {
-        cursor: pointer;
-        font-size: 24px;
-        display: inline-block;
-        width: 24px;
-        height: 24px;
-        line-height: 24px;
-        text-align: center;
-    }
+    <link rel="stylesheet" href="styles/individual_forum_thread_view_style.css">
 
-</style>
 
 <div id="chosen-thread"> </div>
-<div id="author-rating"> </div>
+<div id="rating-wrapper">
+    <div id="author-rating"> </div>    
+    <div id="rate-the-author"> </div>
+    <hr>
+</div>
 
-<div id="rate-the-author"> </div>
+<div id="comment-container"></div>
 
-<hr>
-<div id="comment-container"> </div>
-
-<h5>Care to comment?</h5>
-
-<form id="comment-form">
-        <textarea type="text" id="comment-text" name="comment-text"
-            placeholder="Add a comment!"> </textarea>
-        <button type="submit-comment"> Comment! </button>
-</form>
-
-<button id="delete-thread-btn">Delete thread</button>
+<div id="new-comment-wrap">
+    <h5>Care to comment?</h5>
+    <form id="comment-form">
+            <textarea type="text" id="comment-text" name="comment-text"
+                placeholder="Add a comment!"></textarea>
+            <button type="submit-comment"> Comment! </button>
+    </form>
+    <button id="delete-thread-btn">Delete thread</button>
+</div>
 `;
 
 const stars = {

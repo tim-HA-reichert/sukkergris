@@ -1,28 +1,33 @@
 const html = `
+<link rel="stylesheet" href="styles/style.css">
+
+<div id="nav-wrapper">
+<button id="btn-company-name">Sukkergris</button>
+
         <form id="search-form" action="">
         <input type="text" placeholder="Search.." name="searchBar" id="searchBar">
             <button type="submit" id="searchBtn">Search</button>
         </form>
 
-<div id="nav-wrapper">
-<div id="navigationContainer"></div>
-</div>
-    <template id="logged-in">
-        <button id="btnGoToCart">Go to shopping cart</button>
-        
-        <button id="user-forum-button">Read our user forum!</button>
-        <button id="create-thread-btn">Create a new topic!</button>
-        <button id="btnLogout">Logout</button>
-        <img id="userPicture" src="" alt="users profile picture">
-    </template>
 
-    <template id="not-logged-in">
-        <button id="btnGoToCart">Go to shopping cart</button>    
-        
-        <button id="btnLogin">Login</button>
-        <button id="btnAddUser">Create User</button>
+    <div id="navigationContainer"></div>
+    <template id="logged-in">
+    <button id="btnGoToCart">Shopping Cart</button>
+    
+    <button id="user-forum-button">Read Forum!</button>
+    <button id="create-thread-btn">New Topic</button>
+    <button id="btnLogout">Logout</button>
+    <img id="userPicture" src="" alt="users profile picture">
     </template>
-`;
+    
+    <template id="not-logged-in">
+    <button id="btnGoToCart">Shopping Cart</button>    
+    
+    <button id="btnLogin">Login</button>
+    <button id="btnAddUser">Create User</button>
+    </template>
+</div>
+    `;
 
 
 //NEEDTO: Add functionality to buttons. Basically: transfer functionality from main.js to here. 

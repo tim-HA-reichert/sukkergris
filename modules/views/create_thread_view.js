@@ -1,21 +1,22 @@
 const html = `
-<h2>Create a new topic!</h2>
-<h4>We encourage our members to discuss all things candy.</h4>
+<link rel="stylesheet" href="styles/create_thread_view_style.css">
+    <h2>Create a new topic!</h2>
+    <h4>We encourage our members to discuss all things candy.</h4>
 
-<div id="threadContainer"> 
+    <div id="threadContainer"> 
 
-    <form id="new-thread-form" action="">
-        <label for="thread-title">Topic Title: </label>
-        <input type="text" id="thread-title" name="thread-title"
-            placeholder="Give your topic a name!">
-            
-        <label for="thread-text">Topic Description: </label>
-        <textarea type="text" id="thread-text" name="thread-text"
-            placeholder="Describe the topic."> </textarea>
+        <form id="new-thread-form" action="">
+            <label for="thread-title">Topic Title:</label>
+            <input type="text" id="thread-title" name="thread-title"
+                placeholder="Give your topic a name!">
 
-        <button type="submit"> Submit to forums! </button>
-    </form>
-</div>
+            <label for="thread-text">Topic Description:</label>
+            <textarea type="text" id="thread-text" name="thread-text"
+                placeholder="Describe the topic."></textarea>
+
+            <button id="btn-forum-topic" type="submit">Submit to forums!</button>
+        </form>
+    </div>
 `;
 
 

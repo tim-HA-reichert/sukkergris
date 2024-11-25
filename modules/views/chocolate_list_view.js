@@ -1,4 +1,5 @@
 const html = `
+<link rel="stylesheet" href="styles/chocolate_list_view_style.css">
     <h2>The Products</h2>
     <div id="listContainer"></div>
 `;

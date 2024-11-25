@@ -1,4 +1,6 @@
 const html = `
+<link rel="stylesheet" href="styles/order_confirmation_view_style.css">
+
 <h2>Order Confirmed!</h2>
 <div id="viewContainer"></div>
 <div id="sumContainer"></div>
@@ -74,11 +76,13 @@ this.viewContainer.appendChild(confirmationDiv);
 
             const divCart = document.createElement("div");
             divCart.innerHTML = `
+            <div id="cartInfoContainer">
                 <h3>${item.chocoName}</h3>
                 <p>ID: ${item.chocoID}</p>
                 <p>Quantity: <input type="number" value="${item.quantity}" 
                 min="1" max="99" id="itemQuantity-${index}" disabled> Total sum: ${item.price * item.quantity},-</p>
                 <hr>
+            </div>
             `;
             sum += parseInt(item.price) * parseInt(item.quantity);
             //this.totalItemPrice = sum;

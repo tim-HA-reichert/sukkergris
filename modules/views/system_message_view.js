@@ -1,4 +1,5 @@
 let html = `
+<link rel="stylesheet" href="styles/system_message_view_style.css">
     <dialog id="dialog">
         <div id="dialog-content">
             <div id="message-container"> </div> 

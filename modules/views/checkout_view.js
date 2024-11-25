@@ -1,4 +1,5 @@
 const html = `
+<link rel="stylesheet" href="styles/checkout_view_style.css">
     <h2>Checkout</h2>
 
         <form id="checkout-form" action="">
@@ -181,7 +182,7 @@ export class CheckoutView extends HTMLElement {
                 divCartBottom.innerHTML = `
                 <p>Shipment: ${shipmentPrice},-</p>
                     <p>Sum total: ${sumTotal},-</p>
-                    <input type="submit" value="Place Order">
+                    <input id="btnPlaceOrder" type="submit" value="Place Order">
                 `;
                 this.sumContainer.appendChild(divCartBottom);
     }
