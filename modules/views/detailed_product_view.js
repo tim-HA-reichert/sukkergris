@@ -27,12 +27,12 @@ export class DetailedProductView extends HTMLElement {
         this.attachShadow({ mode: "open" });
         this.shadowRoot.innerHTML = html;
         this.listContainer = this.shadowRoot.getElementById("listContainer");
-    }
+    };
 
-    //---------------------------------------
-    async refresh(dataPromise, userModel) { // DataPromise er et class object med item.
+    //--------------------------------------- Skriver ut sjokolade detaljer
+    async refresh(dataPromise, userModel) {
 
-        this.itemObject = await dataPromise; //wait for the promise to be resolved
+        this.itemObject = await dataPromise;
         this.listContainer.innerHTML = "";
         const theDiv = document.createElement("div");
 
@@ -78,31 +78,24 @@ export class DetailedProductView extends HTMLElement {
                 <div id="reviewContainer" style="display: none;"></div>
             `;
 
-
-
         this.listContainer.appendChild(theDiv);
-
-
-
-
         this.reviewContainer = this.shadowRoot.getElementById("reviewContainer");
 
-
+    //--------------------------------------- Hvis bruker er logget inn, vis review-form
         if (userModel) {
             this.form = this.shadowRoot.getElementById("review-form");
             this.form.style.display = "block";
 
-            //Post review button
+            //Post review knapp
             this.form.addEventListener("submit", evt => {
                 evt.preventDefault();
 
-                //å lage et object med product ID, formdata, 
                 const formData = new FormData(this.form);
 
                 const data = {
                     chocoID: this.itemObject.chocoID,
                     formData: formData
-                }
+                };
 
                 //Event for å lage en review
                 const theEvent = new CustomEvent("left-review", { composed: true, bubbles: true, detail: data });
@@ -110,14 +103,18 @@ export class DetailedProductView extends HTMLElement {
             });
         }
 
+        //Lager events
+        this.createEvents();
+    };
+
+    //--------------------------------------- Lager events for view
+    createEvents() {
         //Add item to cart button
         const btnAddItem = this.shadowRoot.getElementById("btnAddItem");
         btnAddItem.addEventListener('click', evt => {
             const theEvent = new CustomEvent("addItem", { composed: true, bubbles: true, detail: this.itemObject });
             this.dispatchEvent(theEvent);
         });
-
-
 
         //Method for showing the amount of stars a product has
         if (this.itemObject.number_of_ratings > 0) {
@@ -135,24 +132,23 @@ export class DetailedProductView extends HTMLElement {
             btnShowreviews.style.display = "none";
             btnHidereviews.style.display = "block";
         });
+        
         //Hide review button
         const btnHidereviews = this.shadowRoot.getElementById("btnHidereviews");
         btnHidereviews.addEventListener('click', evt => {
-
             this.reviewContainer.style.display = "none";
             btnShowreviews.style.display = "block";
             btnHidereviews.style.display = "none";
         });
+    }
 
-    };
-
+    //--------------------------------------- Behandler visning av reviews
     async showReviews(areviewList) {
 
         if (areviewList) {
             this.reviewContainer.innerHTML = "<h1>Reviews<h1><hr>";
-            
+
             areviewList.forEach(element => {
-                
                 const reviewDiv = document.createElement("div");
                 reviewDiv.innerHTML = `
                 <h2>${element.username}</h2>
@@ -160,31 +156,31 @@ export class DetailedProductView extends HTMLElement {
                 <h3>${stars[element.rating]}</h3>
                 <p>${element.comment_text}</p>
                 <hr>
-                `
+                `;
                 this.reviewContainer.appendChild(reviewDiv);
             });
-            
+
         } else {
             this.reviewContainer.innerHTML = "<h1>Reviews<h1><hr>";
             const reviewDiv = document.createElement("div");
             reviewDiv.innerHTML = `
                 <h2>No reviews added to this product</h2>
                 <hr>
-                `
-                this.reviewContainer.appendChild(reviewDiv);
+                `;
+            this.reviewContainer.appendChild(reviewDiv);
         };
 
     };
 
+    //--------------------------------------- Event til å "oppdatere" reviews. Sender ut samme event til å vise reviews på nytt
     updateLive() {
-        //Event for å vise kommentarer
         const theEvent = new CustomEvent("show-product-reviews", { composed: true, bubbles: true, detail: this.itemObject.chocoID });
         this.dispatchEvent(theEvent);
-    }
+    };
 
 
 
-} //end of class
+}; //end of class
 
 
 customElements.define("detailed-product-view", DetailedProductView);

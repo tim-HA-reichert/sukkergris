@@ -195,9 +195,7 @@ loginView.addEventListener('log-in', evt => {
 navButtons.addEventListener('go-to-settings', evt => {
     viewContainer.innerHTML = "";
     userSettingsView.refresh(userModel);
-
     userSettingsView.listUserComments(api.getUserComments(userModel.token));
-
     viewContainer.appendChild(userSettingsView);
 });
 
