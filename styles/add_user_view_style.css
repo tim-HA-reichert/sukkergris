@@ -1,0 +1,52 @@
+#add-user-wrapper {
+    margin: auto;
+    width: 500px;
+    max-width: 90%;
+    padding: 15px 15px 20px 15px;
+    margin-top: 50px;
+    border-radius: 5px;
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.5);
+}
+
+#add-user-wrapper h2 {
+    text-align: center;
+}
+
+#add-user-form label {
+    display: block; /* Lager line break, i grunn */
+    padding: 10px 10px;
+}
+
+#add-user-form input {
+    margin: 0px 10px;
+    padding: 10px 5px;
+    width: 93%; /* Strekker input field over */
+    border-radius: 4px;
+    border: 1px solid silver;
+}
+
+#add-user-form hr {
+    display: none;
+}
+
+#add-user-form button {
+    display: flex;
+    align-items: center; /* Justerer button tekst vertikalt */
+    justify-content: center; /* Justerer button tekst horisontalt */
+    border-radius: 4px;
+    border: none;
+    text-transform: uppercase;
+    align-content: center;
+    background-color: green;
+    color: white;
+    transform: translateX(-50%);
+    margin: 20px 50% 0px;
+    width: 25%;
+    height: 40px;
+    padding: 8px 10px;
+}
+
+#add-user-form button:hover {
+    cursor: pointer;
+    opacity: .8; /* Fader knappen litt */
+}

@@ -1,0 +1,36 @@
+#new-thread-form label {
+    display: block;
+    padding: 10px 0px 10px 0px;
+}
+
+#thread-title {
+    margin-bottom: 5px; /* Skaper litt mellomrom mellom Topic title- og Topic Description-områdene */
+    padding: 10px 5px;
+}
+
+#thread-title:hover {
+    background-color: rgba(0, 0, 0, 0.02);
+}
+
+#thread-text {
+    width: 500px;
+    height: 250px;
+    padding: 10px 5px;
+}
+
+#thread-text:hover {
+    background-color: rgba(0, 0, 0, 0.02);
+}
+
+#btn-forum-topic {
+    display: block;
+    padding: 10px 5px;
+    margin-top: 20px;
+    border-radius: 8px;
+    border-width: 1px;
+    cursor: pointer;
+}
+
+#btn-forum-topic:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+}

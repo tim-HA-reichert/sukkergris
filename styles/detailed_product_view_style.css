@@ -1,0 +1,81 @@
+h1 {
+    font-size: 32px;
+}
+
+h2 {
+    font-size: 18px;
+}
+
+h3 {
+    font-size: medium;
+}
+
+#listContainer > div {
+    position: relative; /* Setter posisjonsgrunnlag for img */
+    padding-right: 500px;
+}
+
+#listContainer img {
+    
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 0px 100px 0px 10px;
+}
+
+#btnAddItem {
+    font-size: 14px;
+    border-radius: 8px;
+    border-width: 1px;
+    padding: 8px 10px;
+    cursor: pointer;
+}
+
+#btnAddItem:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+#btnShowreviews {
+    font-size: 14px;
+    border-radius: 8px;
+    border-width: 1px;
+    padding: 8px 10px;
+    cursor: pointer;
+}
+
+#btnShowreviews:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+#btnHidereviews {
+    font-size: 14px;
+    border-radius: 8px;
+    border-width: 1px;
+    padding: 8px 10px;
+    cursor: pointer;
+}
+
+#btnHidereviews:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+#reviewContainer {
+    margin: 20px 0px 0px 0px;
+}
+
+#review-form #review-text {
+    margin: 5px 0px 10px 0px;
+    width: 300px;
+    height: 75px;
+    padding: 10px 5px;
+
+}
+
+.button-wrapper button {
+    margin: 15px 0px 0px 0px;
+    font-size: 14px;
+    border-radius: 8px;
+    border-width: 1px;
+    padding: 8px 10px;
+    cursor: pointer;
+}

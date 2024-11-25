@@ -1,0 +1,36 @@
+/* / / / / / CHOCOLATES START / / / / / */
+
+#listContainer {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* W3Schools + ChatGPT combo */
+    padding: 15px;
+}
+
+#listContainer h3 {
+    font-size: 16px;
+}
+
+#listContainer div { /* Sjokoladene i choco detailed view */
+    display: flex;
+    flex-direction: column; /* Legger innhold vertikalt */
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    outline: 1px solid #ddd;
+    padding: 15px;
+}
+
+#listContainer div:hover {
+    background-color: #ddd;
+    cursor: pointer;
+}
+
+#listContainer img {
+    border-radius: 10px;
+}
+
+#listContainer h3:hover {
+    text-decoration: underline;
+}
+
+/* / / / / / CHOCOLATES END / / / / / */

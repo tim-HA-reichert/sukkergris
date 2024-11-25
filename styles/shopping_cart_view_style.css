@@ -1,0 +1,63 @@
+h2 {
+    margin: 20px 0px 0px 0px;
+}
+
+#listContainer {
+    width: 50%;
+    margin-left: 25%;
+}
+
+#listContainer div {
+    margin: 20px 0px; /* Top og bottom space mellom produktene */
+    flex-direction: column;
+    position: relative;
+}
+
+.pQuantity {
+    text-align: end;
+    margin-top: -74px; /* Flytter elementet opp */
+}
+
+.btn-container { /* Boks for å kunne bruke flexboks på button, for å flytte den til høyre */
+    display: flex;
+    align-items: end;
+}
+
+.btnDelProduct {
+    font-size: 12px;
+    background-color: red;
+    color: white;
+    border-radius: 8px;
+    border-width: 1px;
+    padding: 8px 10px;
+    cursor: pointer;
+}
+
+.btnDelProduct:hover {
+    background-color: darkred;
+}
+
+#btnEmptyCart {
+    padding: 10px 5px;
+    margin-top: 5px;
+    margin-right: 10px;
+    border-radius: 8px;
+    border-width: 1px;
+    cursor: pointer;
+}
+
+#btnEmptyCart:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+#btnGoToCheckout {
+    padding: 10px 5px;
+    margin-top: 5px;
+    border-radius: 8px;
+    border-width: 1px;
+    cursor: pointer;
+}
+
+#btnGoToCheckout:hover {
+    background-color: lightgreen;
+}

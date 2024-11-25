@@ -1,0 +1,44 @@
+#login-wrapper {
+    margin: auto;
+    width: 500px;
+    max-width: 90%;
+    padding: 15px 15px 20px 15px;
+    margin-top: 50px;
+    border-radius: 5px;
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.5);
+}
+
+#login-header {
+    text-align: center;
+}
+
+#login-form label {
+    display: block; /* Lager line break, i grunn */
+    padding: 10px 10px;
+}
+
+#login-form input {
+    margin: 0px 10px;
+    padding: 10px 5px;
+    width: 93%; /* Strekker input field over */
+    border-radius: 4px;
+    border: 1px solid silver;
+}
+
+#btn-login {
+    border-radius: 4px;
+    border: none;
+    text-transform: uppercase;
+    background-color: green;
+    color: white;
+    transform: translateX(-50%);
+    margin: 20px 50% 1px;
+    width: 20%;
+    height: 40px;
+    padding: 8px 10px;
+}
+
+#btn-login:hover {
+    cursor: pointer;
+    opacity: .8; /* Fader knappen litt*/
+}

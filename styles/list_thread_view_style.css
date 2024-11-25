@@ -1,0 +1,32 @@
+body {
+    padding: 100px;
+}
+
+#threadContainer {
+    box-shadow: 0px 1px 8px silver; /* Lager skygge bak innleggene, 1px ned, 8px fade, sølv for å være subtle */
+}
+
+#threadContainer hr {
+    display: none;
+}
+
+#threadContainer div {
+    margin: -1px;
+    padding: 10px 8px;
+    border: 1px solid silver;
+}
+
+#threadContainer h3,
+#threadContainer h6,
+#threadContainer p {
+    margin: 5px;
+}
+
+#threadContainer div:hover {
+    cursor: pointer;
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+#thread-list-view div {
+    background-color: aqua;
+}

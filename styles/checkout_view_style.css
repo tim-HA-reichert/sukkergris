@@ -1,0 +1,43 @@
+#checkout-form {
+    margin: auto;
+    width: 500px;
+    max-width: 90%;
+    padding: 15px 15px 20px 15px;
+    margin-top: 50px;
+    border-radius: 5px;
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.5);
+}
+
+#checkout-form label {
+    display: none; /* Lager line break, i grunn */
+    padding: 10px 10px;
+}
+
+#checkout-form input {
+    margin: 10px 10px;
+    padding: 10px 5px;
+    width: 93%; /* Strekker input field over */
+    border-radius: 4px;
+    border: 1px solid silver;
+}
+
+#listContainer div {
+    margin: 20px 0px 20px 10px;
+}
+
+#listContainer input { /* Fikser margin inheritance fra form */
+    margin: 10px 0px 10px 0px;
+    width: auto; /* Gjør input field mye mindre, hindrer line break */
+}
+
+#btnPlaceOrder {
+    padding: 10px 5px;
+    margin-top: 5px;
+    border-radius: 8px;
+    border-width: 1px;
+    cursor: pointer;
+}
+
+#btnPlaceOrder:hover {
+    background-color: lightgreen;
+}
