@@ -1,18 +1,3 @@
-
-//This is the controller part of your administration application
-
-//Implement code so that you:
-// 1. can retrieve data from the service layer and update views
-// 2. retrieve data from views, e.g., clicking on a product in a list, and then retrieve data about that product via the service layer
-// 3. retrieve data from views (forms) and update the server API via the service layer, e.g. adding/update a product or user etc.
-
-//All the views should send data by dispatching events
-
-//If necessary, you can delegate code to several controller-modules (files)
-
-//the following code is just for testing. You have to create your own implementation for
-//retrieving data from the service layer, updating and switching views etc.
-
 import * as api from "./api_service.js";
 import { CategoryListView } from "./views/category_list_view.js";
 import { ChocolateListView } from "./views/chocolate_list_view.js";
@@ -23,7 +8,6 @@ import { LoginView } from "./views/user_login_view.js";
 import { UserSettingsView } from "./views/user_settings_view.js";
 
 import { messageHandler } from "./messageHandler.js";
-
 
 import { NavigationView } from "./views/navigation_view.js";
 import { CreateNewThreadView } from "./views/create_thread_view.js";
@@ -39,7 +23,6 @@ const userContainer = document.getElementById("user-container");
 
 const btnShowCategoriesView = document.getElementById('btnShowCategories');
 
-
 const categoryListView = new CategoryListView();
 const chocolateListView = new ChocolateListView();
 const detailedProductView = new DetailedProductView();
@@ -49,7 +32,7 @@ const addUserView = new AddUserView();
 const loginView = new LoginView();
 const userSettingsView = new UserSettingsView();
 
-//Attach content based on if user is logged in
+//Legger til innhold basert på om brukeren er logget inn
 const navButtons = new NavigationView();
 
 const newThreadView = new CreateNewThreadView();
@@ -58,9 +41,7 @@ const singleThreadView = new IndividualThreadView();
 let threadInfo = null;
 
 const orderConfirmView = new OrderConfirmView();
-
 const orderModel = new OrderModel();
-
 
 let userModel = null;
 
@@ -68,13 +49,12 @@ let userModel = null;
 const shipmentTypes = api.listShipmentMethods();
 
 
-
 //startup----------------------------------------
 startUp();
 
 function startUp() {
-    const categoryPromise = api.getCategories(); //retrieve the categories from the service layer as a promise
-    categoryListView.refresh(categoryPromise); //send the promise to the view. The view will wait for the promise to resolve
+    const categoryPromise = api.getCategories(); //henter kategorier fra service layer som en promise
+    categoryListView.refresh(categoryPromise); //sender promise til viewen. Viewen venter på promise resolve
 
     viewContainer.innerHTML = "";
     viewContainer.appendChild(categoryListView);
@@ -82,7 +62,7 @@ function startUp() {
     if (sessionStorage.getItem("authString")) {
         const loginUserPromise = api.activeUser(sessionStorage.getItem("authString"));
 
-        loginUserPromise.then((aUserModel) => {        //Etter at promiset er ferdig, kjøres koden under
+        loginUserPromise.then((aUserModel) => { //Etter at promiset er ferdig, kjøres koden under
             userModel = aUserModel;
             navButtons.isUserLogged(userModel);
             navButtons.activeUser(api.getUserImage(userModel));
@@ -94,7 +74,7 @@ function startUp() {
 
 }
 
-//-----------------------------------------------
+//----------------------------------------------- Lytter etter kategori-klikk
 categoryListView.addEventListener('categoryselect', function (evt) {    
     const chocolateCategoryPromise = api.getChocolatesByCategory(evt.detail.categoryID, userModel);
     chocolateListView.refresh(chocolateCategoryPromise);
@@ -102,36 +82,36 @@ categoryListView.addEventListener('categoryselect', function (evt) {
     viewContainer.appendChild(chocolateListView);
 });
 
-//---------------------------------------------- AddEventListener for Home knapp
+//---------------------------------------------- Lytter etter Home-knapp
 btnShowCategoriesView.addEventListener('click', function (evt) {
     viewContainer.innerHTML = "";
     viewContainer.appendChild(categoryListView);
 });
 
-//---------------------------------------------- Detailed Sjokolade View
+//---------------------------------------------- Lytter etter sjokolade-klikk
 chocolateListView.addEventListener('chocolateselect', function (evt) {
     viewContainer.innerHTML = "";
     const detailProductPromise = api.getChocolateDetails(evt.detail.chocoID, userModel); //Lager et promise    
 
-    detailProductPromise.then((ChocolateModelClass) => {        //Etter at promiset er ferdig, kjøres koden under
+    detailProductPromise.then((ChocolateModelClass) => { //Etter at promiset er ferdig, kjøres koden under
         detailedProductView.refresh(ChocolateModelClass, userModel);
         ChocolateModelClass.showDetailed();
         viewContainer.appendChild(detailedProductView);
     })
 });
-//---------------------------------------------- Lytter til addItem knapp
+//---------------------------------------------- Lytter til addItem-knapp
 detailedProductView.addEventListener('addItem', evt => {
     orderModel.addItem(evt.detail);
 });
 
-//---------------------------------------------- Lytter til add review
+//---------------------------------------------- Lytter til add review-knapp
 detailedProductView.addEventListener('left-review', evt => {
     const addProductReviewPromise = api.addProductReview(evt.detail, userModel.token)
     addProductReviewPromise.then((response) => {
         detailedProductView.updateLive();
     })
 });
-//---------------------------------------------- Lytter show reviews
+//---------------------------------------------- Lytter show reviews-knapp
 detailedProductView.addEventListener('show-product-reviews', evt => {
     if (userModel) {
         api.getAllUsers(userModel.token).then(usernames => {
@@ -149,7 +129,7 @@ detailedProductView.addEventListener('show-product-reviews', evt => {
 
 });
 
-//----------------------------------------------
+//---------------------------------------------- Lytter til shopping cart-knapp
 
 navButtons.addEventListener('go-to-cart', function (evt) {
     shoppingCartView.refresh(orderModel);
@@ -157,30 +137,30 @@ navButtons.addEventListener('go-to-cart', function (evt) {
     viewContainer.appendChild(shoppingCartView);
 });
 
-//---------------------------------------------- Lytter til Create User knapp
+//---------------------------------------------- Lytter til Create User-knapp
 
 navButtons.addEventListener('add-new-user', () => {
     viewContainer.innerHTML = "";
     viewContainer.appendChild(addUserView);
 });
 
-//---------------------------------------------- Lytter til add-user submit
+//---------------------------------------------- Lytter til add-user submit-knapp
 
 addUserView.addEventListener('add-user', evt => {
     api.addUser(evt.detail);
 });
 
-//---------------------------------------------- Lytter til login knapp
+//---------------------------------------------- Lytter til login-knapp
 
 navButtons.addEventListener('log-in', () => {
     viewContainer.innerHTML = "";
     viewContainer.appendChild(loginView);
 });
-//---------------------------------------------- Lytter til login submit
+//---------------------------------------------- Lytter til login submit-knapp
 
 loginView.addEventListener('log-in', evt => {
     const addUserPromise = api.logIn(evt.detail, "user");
-    addUserPromise.then((aUserModel) => {        //Etter at promiset er ferdig, kjøres koden under
+    addUserPromise.then((aUserModel) => { //Etter at promiset er ferdig, kjøres koden under
         if (aUserModel) {
             userModel = aUserModel;
             startUp();
@@ -190,7 +170,7 @@ loginView.addEventListener('log-in', evt => {
     });
 });
 
-//---------------------------------------------- Lytter til Settings
+//---------------------------------------------- Lytter til Settings-knapp
 
 navButtons.addEventListener('go-to-settings', evt => {
     viewContainer.innerHTML = "";
@@ -199,7 +179,7 @@ navButtons.addEventListener('go-to-settings', evt => {
     viewContainer.appendChild(userSettingsView);
 });
 
-//---------------------------------------------- Logout
+//---------------------------------------------- Lytter til Logout-knapp
 
 navButtons.addEventListener('logout-user', evt => {
     viewContainer.innerHTML = "";
@@ -218,7 +198,7 @@ userSettingsView.addEventListener('logout-user', evt => {
     startUp();
 });
 
-//---------------------------------------------- Change user information
+//---------------------------------------------- Lytter til Change user information
 
 userSettingsView.addEventListener('changed-user-information', informationForm => {
     const changeUserInformationPromise = api.changeUserInformation(informationForm.detail, userModel.token)
@@ -234,7 +214,7 @@ userSettingsView.addEventListener('changed-user-information', informationForm =>
     })
 });
 
-//-------------------------------------------- Delete user comments
+//-------------------------------------------- Lytter til Delete user comments
 
 userSettingsView.addEventListener("delete-comment", e => {
     const commentToDelete = e.detail;
@@ -253,7 +233,7 @@ userSettingsView.addEventListener('delete-user', evt => {
     // viewContainer.innerHTML = "";
 
     const deleteUserPromise = api.deleteUser("user", userModel.token);
-    deleteUserPromise.then((userGotDeleted) => {        //Etter at promiset er ferdig, kjøres koden under
+    deleteUserPromise.then((userGotDeleted) => { //Etter at promiset er ferdig, kjøres koden under
         if (userGotDeleted) {
             sessionStorage.removeItem("authString");
             userModel = null;
@@ -262,7 +242,7 @@ userSettingsView.addEventListener('delete-user', evt => {
     });
 });
 
-//----------------------------------------------
+//---------------------------------------------- Lytter til søk av produkter i søkefeltet
 navButtons.addEventListener("search-for-products", evt => {
     evt.preventDefault();
     viewContainer.innerHTML = "";
@@ -273,7 +253,7 @@ navButtons.addEventListener("search-for-products", evt => {
 });
 
 //----------------------------------------------
-//RECIPES
+//GO TO FORUMS
 //---------------------------------------------
 navButtons.addEventListener("go-to-threads", e => {
     api.getAllUsers(userModel.token).then((usernames) => {
@@ -285,6 +265,7 @@ navButtons.addEventListener("go-to-threads", e => {
     });
 });
 
+//---------------------------------------------- Lytter til klikk på en tråd i forum
 allThreadsView.addEventListener("wish-to-inspect", e => {
     viewContainer.innerHTML = "";
 
@@ -302,6 +283,7 @@ allThreadsView.addEventListener("wish-to-inspect", e => {
     viewContainer.appendChild(singleThreadView);
 });
 
+//---------------------------------------------- Lytter til posting av kommentar
 singleThreadView.addEventListener("submit-comment", e => {
 
     api.addThreadComment(userModel.token, threadInfo.thread, e.detail);
@@ -312,7 +294,7 @@ singleThreadView.addEventListener("submit-comment", e => {
     });
 });
 
-
+//---------------------------------------------- Lytter til rating av author
 singleThreadView.addEventListener("rate-author", e => {
     let meowRating = e.detail.meowRating;
     let ratedUser = e.detail.user;
@@ -322,21 +304,23 @@ singleThreadView.addEventListener("rate-author", e => {
     });
 })
 
+//---------------------------------------------- Lytter til slett av tråd
 singleThreadView.addEventListener("delete-thread", e => {
     api.deleteThread(threadInfo.id, userModel.token);
 })
 
-//----------------------------------------------
+//---------------------------------------------- Lytter til å lage tråd-meny
 navButtons.addEventListener("create-thread", e => {
     viewContainer.innerHTML = "";
     viewContainer.appendChild(newThreadView);
 });
 
+//---------------------------------------------- Lytter til innsending av ny forumpost
 newThreadView.addEventListener("submit-new-thread", e => {
     api.addThreads(userModel.token, e.detail);
 });
 
-
+//---------------------------------------------- Lytter til gå til checkout
 shoppingCartView.addEventListener("go-to-checkout", e => {
     viewContainer.innerHTML = "";
     
@@ -353,7 +337,7 @@ shoppingCartView.addEventListener("go-to-checkout", e => {
 
 });
 
-
+//---------------------------------------------- Lytter til innsending av ordre
 checkoutView.addEventListener("place-order", e => {
     let userInfo; 
     let cartItems;
@@ -387,7 +371,3 @@ checkoutView.addEventListener("place-order", e => {
     orderModel.emptyCart();
     console.log(orderModel);
 });
-
-
-
-

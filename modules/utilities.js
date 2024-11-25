@@ -1,5 +1,5 @@
 
-// fetch wrapper function -----------------------------------
+//-----------------------------------
 export async function fetchData(url, config) {
 
     try {

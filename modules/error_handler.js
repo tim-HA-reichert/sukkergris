@@ -1,9 +1,9 @@
 import { SystemMessageView } from "./views/system_message_view.js";
 
-//-------------------------------------------------------------
 const messageDialog = new SystemMessageView();
 document.body.appendChild(messageDialog);
 
+//-------------------------------------------------------------
 export function errorHandler(error) {
     let errorMessage = "";
     console.log(error);
