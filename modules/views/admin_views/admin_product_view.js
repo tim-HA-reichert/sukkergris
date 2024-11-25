@@ -73,7 +73,7 @@ export class adminProductsView extends HTMLElement {
             this.dispatchEvent(theEvent);
         });
 
-        //Delete a product
+
         this.deleteButton.addEventListener("click", evt => {
             evt.preventDefault();  
 
@@ -82,7 +82,7 @@ export class adminProductsView extends HTMLElement {
             this.deleteProductID.value = "";
         });
 
-        //Switch to change-product form
+        //Bytt til "change-product" skjema. 
         this.changeProduct.addEventListener("click", evt => {
             evt.preventDefault();
 
@@ -105,7 +105,7 @@ export class adminProductsView extends HTMLElement {
     async chocoDeletionList (dataPromise){
             this.listContainer.innerHTML = "";
     
-            const data = await dataPromise; //wait for the promise to be resolved
+            const data = await dataPromise;
     
         if(data.length != 0){
 

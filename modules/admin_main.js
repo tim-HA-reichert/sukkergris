@@ -98,10 +98,18 @@ adminProducts.addEventListener("delete-product", function(evt){
 
 adminProducts.addEventListener("change-product-form", function(evt){
     viewContainer.innerHTML = "";
+    const adjustableChocolateList = api.adjustableChocolateList(adminToken);
+
     changeProductInfo.changeableChoco(adjustableChocolateList);
     viewContainer.appendChild(changeProductInfo);
 });
 
+changeProductInfo.addEventListener("back-to-add", (e) => {
+    viewContainer.innerHTML = "";
+
+    adminProducts.chocoDeletionList(api.adjustableChocolateList(adminToken));
+    viewContainer.appendChild(adminProducts);
+});
 
 changeProductInfo.addEventListener("change-product", function(evt){
     api.changeProduct(adminToken, evt.detail).then(response=>{
