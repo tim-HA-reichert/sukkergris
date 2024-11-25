@@ -179,7 +179,7 @@ navButtons.addEventListener('go-to-settings', evt => {
     viewContainer.appendChild(userSettingsView);
 });
 
-//---------------------------------------------- Lytter til Logout-knapp
+//---------------------------------------------- Lytter til Logout-knapp på navbaren
 
 navButtons.addEventListener('logout-user', evt => {
     viewContainer.innerHTML = "";
@@ -189,7 +189,7 @@ navButtons.addEventListener('logout-user', evt => {
     startUp();
 });
 
-//----------------------------------------------
+//---------------------------------------------- Lytter til Logout-knapp i user settings
 userSettingsView.addEventListener('logout-user', evt => {
     viewContainer.innerHTML = "";
     sessionStorage.removeItem("authString");

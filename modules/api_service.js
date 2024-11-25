@@ -1,5 +1,4 @@
-import { fetchData, shortenDate} from "./utilities.js";
-import { createBasicAuthString } from "./utilities.js";
+import { fetchData, shortenDate, createBasicAuthString} from "./utilities.js";
 import { CategoryModel, ChocolateModel, LoginDataModel, 
     UserThreadModel, UserCommentModel, userModel, ReviewModel } from "./models.js";
 import { errorHandler } from "./error_handler.js";
