@@ -199,7 +199,6 @@ navButtons.addEventListener('go-to-settings', evt => {
     userSettingsView.listUserComments(api.getUserComments(userModel.token));
 
     viewContainer.appendChild(userSettingsView);
-    console.log(userModel.token);
 });
 
 //---------------------------------------------- Logout
@@ -237,7 +236,17 @@ userSettingsView.addEventListener('changed-user-information', informationForm =>
     })
 });
 
-//-------------------------------------------- List user comments
+//-------------------------------------------- Delete user comments
+
+userSettingsView.addEventListener("delete-comment", e => {
+    const commentToDelete = e.detail;
+    api.deleteReview(userModel.token, commentToDelete).then(() => {
+        userSettingsView.listUserComments(api.getUserComments(userModel.token));
+        userSettingsView.refresh(userModel);
+        viewContainer.appendChild(userSettingsView);
+    });
+   
+})
 
 
 //---------------------------------------------- Lytter til Delete User
@@ -252,8 +261,6 @@ userSettingsView.addEventListener('delete-user', evt => {
             userModel = null;
             startUp();
         }
-        // navButtons.isUserLogged(userModel);
-        // navButtons.activeUser(api.getUserImage(userModel));
     });
 });
 
@@ -343,8 +350,6 @@ shoppingCartView.addEventListener("go-to-checkout", e => {
         if(userModel){
             checkoutView.loggedInUserInfo(userModel);
         } 
-
-        //checkoutView.sumTotal(orderModel, shipment);
         viewContainer.appendChild(checkoutView);
     });
 
