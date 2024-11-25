@@ -1,4 +1,4 @@
-import { shortenDate, matchID } from "./utilities.js";
+import { shortenDate } from "./utilities.js";
 
 //=====================================================
 export class CategoryModel {
@@ -43,6 +43,7 @@ export class ChocolateModel {
         this.expected_shipped = obj.expected_shipped;
         this.rating = obj.rating;
         this.number_of_ratings = obj.number_of_ratings
+        this.quantity = 0;
     }
 
     showDetailed() {        
@@ -62,17 +63,36 @@ export class OrderModel {
 
     //----------------------------------------
     constructor() {
-        this.cartArray = [];
+        const savedCart = localStorage.getItem('orderModel');
+        //Sjekker om det er data å hente fra localstorage
+        this.cartArray = savedCart ? JSON.parse(savedCart) : [];
     }
 
     //----------------------------------------
-    update() {
-        //check for valid values, santizing etc. can happen here.
-
+    _saveToLocalStorage() {
+        //Fått hjelp av Claude.ai for dette. 
+        localStorage.setItem('orderModel', JSON.stringify(this.cartArray));
     }
 
     addItem(item) {
-        this.cartArray.push(item);
+        if(this.cartArray.length == 0){
+            this.cartArray.push(item);
+        }
+
+        const existingItem = this.cartArray.find(cartElement => cartElement.chocoID === item.chocoID);
+
+        if (existingItem) {
+            // If existingItem exists, increase quantity
+            existingItem.quantity += 1;
+        } else {
+            // If existingItem doesn't exist, push new item
+            this.cartArray.push(item);
+            //Prevent quantity to start at 0 when adding new item.
+            item.quantity++;
+        }      
+
+        //Kaller på denne for at det skal lagres i localstorage.
+        this._saveToLocalStorage();
     }
 
     updateQuantity(index, newQuantity) {
@@ -81,16 +101,19 @@ export class OrderModel {
             item.quantity = newQuantity; //Updates the quantity
             item.totalPrice = item.price * newQuantity; //Updates the total price
         }
+        this._saveToLocalStorage();
     }
 
     deleteItem(index) {
         if (index >= 0 && index < this.cartArray.length) {
             this.cartArray.splice(index, 1);
         }
+        this._saveToLocalStorage();
     }
 
     emptyCart() {
         this.cartArray = [];
+        this._saveToLocalStorage();
     }
 }
 
@@ -121,6 +144,8 @@ export class LoginDataModel {
         this.street = data.street;
         this.zipcode = data.zipcode;
     }
+
+
 }
 
 
@@ -176,7 +201,7 @@ export class UserThreadModel{
     }
 }
 
-export class UserCommentModel{
+export class UserCommentModel {
 
     constructor(newUserCommentObject){
         this.update(newUserCommentObject)
@@ -222,5 +247,41 @@ export class userModel {
         this.thumb = newUser.thumb;
         this.username = newUser.username;
         this.zipcode = newUser.zipcode;
+    }
+}
+
+
+//===========================================
+//Review Model
+//===========================================
+
+export class ReviewModel{
+
+    constructor(newReviewObject){
+        this.update(newReviewObject)
+    }
+
+    update(reviewObject){
+        this.comment_text = reviewObject.comment_text;
+        this.date = reviewObject.date;
+        this.id = reviewObject.id;
+        this.product_id = reviewObject.product_id;
+        this.rating = reviewObject.rating //Waiting to be filled by userModel.username.
+        
+        this.user_id = reviewObject.user_id;
+
+        this.username = null;
+    }
+
+    setUsername(user){
+        if (user) {
+            this.username = user.username;
+          } else {
+            this.username = 'No username found. Model.js';
+          }
+    }
+
+    setAnonymous () {
+        this.username = "Anonymous"
     }
 }

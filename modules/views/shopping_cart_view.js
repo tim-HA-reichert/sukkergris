@@ -17,24 +17,25 @@ export class ShoppingCartView extends HTMLElement {
         
         //Listeners for emptying cart or proceeding to checkout
         this.shadowRoot.addEventListener("click", (evt) => {
-            if (evt.target.id === "btnGoToCheckout") {
-                this.checkoutView.refresh(this.cart);
-                viewContainer.innerHTML = "";
-                viewContainer.appendChild(this.checkoutView);
-            }
 
-            else if (evt.target.id === "btnEmptyCart") {
+            if (evt.target.id === "btnGoToCheckout") {
+                const checkoutEvent = new CustomEvent("go-to-checkout",
+                    {composed: true, bubbles: true, detail:evt});
+
+                this.dispatchEvent(checkoutEvent);
+                
+            } else if (evt.target.id === "btnEmptyCart") {
                 this.cart.emptyCart();
-                this.refresh(this.cart, this.checkoutView);
+                this.refresh(this.cart);
             }
         });
     }
     
     //---------------------------------------
-    refresh(cartInput, checkoutView) {
+    refresh(cartInput) {
         
         this.cart = cartInput; //tar inn cart-arrayen som parameter
-        this.checkoutView = checkoutView;
+
         this.listContainer.innerHTML = "";
         let sum = 0;
         
@@ -61,14 +62,14 @@ export class ShoppingCartView extends HTMLElement {
             quantityInput.addEventListener("input", (evt) => {
                 const newQuantity = parseInt(evt.target.value);
                 cartInput.updateQuantity(index, newQuantity);
-                this.refresh(cartInput, checkoutView);
+                this.refresh(cartInput);
             });
 
             //Delete button listener
             const deleteButton = divCart.querySelector(`#btnDeleteProduct-${index}`);
             deleteButton.addEventListener("click", () => {
                 cartInput.deleteItem(index);
-                this.refresh(cartInput, checkoutView);
+                this.refresh(cartInput);
             });
         });
 

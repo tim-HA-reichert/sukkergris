@@ -4,9 +4,11 @@ const html = `
     <div id="listContainer">
         <form id="add-user-form" action="">
         
-            <label for="username">Username:</label>
+            <label for="username">Username (email):</label>
             <input required type="text" id="username" name="username"
-            placeholder="Enter your Username">
+            placeholder="Enter your email">
+            
+            <span id="username-error" style="color: red; display: none;">Please enter a valid email address</span>
             <br>
             
             <label for="password">Password</label>
@@ -15,7 +17,7 @@ const html = `
             <br>
             
             <label for="fullName">Full name:</label>
-            <input required type="text" id="fullName" name="fullName"
+            <input required type="text" id="fullname" name="fullname"
                 placeholder="Enter your full name">
             <br>
                 
@@ -42,7 +44,6 @@ const html = `
             
             <label for="img_file">Profile picture:</label>
             <input type="file" id="img_file" name="img_file">
-
             <hr>
 
             <div class="button-wrapper">
@@ -66,19 +67,36 @@ export class AddUserView extends HTMLElement {
         this.attachShadow({ mode: "open" });
         this.shadowRoot.innerHTML = html;
         this.form = this.shadowRoot.getElementById("add-user-form");
+        this.errorSpan = this.shadowRoot.getElementById("username-error");
+        //Regex for email
+        this.emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
         this.form.addEventListener("submit", evt => {
             evt.preventDefault();
             
             const formData = new FormData(this.form);
-            
+
+
+            const emailCheck = formData.get("username");
+
+            if (!this.emailRegex.test(emailCheck)) {
+                this.errorSpan.style.display = "block";
+                return;
+            }
+
+            this.errorSpan.style.display = "none";
+
             const theEvent = new CustomEvent("add-user", { composed: true, bubbles: true, detail: formData });
             this.dispatchEvent(theEvent);
         });
 
-
-        
+        this.shadowRoot.getElementById("username").addEventListener("input", (e) => {
+            if (this.emailRegex.test(e.target.value)) {
+                this.errorSpan.style.display = "none";
+            }
+        });
     }
+    
 
 } //end of class
 
