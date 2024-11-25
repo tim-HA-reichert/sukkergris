@@ -62,7 +62,7 @@ function startUp() {
     if (sessionStorage.getItem("authString")) {
         const loginUserPromise = api.activeUser(sessionStorage.getItem("authString"));
 
-        loginUserPromise.then((aUserModel) => { //Etter at promiset er ferdig, kjøres koden under
+        loginUserPromise.then((aUserModel) => {
             userModel = aUserModel;
             navButtons.isUserLogged(userModel);
             navButtons.activeUser(api.getUserImage(userModel));
@@ -74,8 +74,8 @@ function startUp() {
 
 }
 
-//----------------------------------------------- Lytter etter kategori-klikk
-categoryListView.addEventListener('categoryselect', function (evt) {    
+//-----------------------------------------------
+categoryListView.addEventListener('categoryselect', function (evt) {
     const chocolateCategoryPromise = api.getChocolatesByCategory(evt.detail.categoryID, userModel);
     chocolateListView.refresh(chocolateCategoryPromise);
     viewContainer.innerHTML = "";
@@ -93,7 +93,7 @@ chocolateListView.addEventListener('chocolateselect', function (evt) {
     viewContainer.innerHTML = "";
     const detailProductPromise = api.getChocolateDetails(evt.detail.chocoID, userModel); //Lager et promise    
 
-    detailProductPromise.then((ChocolateModelClass) => { //Etter at promiset er ferdig, kjøres koden under
+    detailProductPromise.then((ChocolateModelClass) => {
         detailedProductView.refresh(ChocolateModelClass, userModel);
         ChocolateModelClass.showDetailed();
         viewContainer.appendChild(detailedProductView);
@@ -160,7 +160,7 @@ navButtons.addEventListener('log-in', () => {
 
 loginView.addEventListener('log-in', evt => {
     const addUserPromise = api.logIn(evt.detail, "user");
-    addUserPromise.then((aUserModel) => { //Etter at promiset er ferdig, kjøres koden under
+    addUserPromise.then((aUserModel) => {
         if (aUserModel) {
             userModel = aUserModel;
             startUp();
@@ -189,7 +189,7 @@ navButtons.addEventListener('logout-user', evt => {
     startUp();
 });
 
-
+//----------------------------------------------
 userSettingsView.addEventListener('logout-user', evt => {
     viewContainer.innerHTML = "";
     sessionStorage.removeItem("authString");
@@ -203,7 +203,6 @@ userSettingsView.addEventListener('logout-user', evt => {
 userSettingsView.addEventListener('changed-user-information', informationForm => {
     const changeUserInformationPromise = api.changeUserInformation(informationForm.detail, userModel.token)
     changeUserInformationPromise.then(() => {
-
         const updateUserPromise = api.activeUser(sessionStorage.getItem("authString"));
         updateUserPromise.then((aUserModel) => {
             userModel = aUserModel;
@@ -223,7 +222,7 @@ userSettingsView.addEventListener("delete-comment", e => {
         userSettingsView.refresh(userModel);
         viewContainer.appendChild(userSettingsView);
     });
-   
+
 })
 
 
@@ -233,7 +232,7 @@ userSettingsView.addEventListener('delete-user', evt => {
     // viewContainer.innerHTML = "";
 
     const deleteUserPromise = api.deleteUser("user", userModel.token);
-    deleteUserPromise.then((userGotDeleted) => { //Etter at promiset er ferdig, kjøres koden under
+    deleteUserPromise.then((userGotDeleted) => {
         if (userGotDeleted) {
             sessionStorage.removeItem("authString");
             userModel = null;
@@ -265,7 +264,7 @@ navButtons.addEventListener("go-to-threads", e => {
     });
 });
 
-//---------------------------------------------- Lytter til klikk på en tråd i forum
+//----------------------------------------------
 allThreadsView.addEventListener("wish-to-inspect", e => {
     viewContainer.innerHTML = "";
 
@@ -279,11 +278,12 @@ allThreadsView.addEventListener("wish-to-inspect", e => {
         const commentContent = api.listComments(userModel.token, threadInfo.thread, usernames);
         singleThreadView.comment(commentContent);
     });
-    
+
     viewContainer.appendChild(singleThreadView);
 });
 
-//---------------------------------------------- Lytter til posting av kommentar
+//----------------------------------------------
+
 singleThreadView.addEventListener("submit-comment", e => {
 
     api.addThreadComment(userModel.token, threadInfo.thread, e.detail);
@@ -294,7 +294,8 @@ singleThreadView.addEventListener("submit-comment", e => {
     });
 });
 
-//---------------------------------------------- Lytter til rating av author
+//----------------------------------------------
+
 singleThreadView.addEventListener("rate-author", e => {
     let meowRating = e.detail.meowRating;
     let ratedUser = e.detail.user;
@@ -304,7 +305,8 @@ singleThreadView.addEventListener("rate-author", e => {
     });
 })
 
-//---------------------------------------------- Lytter til slett av tråd
+//----------------------------------------------
+
 singleThreadView.addEventListener("delete-thread", e => {
     api.deleteThread(threadInfo.id, userModel.token);
 })
@@ -315,29 +317,29 @@ navButtons.addEventListener("create-thread", e => {
     viewContainer.appendChild(newThreadView);
 });
 
-//---------------------------------------------- Lytter til innsending av ny forumpost
+//----------------------------------------------
 newThreadView.addEventListener("submit-new-thread", e => {
     api.addThreads(userModel.token, e.detail);
 });
 
-//---------------------------------------------- Lytter til gå til checkout
+//----------------------------------------------
 shoppingCartView.addEventListener("go-to-checkout", e => {
     viewContainer.innerHTML = "";
-    
+
     checkoutView.totalPrice(orderModel).then(() => {
 
         checkoutView.addShipment(shipmentTypes);
         checkoutView.saveCart(orderModel);
 
-        if(userModel){
+        if (userModel) {
             checkoutView.loggedInUserInfo(userModel);
-        } 
+        }
         viewContainer.appendChild(checkoutView);
     });
 
 });
 
-//---------------------------------------------- Lytter til innsending av ordre
+//----------------------------------------------
 checkoutView.addEventListener("place-order", e => {
     let userInfo; 
     let cartItems;

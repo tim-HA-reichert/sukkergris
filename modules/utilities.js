@@ -11,15 +11,14 @@ export async function fetchData(url, config) {
                 { cause: data });
         };
 
-        return Promise.resolve(data); //returns a resolved promise with data
+        return Promise.resolve(data); //returner et løst promise med data
 
     } catch (error) {
 
-        return Promise.reject(error); //returns a rejected promise with error-info
+        return Promise.reject(error); //returnerer et avvist promise med feil-info
 
     }
 }
-
 
 // basic authentication -------------------------------------
 export function createBasicAuthString(username, password) {
@@ -28,13 +27,9 @@ export function createBasicAuthString(username, password) {
     return "basic " + b64Str; 
 }
 
-//Shorten date function -------------------------------------
+//Shorten date funksjon -------------------------------------
 export function shortenDate (dateInp) {
-    
     const dateData = new Date(dateInp);
     const dateLocalized = dateData.toLocaleDateString();
     return dateLocalized
 }
-
-//-----------------------------------------------------------
-// more utility-functions here if needed...
