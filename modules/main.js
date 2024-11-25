@@ -105,6 +105,8 @@ categoryListView.addEventListener('categoryselect', function (evt) {
 //---------------------------------------------- AddEventListener for Home knapp
 btnShowCategoriesView.addEventListener('click', function (evt) {
     viewContainer.innerHTML = "";
+    console.log(api.getUserComments(userModel.token));
+
     viewContainer.appendChild(categoryListView);
 });
 
@@ -194,8 +196,12 @@ loginView.addEventListener('log-in', evt => {
 
 navButtons.addEventListener('go-to-settings', evt => {
     viewContainer.innerHTML = "";
-    userSettingsView.refresh(userModel)
-    viewContainer.appendChild(userSettingsView)
+    userSettingsView.refresh(userModel);
+
+    userSettingsView.listUserComments(api.getUserComments(userModel.token));
+
+    viewContainer.appendChild(userSettingsView);
+    console.log(userModel.token);
 });
 
 //---------------------------------------------- Logout
@@ -232,6 +238,9 @@ userSettingsView.addEventListener('changed-user-information', informationForm =>
         });
     })
 });
+
+//-------------------------------------------- List user comments
+
 
 //---------------------------------------------- Lytter til Delete User
 
@@ -305,13 +314,10 @@ singleThreadView.addEventListener("rate-author", e => {
     let meowRating = e.detail.meowRating;
     let ratedUser = e.detail.user;
 
-    api.rateUser(userModel.token, ratedUser, meowRating);
-
+    api.rateUser(userModel.token, ratedUser, meowRating).then(() => {
+        messageHandler("User rated", "Thanks for rating this topic!")
+    });
 })
-
-
-
-
 
 singleThreadView.addEventListener("delete-thread", e => {
     api.deleteThread(threadInfo.id, userModel.token);

@@ -1,22 +1,4 @@
 let html = `
-<style>
-
-#dialog{
-    background-color: transparent;
-    border: none;
-}
-
-#dialog-content{
-    background-color: white;
-    padding: 1rem;
-    border-style: solid;
-    border-radius: 1rem;
-    border-color: #dadada;
-    border-width: 4px;
-}
-
-</style>
-
     <dialog id="dialog">
         <div id="dialog-content">
             <div id="message-container"> </div> 

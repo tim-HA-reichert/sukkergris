@@ -272,6 +272,32 @@ export async function deleteReview(aToken, reviewID) {
 }
 
 //----------------------------------------------------------
+// Get user comment function
+//----------------------------------------------------------
+
+export async function getUserComments(aUserID){
+    const url = urlMap.productReviewsURL + "?key=" + groupKey;
+
+    const cfg = {
+        method: "GET",
+        headers: {
+            "authorization": aUserID
+        }
+    }
+
+    try {
+        const result = await fetchData(url, cfg);
+        return result;
+    } catch(error){
+        errorHandler(error);
+    }
+
+
+
+}
+
+
+//----------------------------------------------------------
 // Admin show product reviews
 //----------------------------------------------------------
 export async function adminShowReviews(aAdminToken, usernames) {

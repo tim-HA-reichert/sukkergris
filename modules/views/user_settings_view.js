@@ -2,6 +2,7 @@ const html = `
     <button id="btnLogout">Logout</button>
     <h2>User Information</h2>
         <div id="userInformationContainer"></div>
+    <hr>
     <h2>Change Information</h2>
     <div id="listContainer">
         <form id="change-user-information-form" action="">
@@ -44,33 +45,34 @@ const html = `
             
             <label for="img_file">Profile picture:</label>
             <input type="file" id="img_file" name="img_file">
-
-            <hr>
             
             <div class="button-wrapper">
-            <button type="submit">
-            Change
-            </button>
+                <button type="submit">
+                    Change
+                </button>
             </div>
-            </form>
-            
-            <hr>
+        </form> 
+
+        <hr>
+    </div>
             <button id="btnDeleteUser">Delete User</button>
-            </div>
+
+    <div id="list-comment-container"> </div>
             `;
             
-            export class UserSettingsView extends HTMLElement {
-                //---------------------------------------
-                constructor() {
-                    
-                    super();
-                    
-                    this.attachShadow({ mode: "open" });
-                    this.shadowRoot.innerHTML = html;
-                    this.form = this.shadowRoot.getElementById("change-user-information-form");
-                    this.userInformationContainer = this.shadowRoot.getElementById("userInformationContainer");
-                    
-                    this.form.addEventListener("submit", evt => {
+export class UserSettingsView extends HTMLElement {
+    //---------------------------------------
+    constructor() {
+        
+        super();
+        
+        this.attachShadow({ mode: "open" });
+        this.shadowRoot.innerHTML = html;
+        this.form = this.shadowRoot.getElementById("change-user-information-form");
+        this.userInformationContainer = this.shadowRoot.getElementById("userInformationContainer");
+        this.listComments = this.shadowRoot.getElementById("list-comment-container");
+
+        this.form.addEventListener("submit", evt => {
             evt.preventDefault();
             
             const formData = new FormData(this.form);
@@ -90,8 +92,7 @@ const html = `
             const theEvent = new CustomEvent("delete-user", { composed: true, bubbles: true });
             this.dispatchEvent(theEvent);
         });
-
-        
+   
     }
     
     refresh(userModel) {
@@ -109,6 +110,24 @@ const html = `
         this.userInformationContainer.appendChild(theDiv);
         
     }
+
+    async listUserComments(commentData){
+        this.listComments.innerHTML="";
+        
+        let commentList = await commentData;
+        
+        for(let comment of commentList){
+        const commentDiv = document.createElement("div");
+            commentDiv.innerHTML = `
+                <h3>Your comments</h3>
+                 <p>${comment.comment_text}</p>
+
+            `;
+
+        this.listComments.appendChild(commentDiv);
+        }
+    }
+
 }
 
 customElements.define("user-settings-view", UserSettingsView);

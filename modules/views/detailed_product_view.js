@@ -130,7 +130,7 @@ export class DetailedProductView extends HTMLElement {
         //Hide review button
         const btnHidereviews = this.shadowRoot.getElementById("btnHidereviews");
         btnHidereviews.addEventListener('click', evt => {
-            ;
+
             this.reviewContainer.style.display = "none";
             btnShowreviews.style.display = "block";
             btnHidereviews.style.display = "none";
