@@ -1,7 +1,7 @@
 const html = `
-    <h2>All orders</h2>
+<h2>All orders</h2>
 
-    <div class="content-wrapper">
+<div class="content-wrapper">
     <input name="delete-order" id="delete-order" type="number" placeholder="use ID to delete order" required>
     <button id="delete-order-button">Delete order with ID</button>
 <div> 
@@ -9,11 +9,8 @@ const html = `
     <div id="orderContainer"></div>
 `;
 
-
 //===================================================
 export class OrderListView extends HTMLElement {
-
-
 
     //---------------------------------------
     constructor(){
@@ -35,21 +32,14 @@ export class OrderListView extends HTMLElement {
     
     }
 
-    deleteEvent(aId){
-        const deleteEvent = new CustomEvent("delete-order", 
-            {composed: true, bubbles: true, detail: aId});
-
-        this.dispatchEvent(deleteEvent);
-    }
-
-
+//---------------------------------------------------------
     async getOrders(dataPromise){
         this.orderContainer.innerHTML = "";
 
         const data = await dataPromise;
+    
         if(data.length != 0){
             for(let value of data){
-
                 const orderDiv = document.createElement("div");
                 orderDiv.innerHTML = `
                 <div class="user-order-wrapper">
@@ -59,26 +49,30 @@ export class OrderListView extends HTMLElement {
                         <h4>Order ID: ${value.id}</h4>
                         <h4>Shipping ID: ${value.shipping_id}</h4>
                     </div>
-                    <button class="user-order-delete-btn">Delete this user</button>
+                    <button class="user-order-delete-btn">Delete order</button>
                     <hr>
                 </div>    
                 `;
-
+                    //Knapp for hver instans
                 const deleteButton = orderDiv.querySelector(".user-order-delete-btn");
+                
                 deleteButton.addEventListener("click", () => {
-                    this.deleteEvent(value.id);
+                    const deleteEvent = new CustomEvent("delete-order", 
+                        {composed: true, bubbles: true, detail: value.id});
+            
+                    this.dispatchEvent(deleteEvent);
                 });
 
                 this.orderContainer.appendChild(orderDiv);
             }
         } else {
             const orderDiv = document.createElement("div");
-            orderDiv.innerHTML = `
-            <h3>No orders! We are going bankrupt!</h3>
-            `;
+                orderDiv.innerHTML = `
+                <h3>No orders! We are going bankrupt!</h3>
+                `;
             this.orderContainer.appendChild(orderDiv);
         }
     }
-}
+}//End of class
 
 customElements.define("order-list-view", OrderListView);

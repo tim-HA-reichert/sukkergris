@@ -1,5 +1,5 @@
 const html = `
-        <button id="add-new-product-btn">Add new product</button>
+<button id="add-new-product-btn">Add new product</button>
     <h2>Change a product</h2>
     <div class="content-wrapper">
         <form id="change-product-form">
@@ -25,8 +25,7 @@ const html = `
     <div id="listContainer"></div>
 `;
 
-//Add show info on click functionality? 
-export class changeProductView extends HTMLElement{
+export class ChangeProductView extends HTMLElement{
 
     //----------------------------------------
     constructor(){
@@ -58,7 +57,8 @@ export class changeProductView extends HTMLElement{
     
     }  
 
-
+//---------------------------------------------------------
+//Liste over sjokolade vi kan forandre
     async changeableChoco (dataPromise){
         const data = await dataPromise; 
         this.listContainer.innerHTML = "";
@@ -80,4 +80,4 @@ export class changeProductView extends HTMLElement{
 
 
 
-customElements.define("change-product-view", changeProductView);
+customElements.define("change-product-view", ChangeProductView);

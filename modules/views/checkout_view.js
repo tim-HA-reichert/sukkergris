@@ -94,6 +94,7 @@ export class CheckoutView extends HTMLElement {
         //Populate the orderedItems array
         for(const items of cart.cartArray){
             orderedItems.push({
+            chocoName: items.chocoName,
             chocoID: items.chocoID,
             categoryID: items.categoryID,
             quantity: items.quantity,
@@ -146,11 +147,13 @@ export class CheckoutView extends HTMLElement {
         this.listContainer.innerHTML = "";
         let sum = 0;
 
+        let index = 0;
+
         //Henter inn cart data fra orderen
-        cart.cartArray.forEach((item, index) => {
+        for(let item of cart.cartArray){
             parseInt(item.price);
             parseInt(item.quantity);
-
+            index++;
 
             const divCart = document.createElement("div");
             divCart.innerHTML = `
@@ -162,7 +165,7 @@ export class CheckoutView extends HTMLElement {
             `;
             sum += item.price * item.quantity;
             this.listContainer.appendChild(divCart);
-        });
+        };
 
         this.totalItemPrice = sum;
         this.sumTotal();
@@ -177,7 +180,7 @@ export class CheckoutView extends HTMLElement {
 
                 const shipmentPrice = parseInt(this.shipmentPrice);
                 const totalItemPrice = parseInt(this.totalItemPrice);
-                const sumTotal = shipmentPrice + totalItemPrice;
+                let sumTotal = shipmentPrice + totalItemPrice;
 
                 divCartBottom.innerHTML = `
                 <p>Shipment: ${shipmentPrice},-</p>
@@ -185,6 +188,7 @@ export class CheckoutView extends HTMLElement {
                     <input id="btnPlaceOrder" type="submit" value="Place Order">
                 `;
                 this.sumContainer.appendChild(divCartBottom);
+                sumTotal = 0;
     }
 
     //---------------------------------------

@@ -24,6 +24,8 @@ export class AdminPanelView extends HTMLElement {
 
     }
 
+//---------------------------------------------------------
+//Funksjon for å gi knapper funksjonalitet
     async refresh(){
         let productValue = this.adminProducts.value;
         let orderValue = this.adminOrders.value;
@@ -51,7 +53,7 @@ export class AdminPanelView extends HTMLElement {
             this.dispatchEvent(btnClick);
         });
     }
-}
+}//End of class
 
 
 
