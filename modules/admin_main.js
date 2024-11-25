@@ -31,10 +31,6 @@ viewContainer.innerHTML = "";
 viewContainer.appendChild(adminLoginView);
 }
 
-let adjustableChocolateList = api.adjustableChocolateList();
-
-//For storing the adminToken later
-
 
 //log in as admin-----------------------------------
 adminLoginView.addEventListener("log-in", function(evt){
@@ -77,15 +73,17 @@ allUserView.addEventListener("delete-user", e => {
 //----------------------------------------------------------------
 adminPanelView.addEventListener("admin-products", function(evt){
     viewContainer.innerHTML = "";
-    adminProducts.chocoDeletionList(adjustableChocolateList);
+
+    adminProducts.chocoDeletionList(api.adjustableChocolateList(adminToken));
+
     viewContainer.appendChild(adminProducts);
 });
 
 
 adminProducts.addEventListener("add-product", function(evt){
     api.adminProducts(adminToken, evt.detail).then(response => {
-        adjustableChocolateList = api.adjustableChocolateList();
-        adminProducts.chocoDeletionList(adjustableChocolateList);
+
+        adminProducts.chocoDeletionList(api.adjustableChocolateList(adminToken));
         viewContainer.appendChild(adminProducts);
 
         this.form.reset();  
@@ -94,7 +92,7 @@ adminProducts.addEventListener("add-product", function(evt){
 
 adminProducts.addEventListener("delete-product", function(evt){
     api.deleteProduct(adminToken, evt.detail).then(response =>{
-        adjustableChocolateList = api.adjustableChocolateList();
+        const adjustableChocolateList = api.adjustableChocolateList(adminToken);
 
         adminProducts.chocoDeletionList(adjustableChocolateList);
         viewContainer.appendChild(adminProducts);
@@ -111,7 +109,7 @@ adminProducts.addEventListener("change-product-form", function(evt){
 
 changeProductInfo.addEventListener("change-product", function(evt){
     api.changeProduct(adminToken, evt.detail).then(response=>{
-        adjustableChocolateList = api.adjustableChocolateList();
+        adjustableChocolateList = api.adjustableChocolateList(adminToken);
 
         changeProductInfo.changeableChoco(adjustableChocolateList);
         viewContainer.appendChild(changeProductInfo);

@@ -11,8 +11,14 @@ const addNewProductHTML = `
             <input name="carbohydrates" placeholder="Nutrients"><br>
             <input name="stock"         placeholder="Stock amount"><br>
             <input name="expected_shipment" placeholder="Expected Shipment"><br>
-            <input name="reserved_members"  placeholder="Only for members?"><br>
-            <input name="thumb" type="file"><br>
+            
+            <label for="reserved_members">Only for members?</label>
+            <select id="reserved_members" name="reserved_members">
+                <option value="true">Yes</option>
+                <option value="false">No</option>
+            </select> <br>
+            <label for="img_file">Choose a picture:</label>
+            <input name="img_file" id="img_file" type="file"><br>
 
             <input type="submit" value="Add new product">
         </form>
@@ -86,13 +92,15 @@ export class adminProductsView extends HTMLElement {
         });
     }
 
-    async deleteEvent(aID){
+
+//------------------------------
+    deleteEvent(aID){
         const deleteEvent = new CustomEvent("delete-product", 
             {composed: true, bubbles: true, detail:aID});
 
         this.dispatchEvent(deleteEvent);
     }
-
+//-----------------------------
 
     async chocoDeletionList (dataPromise){
             this.listContainer.innerHTML = "";
@@ -121,7 +129,6 @@ export class adminProductsView extends HTMLElement {
                     this.deleteEvent(value.chocoID);
                 });
 
-
                 this.listContainer.appendChild(theDiv);
             }
         } else {
@@ -133,6 +140,10 @@ export class adminProductsView extends HTMLElement {
 
         }
         }//End of deleteChoco 
+
+
+
+
 
 } //end of class
 
