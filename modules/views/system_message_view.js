@@ -29,12 +29,13 @@ export class SystemMessageView extends HTMLElement {
     
     }
 
-        
+//-------------------------------------------------------
     typeOfMessage(aMessage) {
         this.message.innerHTML = aMessage;
         this.dialog.showModal();
     }  
 
+//-------------------------------------------------------
     closeOnClick(evt){
         if(evt.target === this.dialog){
             this.dialog.close();

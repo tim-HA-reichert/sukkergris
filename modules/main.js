@@ -361,30 +361,37 @@ shoppingCartView.addEventListener("go-to-checkout", e => {
 
 //----------------------------------------------
 checkoutView.addEventListener("place-order", e => {
-    let userInfo;
-    if (userModel) {
-        //For logged in users. 
-        api.placeOrder(userModel.token, e.detail).then((result) => {
-            if (result.msg === "insert order ok") {
-                viewContainer.innerHTML = "";
-                userInfo = result.record;
-                orderConfirmView.refresh(userInfo, orderModel, shipmentTypes);
-                viewContainer.appendChild(orderConfirmView);
-                orderModel.emptyCart();
-            }
-        });
-    } else {
-        //For guest users. 
-        api.placeOrder(null, e.detail).then((result) => {
-            if (result.msg === "insert order ok") {
-                viewContainer.innerHTML = "";
-                userInfo = result.record;
-                orderConfirmView.refresh(userInfo, orderModel, shipmentTypes);
-                viewContainer.appendChild(orderConfirmView);
-                orderModel.emptyCart();
+    let userInfo; 
+    let cartItems;
+        if(userModel){
+            //For logged in users. 
+            api.placeOrder(userModel.token, e.detail).then((result) => {
+                console.log(result);
+                if(result.msg === "insert order ok"){
+                    viewContainer.innerHTML = "";
+                    userInfo = result.record;
+                    cartItems = result.record.content;
+                    console.log(result);
+                    orderConfirmView.refresh(userInfo, cartItems, shipmentTypes);
+                    viewContainer.appendChild(orderConfirmView);
+                }
+            });
+        } else {
+            //For guest users. 
+            api.placeOrder(null, e.detail).then((result) => {
+                console.log(result);
+                if(result.msg === "insert order ok"){
+                    viewContainer.innerHTML = "";
+                    userInfo = result.record;
+                    cartItems = result.record.content;
+                    orderConfirmView.refresh(userInfo, cartItems, shipmentTypes);
+                    viewContainer.appendChild(orderConfirmView);
             }
         });
     }
+    console.log(orderModel);
+    orderModel.emptyCart();
+    console.log(orderModel);
 });
 
 

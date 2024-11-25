@@ -69,6 +69,7 @@ export class IndividualThreadView extends HTMLElement{
         })
     }
 
+//------------------------------------------------------
     async refresh(dataPromise){
         
         this.chosenThread.innerHTML = "";
@@ -85,6 +86,7 @@ export class IndividualThreadView extends HTMLElement{
         this.chosenThread.appendChild(theDiv);
     }
 
+//------------------------------------------------------
     async currentRating(authorData, authorToRate){
         this.ratingDiv.innerHTML = "";
 
@@ -105,6 +107,7 @@ export class IndividualThreadView extends HTMLElement{
             this.previousRatings(rating);
         }
 
+//------------------------------------------------------
     previousRatings(aRating){
         const ratingInfoDiv = document.createElement("div");
 
@@ -126,6 +129,7 @@ export class IndividualThreadView extends HTMLElement{
         this.ratingDiv.appendChild(ratingInfoDiv);
     }
 
+//------------------------------------------------------
     async rateTheAuthor() {
         //Set in error message for when rating on self. 
         this.rateAuthor.innerHTML = "";
@@ -157,7 +161,7 @@ export class IndividualThreadView extends HTMLElement{
         this.rateAuthor.appendChild(starContainer);
     }
     
-
+//------------------------------------------------------
     setRating(rating) {
         const stars = this.shadowRoot.querySelectorAll("#star-container span");
         
@@ -179,7 +183,7 @@ export class IndividualThreadView extends HTMLElement{
     }
 
 
-
+//------------------------------------------------------
     async comment(commentData){
         this.commentContainer.innerHTML = "";
 

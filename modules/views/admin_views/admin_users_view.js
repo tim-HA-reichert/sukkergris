@@ -13,8 +13,6 @@ const html = `
 //===================================================
 export class UserListView extends HTMLElement {
 
-
-
     //---------------------------------------
     constructor(){
 
@@ -36,11 +34,13 @@ export class UserListView extends HTMLElement {
     
     }
 
+//------------------------------------------------------
     deleteEvent(userId){
         const deleteEvent = new CustomEvent("delete-user", { composed: true, bubbles: true, detail: userId });
         this.dispatchEvent(deleteEvent); 
     }
 
+//------------------------------------------------------
     async listUsers(dataPromise){
         this.userContainer.innerHTML = "";
         

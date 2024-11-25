@@ -2,7 +2,7 @@ import * as api from "./api_service.js";
 import { AdminLoginView } from "./views/admin_views/admin_login_view.js";
 import { AdminPanelView } from "./views/admin_views/admin_panel_view.js";
 import { adminProductsView } from "./views/admin_views/admin_product_view.js";
-import { changeProductView } from "./views/admin_views/admin_product_change_view.js";
+import { ChangeProductView } from "./views/admin_views/admin_product_change_view.js";
 import { UserListView } from "./views/admin_views/admin_users_view.js";
 import { OrderListView } from "./views/admin_views/admin_orders_view.js";
 import { ReviewsView } from "./views/admin_views/admin_review_view.js";
@@ -18,7 +18,7 @@ const allUserView = new UserListView();
 const orderListView = new OrderListView();
 const reviewsView = new ReviewsView();
 
-const changeProductInfo = new changeProductView();
+const changeProductInfo = new ChangeProductView();
 let adminToken = null;
 
 startup();
@@ -27,7 +27,6 @@ function startup(){
 viewContainer.innerHTML = "";
 viewContainer.appendChild(adminLoginView);
 }
-
 
 //log in as admin-----------------------------------
 adminLoginView.addEventListener("log-in", function(evt){
@@ -166,13 +165,15 @@ adminPanelView.addEventListener("admin-reviews", e => {
 
 //---------------------------------------------- Sletter Review
 reviewsView.addEventListener("deleteReview", evt => {
+api.getAllUsers(adminToken).then(usernames => {
     api.deleteReview(adminToken, evt.detail).then((result) => {
         if(result) {            
-            api.adminShowReviews(adminToken).then((reviewList) => {
+            api.adminShowReviews(adminToken, usernames).then((reviewList) => {
                 viewContainer.innerHTML="";
                 reviewsView.showReviews(reviewList);
                 viewContainer.appendChild(reviewsView);
-            });
-        }
-    });
+                });
+            }
+        });
+    })
 });

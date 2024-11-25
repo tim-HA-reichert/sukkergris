@@ -16,7 +16,7 @@ export class ShoppingCartView extends HTMLElement {
         this.shadowRoot.innerHTML = html;
         this.listContainer = this.shadowRoot.getElementById("listContainer");
         
-        //Listeners for emptying cart or proceeding to checkout
+        //Lyttere for å gå til checkout og før å tømme handlekurv
         this.shadowRoot.addEventListener("click", (evt) => {
 
             if (evt.target.id === "btnGoToCheckout") {
@@ -40,7 +40,10 @@ export class ShoppingCartView extends HTMLElement {
         this.listContainer.innerHTML = "";
         let sum = 0;
         
+
         cartInput.cartArray.forEach((item, index) => {
+//Denne forEach-løkken ser sånn her ut som en for.. of: 
+//for (const [index, item] of this.cart.cartArray.entries())
 
             if (!item.quantity) {
                 item.quantity = 1;
@@ -60,15 +63,16 @@ export class ShoppingCartView extends HTMLElement {
             sum += parseInt(item.price) * parseInt(item.quantity);
             this.listContainer.appendChild(divCart);
 
-            //Increases amount
+            //Øk mengde produkter i kurv
             const quantityInput = divCart.querySelector(`#itemQuantity-${index}`);
             quantityInput.addEventListener("input", (evt) => {
                 const newQuantity = parseInt(evt.target.value);
                 cartInput.updateQuantity(index, newQuantity);
+                //Tegner handlekurv på nytt
                 this.refresh(cartInput);
             });
 
-            //Delete button listener
+            //Fjern produkter fra kurv
             const deleteButton = divCart.querySelector(`#btnDeleteProduct-${index}`);
             deleteButton.addEventListener("click", () => {
                 cartInput.deleteItem(index);
@@ -76,7 +80,7 @@ export class ShoppingCartView extends HTMLElement {
             });
         });
 
-        //Cart summary
+        //Handlekurv oppsummering
         const divCartBottom = document.createElement("div");
         divCartBottom.innerHTML = `
             <p>Sum: ${sum + ",-"}</p>
@@ -86,7 +90,7 @@ export class ShoppingCartView extends HTMLElement {
         this.listContainer.appendChild(divCartBottom);
     }
 
-} //end of class
+} //Slutten av klassen
 
 
 customElements.define("shopping-cart-view", ShoppingCartView);
