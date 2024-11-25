@@ -167,8 +167,6 @@ export async function addProductReview(aData, aToken) {
     const url = urlMap.productReviewsURL + "?key=" + groupKey;
     const form = aData.formData     
 
-    console.log(aData);
-
     try {
         const cfg = {
             method: "POST",
@@ -259,7 +257,6 @@ export async function deleteReview(aToken, reviewID) {
 
     try {
         const result = await fetchData(url, cfg);
-            console.log(result);
         if(result.msg === "delete comment ok") {
             messageHandler("Review Deleted", "Review ID: " + result.record.id);
             return true
@@ -499,7 +496,6 @@ export async function logIn(aForm, accountType) {
        if(loginData.superuser != true){
             messageHandler("Welcome back!", "Sweetness for your tastebuds await, " + result.logindata.username);
             }
-            console.log(result);
             return loginData;
         
 
@@ -613,7 +609,6 @@ export async function adminProducts(aToken, aNewProductForm) {
         }
 
         const result = await fetchData(url, cfg);
-        console.log(result);
         messageHandler(`New product: ${result.record.name} added!`);
         return result;
 
@@ -898,7 +893,6 @@ export async function addThreads(aToken, threadForm){
         try{
 
         const result = await fetchData(url, cfg);
-        console.log(result);
         result.start_of_thread = true;
 
         messageHandler("Forum", "Added new topic of discussion!");
@@ -1036,7 +1030,6 @@ export async function placeOrder(aToken, aOrderForm){
 
     try{
         const result = await fetchData(url, cfg);
-        console.log(result);
         
         return result
     } catch(error) {
@@ -1123,7 +1116,6 @@ export async function rateUser(aToken, userToRate, amountOfBeenz){
 
     try {
         const result = await fetchData(url, cfg);
-        console.log(result);
 
         return result;
     } catch(error) {
