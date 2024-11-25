@@ -21,7 +21,6 @@ const reviewsView = new ReviewsView();
 const changeProductInfo = new changeProductView();
 let adminToken = null;
 
-//Add stay-logged in for admin? Security concerns
 startup();
 //startup-------------------------------------------
 function startup(){
@@ -75,7 +74,7 @@ adminPanelView.addEventListener("admin-products", function(evt){
     viewContainer.appendChild(adminProducts);
 });
 
-
+//----------------------------------------------
 adminProducts.addEventListener("add-product", function(evt){
     api.adminProducts(adminToken, evt.detail).then(response => {
 
@@ -86,6 +85,7 @@ adminProducts.addEventListener("add-product", function(evt){
     });
 });
 
+//----------------------------------------------
 adminProducts.addEventListener("delete-product", function(evt){
     api.deleteProduct(adminToken, evt.detail).then(response =>{
         const adjustableChocolateList = api.adjustableChocolateList(adminToken);
@@ -95,7 +95,7 @@ adminProducts.addEventListener("delete-product", function(evt){
     });
 });
 
-
+//----------------------------------------------
 adminProducts.addEventListener("change-product-form", function(evt){
     viewContainer.innerHTML = "";
     const adjustableChocolateList = api.adjustableChocolateList(adminToken);
@@ -104,6 +104,7 @@ adminProducts.addEventListener("change-product-form", function(evt){
     viewContainer.appendChild(changeProductInfo);
 });
 
+//----------------------------------------------
 changeProductInfo.addEventListener("back-to-add", (e) => {
     viewContainer.innerHTML = "";
 
@@ -111,6 +112,7 @@ changeProductInfo.addEventListener("back-to-add", (e) => {
     viewContainer.appendChild(adminProducts);
 });
 
+//----------------------------------------------
 changeProductInfo.addEventListener("change-product", function(evt){
     api.changeProduct(adminToken, evt.detail).then(response=>{
         adjustableChocolateList = api.adjustableChocolateList(adminToken);
@@ -134,6 +136,7 @@ adminPanelView.addEventListener("admin-orders", e => {
     });
 });
 
+//----------------------------------------------
 orderListView.addEventListener("delete-order", e => {
     api.deleteOrder(adminToken, e.detail).then((result) => {
         const refreshList = api.listOrders(adminToken);
