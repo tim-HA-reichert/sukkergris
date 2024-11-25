@@ -1,6 +1,9 @@
 import { shortenDate } from "./utilities.js";
 
-//=====================================================
+//===========================================
+//Category model
+//===========================================
+
 export class CategoryModel {
 
     //----------------------------------------
@@ -14,9 +17,13 @@ export class CategoryModel {
         this.categoryName = obj.categoryName;
         this.description = obj.description;
     }
-}
+} //End of class
 
-//=====================================================
+
+//===========================================
+//Chocolate model
+//===========================================
+
 export class ChocolateModel {
 
     //----------------------------------------
@@ -47,7 +54,8 @@ export class ChocolateModel {
         this.quantity = 0;
     }
 
-    showDetailed() {        
+    //----------------------------------------
+    showDetailed() {
         if (this.stock == 0) {
             this.stock = "Out of stock";
             this.expected_shipped = "Expected shipping date: " + shortenDate(this.expected_shipped);
@@ -58,7 +66,12 @@ export class ChocolateModel {
         }
     }
 
-}
+} //End of class
+
+
+//===========================================
+//Order model
+//===========================================
 
 export class OrderModel {
 
@@ -75,8 +88,9 @@ export class OrderModel {
         localStorage.setItem('orderModel', JSON.stringify(this.cartArray));
     }
 
+    //----------------------------------------
     addItem(item) {
-        if(this.cartArray.length == 0){
+        if (this.cartArray.length == 0) {
             this.cartArray.push(item);
         }
 
@@ -90,12 +104,13 @@ export class OrderModel {
             this.cartArray.push(item);
             //Prevent quantity to start at 0 when adding new item.
             item.quantity++;
-        }      
+        }
 
         //Kaller på denne for at det skal lagres i localstorage.
         this._saveToLocalStorage();
     }
 
+    //----------------------------------------
     updateQuantity(index, newQuantity) {
         const item = this.cartArray[index];
         if (item) {
@@ -105,6 +120,7 @@ export class OrderModel {
         this._saveToLocalStorage();
     }
 
+    //----------------------------------------
     deleteItem(index) {
         if (index >= 0 && index < this.cartArray.length) {
             this.cartArray.splice(index, 1);
@@ -112,11 +128,12 @@ export class OrderModel {
         this._saveToLocalStorage();
     }
 
+    //----------------------------------------
     emptyCart() {
         this.cartArray = [];
         this._saveToLocalStorage();
     }
-}
+}  //End of class
 
 // The model could also take care of converting between
 // API-data and model-data and visa versa.
@@ -127,13 +144,20 @@ export class OrderModel {
 // Add more model classes here, e.g.:
 // OrderModel, UserModel, LoginDataModel, CommentsModel...
 
+
+//===========================================
+//LoginData model
+//===========================================
+
 export class LoginDataModel {
 
-    constructor(loginData){
+    //----------------------------------------
+    constructor(loginData) {
         this.update(loginData);
     }
 
-    update(data){
+    //----------------------------------------
+    update(data) {
         this.superuser = data.superuser;
         this.thumb = data.thumb;
         this.token = data.token;
@@ -145,43 +169,48 @@ export class LoginDataModel {
         this.street = data.street;
         this.zipcode = data.zipcode;
     }
+} //End of class
 
 
-}
+//===========================================
+//New Product model
+//===========================================
 
+export class NewProductModel {
 
-export class NewProductModel{
-
+    //----------------------------------------
     constructor(newProductObject) {
         this.update(newProductObject);
-     }
- 
-     //----------------------------------------
-     update(newProduct) {
- 
+    }
+
+    //----------------------------------------
+    update(newProduct) {
+
         //Apply form values here
-         this.chocoID = newProduct.chocoID;
-         this.categoryID = newProduct.categoryID;
-         this.chocoName = newProduct.chocoName;
-         this.details = newProduct.details;        
-         this.description = newProduct.description;        
-         this.thumb = newProduct.thumb;
-         this.price = newProduct.price;        
-     }
-}
+        this.chocoID = newProduct.chocoID;
+        this.categoryID = newProduct.categoryID;
+        this.chocoName = newProduct.chocoName;
+        this.details = newProduct.details;
+        this.description = newProduct.description;
+        this.thumb = newProduct.thumb;
+        this.price = newProduct.price;
+    }
+} //End of class
 
 
 //===========================================
 //Forum models
 //===========================================
 
-export class UserThreadModel{
+export class UserThreadModel {
 
-    constructor(newthreadObject){
+    //----------------------------------------
+    constructor(newthreadObject) {
         this.update(newthreadObject);
     }
-//----------------------------------------
-    update(newThread){
+
+    //----------------------------------------
+    update(newThread) {
         this.date = shortenDate(newThread.date);
         this.heading = newThread.heading;
         this.id = newThread.id;
@@ -193,22 +222,30 @@ export class UserThreadModel{
         this.username = null;
     }
 
-    setUsername(user){
+    //----------------------------------------
+    setUsername(user) {
         if (user) {
             this.username = user.username;
-          } else {
+        } else {
             this.username = 'No username found. Model.js';
-          }
+        }
     }
-}
+}   //End of class
+
+
+//===========================================
+//UserComment Model
+//===========================================
 
 export class UserCommentModel {
 
-    constructor(newUserCommentObject){
+    //----------------------------------------
+    constructor(newUserCommentObject) {
         this.update(newUserCommentObject)
     }
 
-    update(newComment){
+    //----------------------------------------
+    update(newComment) {
         this.message = newComment.message;
         this.start_of_thread = false;
         this.thread = newComment.thread;
@@ -217,14 +254,15 @@ export class UserCommentModel {
         this.username = null;
     }
 
-    setUsername(user){
+    //----------------------------------------
+    setUsername(user) {
         if (user) {
             this.username = user.username;
-          } else {
+        } else {
             this.username = 'No username found. Model.js';
-          }
+        }
     }
-}
+}   //End of class
 
 
 //===========================================
@@ -233,11 +271,13 @@ export class UserCommentModel {
 
 export class userModel {
 
-    constructor(newUserObject){
+    //----------------------------------------
+    constructor(newUserObject) {
         this.update(newUserObject);
     }
 
-    update(newUser){
+    //----------------------------------------
+    update(newUser) {
         this.beenz = newUser.beenz;
         this.city = newUser.city;
         this.country = newUser.country;
@@ -249,40 +289,44 @@ export class userModel {
         this.username = newUser.username;
         this.zipcode = newUser.zipcode;
     }
-}
+}   //End of class
 
 
 //===========================================
 //Review Model
 //===========================================
 
-export class ReviewModel{
+export class ReviewModel {
 
-    constructor(newReviewObject){
+    //----------------------------------------
+    constructor(newReviewObject) {
         this.update(newReviewObject)
     }
 
-    update(reviewObject){
+    //----------------------------------------
+    update(reviewObject) {
         this.comment_text = reviewObject.comment_text;
         this.date = reviewObject.date;
         this.id = reviewObject.id;
         this.product_id = reviewObject.product_id;
         this.rating = reviewObject.rating //Waiting to be filled by userModel.username.
-        
+
         this.user_id = reviewObject.user_id;
 
         this.username = null;
     }
 
-    setUsername(user){
+    //----------------------------------------
+    setUsername(user) {
         if (user) {
             this.username = user.username;
-          } else {
+        } else {
             this.username = 'No username found. Model.js';
-          }
+        }
     }
 
-    setAnonymous () {
+    //----------------------------------------
+    setAnonymous() {
         this.username = "Anonymous"
     }
-}
+} //End of class
