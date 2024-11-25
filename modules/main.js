@@ -18,6 +18,7 @@ import { OrderModel } from "./models.js";
 import { CheckoutView } from "./views/checkout_view.js";
 import { OrderConfirmView } from "./views/order_confirmation_view.js";
 
+
 const viewContainer = document.getElementById('viewContainer');
 const userContainer = document.getElementById("user-container");
 
@@ -64,6 +65,7 @@ function startUp() {
 
         loginUserPromise.then((aUserModel) => {
             userModel = aUserModel;
+
             navButtons.isUserLogged(userModel);
             navButtons.activeUser(api.getUserImage(userModel));
         });
@@ -229,10 +231,8 @@ userSettingsView.addEventListener("delete-comment", e => {
 //---------------------------------------------- Lytter til Delete User
 
 userSettingsView.addEventListener('delete-user', evt => {
-    // viewContainer.innerHTML = "";
-
-    const deleteUserPromise = api.deleteUser("user", userModel.token);
-    deleteUserPromise.then((userGotDeleted) => {
+   const deleteUserPromise = api.deleteUser("user", userModel.token);
+    deleteUserPromise.then((userGotDeleted) => {        //Etter at promiset er ferdig, kjøres koden under
         if (userGotDeleted) {
             sessionStorage.removeItem("authString");
             userModel = null;
@@ -270,10 +270,10 @@ allThreadsView.addEventListener("wish-to-inspect", e => {
 
     api.getAllUsers(userModel.token).then((usernames) => {
         threadInfo = e.detail;
+
         singleThreadView.refresh(threadInfo);
         singleThreadView.currentRating(usernames, threadInfo);
-
-        singleThreadView.rateTheAuthor();
+            singleThreadView.rateTheAuthor();
 
         const commentContent = api.listComments(userModel.token, threadInfo.thread, usernames);
         singleThreadView.comment(commentContent);
@@ -300,9 +300,7 @@ singleThreadView.addEventListener("rate-author", e => {
     let meowRating = e.detail.meowRating;
     let ratedUser = e.detail.user;
 
-    api.rateUser(userModel.token, ratedUser, meowRating).then(() => {
-        messageHandler("User rated", "Thanks for rating this topic!")
-    });
+    api.rateUser(userModel.token, ratedUser, meowRating);
 })
 
 //----------------------------------------------

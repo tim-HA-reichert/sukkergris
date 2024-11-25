@@ -3,10 +3,10 @@ import { SystemMessageView } from "./views/system_message_view.js";
 const messageDialog = new SystemMessageView();
 document.body.appendChild(messageDialog);
 
-//-------------------------------------------------------------
-export function errorHandler(error) {
-    let errorMessage = "";
-    console.log(error);
+export function errorHandler(error, customMessage) {
+    let errorMessage = customMessage;
+
+    if(!errorMessage){
     switch (error.cause.http_code) {
         case 400:
             errorMessage = "Please check your input.";
@@ -18,15 +18,13 @@ export function errorHandler(error) {
             errorMessage = "Wrong groupkey";
             break;
         default:        
-        console.log(error);
             errorMessage = error.cause.msg;
     }
+}
     let html = `
         <h1>Error occurred</h1>
         <p>${errorMessage}</p>
     `;
     
     messageDialog.typeOfMessage(html);
-
-    console.log(error.cause);
 }

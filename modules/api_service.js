@@ -1081,13 +1081,13 @@ export async function rateUser(aToken, userToRate, amountOfBeenz){
             userid: userToRate,
             beenz: amountOfBeenz
         })
-    }
+    }   
 
     try {
         const result = await fetchData(url, cfg);
 
         return result;
-    } catch (error) {
-        errorHandler(error);
+    } catch(error) {
+        errorHandler(false, "You can't rate yourself");
     }
 }

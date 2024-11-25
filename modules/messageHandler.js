@@ -6,7 +6,6 @@ document.body.appendChild(messageDialog);
 //-------------------------------------------------------------
 export function messageHandler(title, msg) {
 
-    // show messages here, e.g. show a dialog with an easy-to-understand message
     let html =``;
 
     if(msg){

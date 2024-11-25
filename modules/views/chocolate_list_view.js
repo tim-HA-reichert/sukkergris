@@ -19,10 +19,11 @@ export class ChocolateListView extends HTMLElement {
     }
 
     //---------------------------------------
+    //Liste over sjokolader fra en kategori
     async refresh(dataPromise) {        
         this.listContainer.innerHTML = "";
 
-        const data = await dataPromise; //wait for the promise to be resolved
+        const data = await dataPromise;
 
         for (let value of data) {
 
@@ -40,10 +41,10 @@ export class ChocolateListView extends HTMLElement {
                 this.dispatchEvent(chocolateDetailEvent);
             });
 
-        } //end for-loop
+        } 
     }
 
-} //end of class
+}//End of class
 
 
 customElements.define("chocolate-list-view", ChocolateListView);

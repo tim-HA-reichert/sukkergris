@@ -86,12 +86,11 @@ export class CheckoutView extends HTMLElement {
 
     }
     //---------------------------------------
-//Data to send to server. Hidden input. 
+//Data av ting som blir sendt til server. "hidden" input. 
     async saveCart(cartInput){
         const cart = cartInput;
-        //Array to hold items, for hidden form input
         const orderedItems = []
-        //Populate the orderedItems array
+        //Legger masse ting i orderedItems.
         for(const items of cart.cartArray){
             orderedItems.push({
             chocoName: items.chocoName,
@@ -102,9 +101,9 @@ export class CheckoutView extends HTMLElement {
             });
         }
 
-        //Update hidden input for content with orderedItems array
+        //Henter ut HTML elementet
         const contentInput = this.shadowRoot.getElementById("content");
-        //Convert to JSON before entering into cfg.body
+        //Konverter til JSON før det går til cfg "body". 
         contentInput.value = JSON.stringify(orderedItems);
     }
 
@@ -115,15 +114,14 @@ export class CheckoutView extends HTMLElement {
     
         const shipmentDiv = document.createElement("div");
 
-        // Create and append options based on the shipment data
+        //Lager forskjellige alternativ basert på shippingdata fra server.
         for(let shipment of shipmentType){
             const option = document.createElement("option");
             
             option.value = shipment.id;
-            //Added price property for e.target.selectedOptions
             option.price = shipment.price;
 
-            //Checks if price = 0. "Free" if true. 
+            //Hvis pris er = 0, skriv "Free".
             option.textContent = `${shipment.type}, (${shipment.price === "0" ? 
                 "Free" : parseInt(shipment.price) + ",-"})`
 
@@ -131,7 +129,7 @@ export class CheckoutView extends HTMLElement {
         }
 
         this.shipment.addEventListener("change", (e) =>{
-            //Extract shippingprice. 
+            //For å få ut shippingprisen og brukes i "sumTotal". 
             this.shipmentPrice = parseInt(e.target.selectedOptions[0].price);
             this.sumTotal();
         });
@@ -172,7 +170,7 @@ export class CheckoutView extends HTMLElement {
     }
 
     //----------------------------------------
-    //Local method to add the price with shipping price.
+    //Summerer for å gi en total. 
     sumTotal(){       
         this.sumContainer.innerHTML = "";
                 //Cart summary
@@ -192,7 +190,7 @@ export class CheckoutView extends HTMLElement {
     }
 
     //---------------------------------------
-    //If user is logged in, fill available credentials. 
+    //Hvis bruker er logget inn, auto-fyll inputs.
     async loggedInUserInfo(userDataPromise){
         const userdata = await userDataPromise;
     

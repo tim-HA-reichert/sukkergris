@@ -62,7 +62,6 @@ export class UserListView extends HTMLElement {
                 const deleteButton = userDiv.querySelector(".user-entry-delete-btn");
                 deleteButton.addEventListener("click", () => {
                     this.deleteEvent(value.id);
-
                 });
 
             this.userContainer.appendChild(userDiv);
@@ -70,7 +69,7 @@ export class UserListView extends HTMLElement {
         } else {
             const userDiv = document.createElement("div");
             userDiv.innerHTML = `
-            <h3>No users in our community... sad</h3>
+            <h3>No users in our community... sad.</h3>
             `;
             this.userContainer.appendChild(userDiv);
         }

@@ -131,33 +131,30 @@ export class IndividualThreadView extends HTMLElement{
 
 //------------------------------------------------------
     async rateTheAuthor() {
-        //Set in error message for when rating on self. 
+        //Lag error message for når noen prøver å rate seg selv.
         this.rateAuthor.innerHTML = "";
-    
+
         //Star HTML element i form av en "div"
         const starContainer = document.createElement("div");
         starContainer.id = "star-container";
     
         // ChatGPT fra 144 -> 154
-        // Generate stars dynamically
+        // Generer stjerner med for-loop
         for (let i = 1; i <= 5; i++) {
             const star = document.createElement("span");
             star.innerHTML = "&#9734;";
             star.style.cursor = "pointer";
             star.style.fontSize = "24px";
             
-            //Setter en ny verdi på "star" med navn rating-value. Matcher denne med "i" fra for-loopen.
+            //Setter verdi på "star" med navn "rating-value". 
+            //Matcher denne med "i"-verdi fra for-loopen.
             star.setAttribute("rating-value", i); 
-
 
             star.addEventListener("click", () => this.setRating(i));
 
-
-            // Add the star to the container
             starContainer.appendChild(star);
         }
     
-        // Add the star container to the rateAuthor div
         this.rateAuthor.appendChild(starContainer);
     }
     
@@ -165,23 +162,23 @@ export class IndividualThreadView extends HTMLElement{
     setRating(rating) {
         const stars = this.shadowRoot.querySelectorAll("#star-container span");
         
-        stars.forEach((star, index) => {
-           
-            //Om index er mindre enn rating, print stjerne
+        let index = 0;
+        for (const star of stars) {
+            // Om index er mindre enn rating, print stjerne
             if (index < rating) {
                 star.innerHTML = "&#9733;";
             } else {
                 star.innerHTML = "&#9734;";
             }
-        });
-
+            index++;
+        }
         const ratingEvent = new CustomEvent("rate-author", {
             composed: true, bubbles: true, detail: 
                 { meowRating: rating, user: this.userToRate },
-        });
-        this.dispatchEvent(ratingEvent);
-    }
 
+        });
+            this.dispatchEvent(ratingEvent);
+        }
 
 //------------------------------------------------------
     async comment(commentData){

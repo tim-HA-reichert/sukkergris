@@ -29,9 +29,6 @@ const html = `
 </div>
     `;
 
-
-//NEEDTO: Add functionality to buttons. Basically: transfer functionality from main.js to here. 
-
 //===================================================
 export class NavigationView extends HTMLElement {    
     
@@ -62,8 +59,7 @@ export class NavigationView extends HTMLElement {
     isUserLogged(aUser) {
         this.navigationContainer.innerHTML = "";
 
-        //Choose what to render
-        //"aUser" is provided in main.js
+        //Velg hva template skal inneholde
         let template = aUser ? this.loggedIn : this.notLoggedIn;
             const clone = template.content.cloneNode(true);
             this.navigationContainer.appendChild(clone);
@@ -96,10 +92,8 @@ export class NavigationView extends HTMLElement {
     }
 
 
-
-
 //------------------------------------------------------
-    //seperate method for logged in users: 
+    //Method for logged in users: 
     activeUser(pictureData){
         this.userPicture = this.shadowRoot.getElementById("userPicture");
         this.createThread = this.shadowRoot.getElementById("create-thread-btn");
