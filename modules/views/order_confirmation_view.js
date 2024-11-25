@@ -71,7 +71,7 @@ displayUserAndShipmentInfo(user, shipmentInfo) {
 displayCartItems(cartItems) {
     let sum = 0;
     
-//Parse for å kunne bruke JSON objektet "på nytt".
+//Parse for å kunne bruke JSON objektet på nytt nedenfor.
     let parsedCart = JSON.parse(cartItems);
     console.log(parsedCart);
 

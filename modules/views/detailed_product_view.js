@@ -2,11 +2,9 @@ import { shortenDate } from "../utilities.js";
 
 const html = `
 <link rel="stylesheet" href="styles/detailed_product_view_style.css">
-
     <h2>Product Details</h2>
     <div id="listContainer"></div>
 `;
-
 
 const stars = {
     1: "&#9733; &#9734; &#9734; &#9734; &#9734;",
@@ -97,13 +95,13 @@ export class DetailedProductView extends HTMLElement {
                     formData: formData
                 };
 
-                //Event for å lage en review
+                //Event for å sende ut review data
                 const theEvent = new CustomEvent("left-review", { composed: true, bubbles: true, detail: data });
                 this.dispatchEvent(theEvent);
             });
         }
 
-        //Lager events
+        //Lokale methods som lager events
         this.createEvents();
         this.checkDiscount();
     };
@@ -126,14 +124,14 @@ export class DetailedProductView extends HTMLElement {
             this.dispatchEvent(theEvent);
         });
 
-        //Method for showing the amount of stars a product has
+        //Viser rating til et produkt
         if (this.itemObject.number_of_ratings > 0) {
             const ratingRounded = Math.round(Number(this.itemObject.rating))
             const starSymbols = this.shadowRoot.getElementById("starSymbols");
             starSymbols.innerHTML = stars[ratingRounded];
         };
 
-        //Show review button
+        //Vis reviews
         const btnShowreviews = this.shadowRoot.getElementById("btnShowreviews");
         btnShowreviews.addEventListener('click', evt => {
             const theEvent = new CustomEvent("show-product-reviews", { composed: true, bubbles: true, detail: this.itemObject.chocoID });
@@ -143,7 +141,7 @@ export class DetailedProductView extends HTMLElement {
             btnHidereviews.style.display = "block";
         });
         
-        //Hide review button
+        //Gjem reviews
         const btnHidereviews = this.shadowRoot.getElementById("btnHidereviews");
         btnHidereviews.addEventListener('click', evt => {
             this.reviewContainer.style.display = "none";
@@ -153,22 +151,22 @@ export class DetailedProductView extends HTMLElement {
     }
 
     //--------------------------------------- Behandler visning av reviews
-    async showReviews(areviewList) {
+    async showReviews(aReviewList) {
 
-        if (areviewList) {
+        if (aReviewList) {
             this.reviewContainer.innerHTML = "<h1>Reviews<h1><hr>";
-
-            areviewList.forEach(element => {
+                
+            for (const element of aReviewList) {
                 const reviewDiv = document.createElement("div");
                 reviewDiv.innerHTML = `
-                <h2>${element.username}</h2>
-                <h4>${shortenDate(element.date)}</h4>
-                <h3>${stars[element.rating]}</h3>
-                <p>${element.comment_text}</p>
-                <hr>
+                    <h2>${element.username}</h2>
+                    <h4>${shortenDate(element.date)}</h4>
+                    <h3>${stars[element.rating]}</h3>
+                    <p>${element.comment_text}</p>
+                    <hr>
                 `;
                 this.reviewContainer.appendChild(reviewDiv);
-            });
+            }
 
         } else {
             this.reviewContainer.innerHTML = "<h1>Reviews<h1><hr>";

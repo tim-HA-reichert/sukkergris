@@ -135,16 +135,6 @@ export class OrderModel {
     }
 }  //End of class
 
-// The model could also take care of converting between
-// API-data and model-data and visa versa.
-// In our example, the service layer converts from API-data to model data and
-// we have no conversion the other way (We are sending formdata
-// from the view with no conversion).
-
-// Add more model classes here, e.g.:
-// OrderModel, UserModel, LoginDataModel, CommentsModel...
-
-
 //===========================================
 //LoginData model
 //===========================================
@@ -234,7 +224,7 @@ export class UserThreadModel {
 
 
 //===========================================
-//UserComment Model
+//Forum Comment Model
 //===========================================
 
 export class UserCommentModel {

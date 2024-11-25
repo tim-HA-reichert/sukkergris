@@ -19,7 +19,6 @@ const html = `
     </div>
 `;
 
-
 export class CreateNewThreadView extends HTMLElement {
 
     constructor(){
@@ -30,8 +29,6 @@ export class CreateNewThreadView extends HTMLElement {
         this.shadowRoot.innerHTML = html;
         this.form = this.shadowRoot.getElementById("new-thread-form");
     
-
- 
         this.form.addEventListener("submit", evt => {
             evt.preventDefault();
 
@@ -40,9 +37,7 @@ export class CreateNewThreadView extends HTMLElement {
             const newThreadEvent = new CustomEvent("submit-new-thread", {composed: true, bubbles:true, detail: formData});
             this.dispatchEvent(newThreadEvent);
         });
-    
     }
-
-}
+}//End of class
 
 customElements.define("new-thread-view", CreateNewThreadView);
