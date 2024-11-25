@@ -19,7 +19,7 @@ export class CategoryListView extends HTMLElement {
         this.listContainer = this.shadowRoot.getElementById("listContainer");
     }
 
-    //---------------------------------------
+//---------------------------------------
     async refresh(dataPromise) {        
         
         const data = await dataPromise; //wait for the promise to be resolved
