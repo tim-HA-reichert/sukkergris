@@ -98,15 +98,15 @@ export async function getChocolatesByCategory(category, aUser) {
         }
 
         for (let chocoCat of data) {
-            if (chocoCat.category_id === category) {
+            if (chocoCat.category_id === category){
+                    const imgKeyToUse = chocoCat.static ? imgKey : groupKey;
                 const chocoObj = {
                     chocoID: chocoCat.id,
                     chocoName: chocoCat.name,
                     categoryID: chocoCat.category_id,
                     description: chocoCat.description,
                     details: chocoCat.details,
-                    //Not working yet
-                    thumb: urlMap.imgURL + imgKey + "/small/" + chocoCat.thumb,
+                    thumb: urlMap.imgURL + imgKeyToUse + "/small/" + chocoCat.thumb,
                     price: chocoCat.price
                 };
                 //fikk hjelp av chatGPT for .push og chosenCat array. 
@@ -126,15 +126,21 @@ export async function getChocolatesByCategory(category, aUser) {
 // return details about chosen chocolate
 //----------------------------------------------------------
 
-export async function adjustableChocolateList(category) {
-    const url = urlMap.chosenCategoryURL + "?key=" + groupKey + "&category_id=" + category;
+export async function adjustableChocolateList(aToken) {
+    const url = urlMap.chosenCategoryURL + "?key=" + groupKey;
     //Category er et tall, som er lik categoryID til eventListener i category_list_view.js
 
+    
+    const cfg = {
+        method: "GET",
+        headers: {
+            "authorization": aToken,
+        }
+    }
 
     try {
-        const data = await fetchData(url);
-        //data er en liste med sjokolade. Ufiltrert liste. 
 
+        const data = await fetchData(url, cfg);
         const chocoDeleteList = [];
 
         for (let chocoCat of data) {
@@ -145,14 +151,15 @@ export async function adjustableChocolateList(category) {
                     categoryID: chocoCat.category_id,
                     description: chocoCat.description,
                     details: chocoCat.details,
-                    thumb: urlMap.imgURL + imgKey + "/small/" + chocoCat.thumb,
+                    thumb: urlMap.imgURL + groupKey + "/small/" + chocoCat.thumb,
+                    reserved_members: chocoCat.reserved_members,
                     price: chocoCat.price
                 };
                 //fikk hjelp av chatGPT for .push og chosenCat array. 
                 chocoDeleteList.push(new ChocolateModel(chocoObj));
             };
         };
-
+        
         return chocoDeleteList;
 
     } catch (error) {
@@ -271,6 +278,7 @@ export async function deleteReview(aToken, reviewID) {
 //----------------------------------------------------------
 // Get user comment function
 //----------------------------------------------------------
+//For at brukere skal kunne se hva de har kommentert. 
 
 export async function getUserComments(aUserID){
     const url = urlMap.productReviewsURL + "?key=" + groupKey;
@@ -288,9 +296,6 @@ export async function getUserComments(aUserID){
     } catch(error){
         errorHandler(error);
     }
-
-
-
 }
 
 

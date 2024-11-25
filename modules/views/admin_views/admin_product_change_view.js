@@ -1,4 +1,5 @@
 const html = `
+        <button id="add-new-product-btn">Add new product</button>
     <h2>Change a product</h2>
     <div class="content-wrapper">
         <form id="change-product-form">
@@ -35,8 +36,8 @@ export class changeProductView extends HTMLElement{
         this.shadowRoot.innerHTML = html;
         this.form = this.shadowRoot.getElementById("change-product-form");
         this.listContainer = this.shadowRoot.getElementById("listContainer");
+        this.backToAddProduct = this.shadowRoot.getElementById("add-new-product-btn");
     
-
     this.form.addEventListener('submit', evt => {
         evt.preventDefault();
         const formData = new FormData(this.form);
@@ -46,6 +47,15 @@ export class changeProductView extends HTMLElement{
 
         this.dispatchEvent(changeEvent);
         });
+
+    this.backToAddProduct.addEventListener("click", evt => {
+        evt.preventDefault();
+
+        const addEvent = new CustomEvent("back-to-add", {
+            composed: true, bubbles: true, detail: evt});
+        this.dispatchEvent(addEvent);
+    })
+    
     }  
 
 

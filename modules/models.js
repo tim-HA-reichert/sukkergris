@@ -42,7 +42,8 @@ export class ChocolateModel {
         this.stock = obj.stock;
         this.expected_shipped = obj.expected_shipped;
         this.rating = obj.rating;
-        this.number_of_ratings = obj.number_of_ratings
+        this.reserved_members = obj.reserved_members;
+        this.number_of_ratings = obj.number_of_ratings;
         this.quantity = 0;
     }
 

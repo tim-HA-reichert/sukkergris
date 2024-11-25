@@ -11,8 +11,6 @@ import { ReviewsView } from "./views/admin_views/admin_review_view.js";
 const viewContainer = document.getElementById("viewContainer");
 const navContainer = document.getElementById("admin-navigation");
 
-const homeBtn = document.getElementById("back-to-admin-start");
-
 const adminLoginView = new AdminLoginView();
 const adminPanelView = new AdminPanelView();
 const adminProducts = new adminProductsView();
@@ -31,19 +29,13 @@ viewContainer.innerHTML = "";
 viewContainer.appendChild(adminLoginView);
 }
 
-let adjustableChocolateList = api.adjustableChocolateList();
-
-//For storing the adminToken later
-
 
 //log in as admin-----------------------------------
 adminLoginView.addEventListener("log-in", function(evt){
-    //the "log-in" tag in the eventListener sends the username and password to the server
     const logInPromise = api.logIn(evt.detail, "admin");
     logInPromise.then((result) => {
-        adminToken = result.token;
-        localStorage.setItem("adminToken", adminToken); // Save token
-        
+        adminToken = result.token; //Spar adminToken til variabel
+
             viewContainer.innerHTML ="";
             navContainer.appendChild(adminPanelView)
             adminPanelView.refresh();  
@@ -77,15 +69,17 @@ allUserView.addEventListener("delete-user", e => {
 //----------------------------------------------------------------
 adminPanelView.addEventListener("admin-products", function(evt){
     viewContainer.innerHTML = "";
-    adminProducts.chocoDeletionList(adjustableChocolateList);
+
+    adminProducts.chocoDeletionList(api.adjustableChocolateList(adminToken));
+
     viewContainer.appendChild(adminProducts);
 });
 
 
 adminProducts.addEventListener("add-product", function(evt){
     api.adminProducts(adminToken, evt.detail).then(response => {
-        adjustableChocolateList = api.adjustableChocolateList();
-        adminProducts.chocoDeletionList(adjustableChocolateList);
+
+        adminProducts.chocoDeletionList(api.adjustableChocolateList(adminToken));
         viewContainer.appendChild(adminProducts);
 
         this.form.reset();  
@@ -94,7 +88,7 @@ adminProducts.addEventListener("add-product", function(evt){
 
 adminProducts.addEventListener("delete-product", function(evt){
     api.deleteProduct(adminToken, evt.detail).then(response =>{
-        adjustableChocolateList = api.adjustableChocolateList();
+        const adjustableChocolateList = api.adjustableChocolateList(adminToken);
 
         adminProducts.chocoDeletionList(adjustableChocolateList);
         viewContainer.appendChild(adminProducts);
@@ -104,14 +98,22 @@ adminProducts.addEventListener("delete-product", function(evt){
 
 adminProducts.addEventListener("change-product-form", function(evt){
     viewContainer.innerHTML = "";
+    const adjustableChocolateList = api.adjustableChocolateList(adminToken);
+
     changeProductInfo.changeableChoco(adjustableChocolateList);
     viewContainer.appendChild(changeProductInfo);
 });
 
+changeProductInfo.addEventListener("back-to-add", (e) => {
+    viewContainer.innerHTML = "";
+
+    adminProducts.chocoDeletionList(api.adjustableChocolateList(adminToken));
+    viewContainer.appendChild(adminProducts);
+});
 
 changeProductInfo.addEventListener("change-product", function(evt){
     api.changeProduct(adminToken, evt.detail).then(response=>{
-        adjustableChocolateList = api.adjustableChocolateList();
+        adjustableChocolateList = api.adjustableChocolateList(adminToken);
 
         changeProductInfo.changeableChoco(adjustableChocolateList);
         viewContainer.appendChild(changeProductInfo);
