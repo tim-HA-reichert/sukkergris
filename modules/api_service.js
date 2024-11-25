@@ -278,6 +278,7 @@ export async function deleteReview(aToken, reviewID) {
 //----------------------------------------------------------
 // Get user comment function
 //----------------------------------------------------------
+//For at brukere skal kunne se hva de har kommentert. 
 
 export async function getUserComments(aUserID){
     const url = urlMap.productReviewsURL + "?key=" + groupKey;
@@ -295,9 +296,6 @@ export async function getUserComments(aUserID){
     } catch(error){
         errorHandler(error);
     }
-
-
-
 }
 
 

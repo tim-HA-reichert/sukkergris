@@ -11,8 +11,6 @@ import { ReviewsView } from "./views/admin_views/admin_review_view.js";
 const viewContainer = document.getElementById("viewContainer");
 const navContainer = document.getElementById("admin-navigation");
 
-const homeBtn = document.getElementById("back-to-admin-start");
-
 const adminLoginView = new AdminLoginView();
 const adminPanelView = new AdminPanelView();
 const adminProducts = new adminProductsView();
@@ -34,12 +32,10 @@ viewContainer.appendChild(adminLoginView);
 
 //log in as admin-----------------------------------
 adminLoginView.addEventListener("log-in", function(evt){
-    //the "log-in" tag in the eventListener sends the username and password to the server
     const logInPromise = api.logIn(evt.detail, "admin");
     logInPromise.then((result) => {
-        adminToken = result.token;
-        localStorage.setItem("adminToken", adminToken); // Save token
-        
+        adminToken = result.token; //Spar adminToken til variabel
+
             viewContainer.innerHTML ="";
             navContainer.appendChild(adminPanelView)
             adminPanelView.refresh();  

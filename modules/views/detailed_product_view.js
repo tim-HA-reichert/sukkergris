@@ -36,8 +36,6 @@ export class DetailedProductView extends HTMLElement {
         this.listContainer.innerHTML = "";
         const theDiv = document.createElement("div");
 
-        console.log(dataPromise);
-
         theDiv.innerHTML = `
                 <h1>${this.itemObject.chocoName}</h1>
                 <h3>${this.itemObject.heading}</h3>
