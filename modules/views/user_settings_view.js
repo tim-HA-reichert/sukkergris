@@ -95,6 +95,7 @@ export class UserSettingsView extends HTMLElement {
    
     }
     
+//-------------------------------------------------------   
     refresh(userModel) {
         this.userInformationContainer.innerHTML = "";
 
@@ -111,6 +112,7 @@ export class UserSettingsView extends HTMLElement {
         
     }
 
+//-------------------------------------------------------
     async listUserComments(commentData){
         this.listComments.innerHTML="";
         
@@ -139,7 +141,7 @@ export class UserSettingsView extends HTMLElement {
         }
     }
 
-
+//-------------------------------------------------------
     async deleteEvent(aID){
         const deleteEvent = new CustomEvent("delete-comment", 
             {composed: true, bubbles: true, detail:aID});

@@ -35,7 +35,7 @@ const html = `
 //===================================================
 export class NavigationView extends HTMLElement {    
     
-    //---------------------------------------
+//------------------------------------------------------
     constructor() {
 
         super();
@@ -58,6 +58,7 @@ export class NavigationView extends HTMLElement {
         });
 }
 
+//------------------------------------------------------
     isUserLogged(aUser) {
         this.navigationContainer.innerHTML = "";
 
@@ -70,9 +71,9 @@ export class NavigationView extends HTMLElement {
             if(!aUser) {
                 this.guestUser();
             }
-
     }
 
+//------------------------------------------------------
     guestUser(){
         this.btnGoToCart = this.shadowRoot.getElementById('btnGoToCart');
         this.btnLogin = this.shadowRoot.getElementById("btnLogin");
@@ -97,7 +98,7 @@ export class NavigationView extends HTMLElement {
 
 
 
-
+//------------------------------------------------------
     //seperate method for logged in users: 
     activeUser(pictureData){
         this.userPicture = this.shadowRoot.getElementById("userPicture");

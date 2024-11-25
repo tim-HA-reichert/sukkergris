@@ -1,14 +1,13 @@
 const html = `
 <div class="content-wrapper">
-<input name="reviewToDelete" id="reviewToDelete" type="number" placeholder="Message ID" required>
-<button id="btnDeleteReview">Delete review</button>
-<div> 
+    <input name="reviewToDelete" id="reviewToDelete" type="number" placeholder="Message ID" required>
+    <button id="btnDeleteReview">Delete review</button>
+</div> 
 <hr>
 <h2>All Reviews</h2>
 <hr>
-    <div id="reviewContainer"></div>
+<div id="reviewContainer"></div>
 `;
-
 
 //===================================================
 export class ReviewsView extends HTMLElement {
@@ -29,21 +28,16 @@ export class ReviewsView extends HTMLElement {
         this.btnDeleteReview.addEventListener("click", e => {
             e.preventDefault();
 
-            this.deleteEvent(this.reviewToDelete.value);
+            const deleteReviewEvent = new CustomEvent("deleteReview", 
+                {composed: true, bubbles: true, detail: this.reviewToDelete.value});
+
+            this.dispatchEvent(deleteReviewEvent);
 
             this.reviewToDelete.value = "";
         })
-    
     }
 
-    deleteEvent(aID){
-        const deleteReviewEvent = new CustomEvent("deleteReview", 
-            {composed: true, bubbles: true, detail: aID});
-
-        this.dispatchEvent(deleteReviewEvent);
-    }
-
-
+//------------------------------------------------------
     async showReviews(reviewList){
         this.reviewContainer.innerHTML = "";
         const data = await reviewList;
@@ -62,18 +56,18 @@ export class ReviewsView extends HTMLElement {
                     <p>Review Text: ${value.comment_text}</p>
                     <p>Rating: ${value.rating}</p>
                </div>
-               <button class="user-review-delete-btn">Delete this user</button>
+               <button class="user-review-delete-btn">Delete this review</button>
                     <hr>
             </div>
                 `;
 
                 const deleteButton = userDiv.querySelector(".user-review-delete-btn");
                 deleteButton.addEventListener("click", () => {
-                    this.deleteEvent(value.id);
-    
+                    const deleteReviewEvent = new CustomEvent("deleteReview", 
+                        {composed: true, bubbles: true, detail: value.id});
+        
+                    this.dispatchEvent(deleteReviewEvent);
                 });
-
-
                 this.reviewContainer.appendChild(userDiv);
             }
         } else {
@@ -83,8 +77,6 @@ export class ReviewsView extends HTMLElement {
             `;
             this.reviewContainer.appendChild(userDiv);
         }
-
-
     }
 }
 

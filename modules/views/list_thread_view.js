@@ -10,7 +10,7 @@ const html = `
 //===================================================
 export class ThreadListView extends HTMLElement {
 
-    //---------------------------------------
+//------------------------------------------------------
     constructor(){
 
         super();
@@ -21,7 +21,7 @@ export class ThreadListView extends HTMLElement {
 
     }
 
-    //---------------------------------------
+//------------------------------------------------------
     async loadThreads(threadData){
         this.threadContainer.innerHTML = "";
         

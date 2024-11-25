@@ -77,7 +77,10 @@ export class adminProductsView extends HTMLElement {
         this.deleteButton.addEventListener("click", evt => {
             evt.preventDefault();  
 
-            this.deleteEvent(this.deleteProductID.value);
+            const deleteEvent = new CustomEvent("delete-product", 
+                {composed: true, bubbles: true, detail:this.deleteProductID.value});
+    
+            this.dispatchEvent(deleteEvent);
 
             this.deleteProductID.value = "";
         });
@@ -92,16 +95,8 @@ export class adminProductsView extends HTMLElement {
         });
     }
 
-
-//------------------------------
-    deleteEvent(aID){
-        const deleteEvent = new CustomEvent("delete-product", 
-            {composed: true, bubbles: true, detail:aID});
-
-        this.dispatchEvent(deleteEvent);
-    }
-//-----------------------------
-
+//-----------------------------------------
+//Liste over sjokolader vi kan slette
     async chocoDeletionList (dataPromise){
             this.listContainer.innerHTML = "";
     
@@ -134,18 +129,12 @@ export class adminProductsView extends HTMLElement {
         } else {
             const theDiv = document.createElement("div");
             theDiv.innerHTML = `
-            <h3>No new chocolates added, maybe add some?</h3>
+            <h3>No new chocolates... maybe add some?</h3>
             `;
             this.listContainer.appendChild(theDiv);
-
         }
-        }//End of deleteChoco 
-
-
-
-
-
-} //end of class
+    } 
+}//End of class
 
 
 customElements.define("add-product-view", adminProductsView);

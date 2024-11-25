@@ -20,7 +20,6 @@ const html = `
     </div>   
 `;
 
-
 export class AdminLoginView extends HTMLElement {
     //---------------------------------------
     constructor(){
@@ -36,10 +35,11 @@ export class AdminLoginView extends HTMLElement {
 
             const formData = new FormData(this.form);
 
+            //Event for å sende ut skjema/form til server
             const theEvent = new CustomEvent("log-in", {composed: true, bubbles:true, detail: formData});
             this.dispatchEvent(theEvent);
         });
     }
-}
+}//End of class
 
 customElements.define("login-view", AdminLoginView);
