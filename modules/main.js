@@ -344,12 +344,12 @@ checkoutView.addEventListener("place-order", e => {
         if(userModel){
             //For logged in users. 
             api.placeOrder(userModel.token, e.detail).then((result) => {
-                console.log(result);
+
                 if(result.msg === "insert order ok"){
                     viewContainer.innerHTML = "";
                     userInfo = result.record;
                     cartItems = result.record.content;
-                    console.log(result);
+
                     orderConfirmView.refresh(userInfo, cartItems, shipmentTypes);
                     viewContainer.appendChild(orderConfirmView);
                 }
@@ -367,7 +367,7 @@ checkoutView.addEventListener("place-order", e => {
             }
         });
     }
-    console.log(orderModel);
+
     orderModel.emptyCart();
-    console.log(orderModel);
+
 });
