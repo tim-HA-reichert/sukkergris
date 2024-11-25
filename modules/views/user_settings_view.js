@@ -119,15 +119,35 @@ export class UserSettingsView extends HTMLElement {
         for(let comment of commentList){
         const commentDiv = document.createElement("div");
             commentDiv.innerHTML = `
-                <h3>Your comments</h3>
-                 <p>${comment.comment_text}</p>
+            <div class="user-comment-history">
+                <h3>Your Reviews</h3>
+                <p>${comment.comment_text}</p>
 
+                <div id="btn-del">
+                    <button class="btn-delete-comment">Delete Comment</button>
+                </div>
+                
+                <hr>
+            </div>
             `;
 
+        const deleteButton = commentDiv.querySelector(".btn-delete-comment");
+            deleteButton.addEventListener("click", e => {
+                this.deleteEvent(comment.id);
+            });            
         this.listComments.appendChild(commentDiv);
         }
     }
 
-}
+
+    async deleteEvent(aID){
+        const deleteEvent = new CustomEvent("delete-comment", 
+            {composed: true, bubbles: true, detail:aID});
+
+        this.dispatchEvent(deleteEvent);
+    }
+
+
+} //End of class
 
 customElements.define("user-settings-view", UserSettingsView);

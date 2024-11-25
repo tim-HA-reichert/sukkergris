@@ -77,6 +77,10 @@ export class DetailedProductView extends HTMLElement {
             `;
 
         this.listContainer.appendChild(theDiv);
+
+
+
+
         this.reviewContainer = this.shadowRoot.getElementById("reviewContainer");
 
     //--------------------------------------- Hvis bruker er logget inn, vis review-form
