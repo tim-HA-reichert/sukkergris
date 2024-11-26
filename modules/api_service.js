@@ -467,7 +467,8 @@ export async function logIn(aForm, accountType) {
 
         
         const result = await fetchData(url, cfg);      
-\
+
+        console.log(result);
             const loginDataObj = {
                 superuser: result.logindata.superuser,
                 thumb: result.logindata.thumb,
@@ -486,6 +487,7 @@ export async function logIn(aForm, accountType) {
        if(loginData.superuser != true) {
             messageHandler("Welcome back!", "Sweetness for your tastebuds await, " + result.logindata.username);
             }
+            
             return loginData;
         
 
