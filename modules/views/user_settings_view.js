@@ -1,6 +1,8 @@
 const html = `
+    <link rel="stylesheet" href="styles/user_settings_view_style.css">
     <button id="btnLogout">Logout</button>
     <h2>User Information</h2>
+    <div id="profile-wrapper">
         <div id="userInformationContainer"></div>
     <hr>
     <h2>Change Information</h2>
@@ -48,17 +50,18 @@ const html = `
             
             <div class="button-wrapper">
                 <button type="submit">
-                    Change
+                    Edit Profile
                 </button>
             </div>
         </form> 
 
         <hr>
     </div>
-            <button id="btnDeleteUser">Delete User</button>
-
+    
     <div id="list-comment-container"> </div>
-            `;
+    <button id="btnDeleteUser">Delete User</button>
+    </div>
+`;
             
 export class UserSettingsView extends HTMLElement {
     //---------------------------------------

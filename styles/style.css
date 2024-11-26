@@ -94,6 +94,11 @@ header {
     background-color: rgba(0, 0, 0, 0.1);
 }
 
+#navigationContainer #userPicture:hover {
+    opacity: .7;
+    cursor: pointer;
+}
+
 /* / / / / / NAV USER BUTTONS START / / / / / */
 
 #btnGoToCart {
@@ -151,7 +156,7 @@ header {
 
 /* / / / / / NAV USER BUTTONS END / / / / / */
 
-@media(max-width: 1300px){
+@media(max-width: 1300px){ /* Litt mobile-friendly */
     #nav-wrapper {
         flex-direction: column;
         gap: 1rem;

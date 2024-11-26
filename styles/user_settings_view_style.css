@@ -1,0 +1,68 @@
+#btnLogout {
+    display: none;
+}
+
+#profile-wrapper {
+    margin: auto;
+    width: 500px;
+    max-width: 90%;
+    padding: 15px 15px 20px 15px;
+    margin-top: 50px;
+    border-radius: 5px;
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.5);
+}
+
+#listContainer label {
+    display: block; /* Lager line break, i grunn */
+    padding: 10px 0px;
+}
+
+#change-user-information-form input {
+    padding: 10px 5px;
+    width: 97%; /* Strekker input field over */
+    border-radius: 4px;
+    border: 1px solid silver;
+}
+
+.button-wrapper {
+    margin: 10px 0px;
+}
+
+.button-wrapper button {
+    padding: 5px 10px;
+    margin-top: 5px;
+    border-radius: 8px;
+    border-width: 1px;
+    cursor: pointer;
+}
+
+.button-wrapper button:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+#btnDeleteUser {
+    border-radius: 4px;
+    border: none;
+    font-size: 18px;
+    background-color: rgb(200, 0, 0);
+    color: white;
+    height: 40px;
+    padding: 8px 10px;
+}
+
+#btnDeleteUser:hover {
+    cursor: pointer;
+    opacity: .7;
+}
+
+.btn-delete-comment {
+    padding: 5px 10px;
+    margin-top: 5px;
+    border-radius: 8px;
+    border-width: 1px;
+    cursor: pointer;
+}
+
+.btn-delete-comment:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+}
