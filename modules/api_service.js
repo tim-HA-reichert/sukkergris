@@ -468,7 +468,7 @@ export async function logIn(aForm, accountType) {
 
 
         const result = await fetchData(url, cfg);
-        //if-setning 451 skapte error for admin login. 
+        
 
         if (result.msg === "login OK" || result.msg === 'administrator login OK') {
             const loginDataObj = {
