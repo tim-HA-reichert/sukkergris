@@ -467,7 +467,7 @@ export async function logIn(aForm, accountType) {
 
         
         const result = await fetchData(url, cfg);      
-\
+
             const loginDataObj = {
                 superuser: result.logindata.superuser,
                 thumb: result.logindata.thumb,
