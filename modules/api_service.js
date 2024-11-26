@@ -564,10 +564,10 @@ export async function changeUserInformation(aInformationForm, aToken) {
 
         const result = await fetchData(url, cfg);
         if (result.msg == "update user ok") {
-            messageHandler("User Info updated", "Refresh to see the changes!");
+            messageHandler("User Info updated", "Log in again to see changes");
+            return result;
         }
 
-        return result;
 
 
     } catch (error) {

@@ -210,14 +210,13 @@ userSettingsView.addEventListener('logout-user', evt => {
 
 userSettingsView.addEventListener('changed-user-information', informationForm => {
     const changeUserInformationPromise = api.changeUserInformation(informationForm.detail, userModel.token)
-    changeUserInformationPromise.then(() => {
-        const updateUserPromise = api.activeUser(sessionStorage.getItem("authString"));
-        updateUserPromise.then((aUserModel) => {
-            userModel = aUserModel;
-            navButtons.isUserLogged(userModel);
-            navButtons.activeUser(api.getUserImage(userModel));
-            userSettingsView.refresh(userModel)
-        });
+    changeUserInformationPromise.then((result) => {
+        if (result) {
+            viewContainer.innerHTML = "";
+            sessionStorage.removeItem("authString");
+            userModel = null;
+            startUp();
+        }
     })
 });
 
@@ -237,7 +236,7 @@ userSettingsView.addEventListener("delete-comment", e => {
 //---------------------------------------------- Lytter til Delete User
 
 userSettingsView.addEventListener('delete-user', evt => {
-   const deleteUserPromise = api.deleteUser("user", userModel.token);
+    const deleteUserPromise = api.deleteUser("user", userModel.token);
     deleteUserPromise.then((userGotDeleted) => {        //Etter at promiset er ferdig, kjøres koden under
         if (userGotDeleted) {
             sessionStorage.removeItem("authString");
@@ -279,7 +278,7 @@ allThreadsView.addEventListener("wish-to-inspect", e => {
 
         singleThreadView.refresh(threadInfo);
         singleThreadView.currentRating(usernames, threadInfo);
-            singleThreadView.rateTheAuthor();
+        singleThreadView.rateTheAuthor();
 
         const commentContent = api.listComments(userModel.token, threadInfo.thread, usernames);
         singleThreadView.comment(commentContent);
@@ -345,31 +344,31 @@ shoppingCartView.addEventListener("go-to-checkout", e => {
 
 //----------------------------------------------
 checkoutView.addEventListener("place-order", e => {
-    let userInfo; 
+    let userInfo;
     let cartItems;
-        if(userModel){
-            //For logged in users. 
-            api.placeOrder(userModel.token, e.detail).then((result) => {
+    if (userModel) {
+        //For logged in users. 
+        api.placeOrder(userModel.token, e.detail).then((result) => {
 
-                if(result.msg === "insert order ok"){
-                    viewContainer.innerHTML = "";
-                    userInfo = result.record;
-                    cartItems = result.record.content;
+            if (result.msg === "insert order ok") {
+                viewContainer.innerHTML = "";
+                userInfo = result.record;
+                cartItems = result.record.content;
 
-                    orderConfirmView.refresh(userInfo, cartItems, shipmentTypes);
-                    viewContainer.appendChild(orderConfirmView);
-                }
-            });
-        } else {
-            //For guest users. 
-            api.placeOrder(null, e.detail).then((result) => {
-                console.log(result);
-                if(result.msg === "insert order ok"){
-                    viewContainer.innerHTML = "";
-                    userInfo = result.record;
-                    cartItems = result.record.content;
-                    orderConfirmView.refresh(userInfo, cartItems, shipmentTypes);
-                    viewContainer.appendChild(orderConfirmView);
+                orderConfirmView.refresh(userInfo, cartItems, shipmentTypes);
+                viewContainer.appendChild(orderConfirmView);
+            }
+        });
+    } else {
+        //For guest users. 
+        api.placeOrder(null, e.detail).then((result) => {
+            console.log(result);
+            if (result.msg === "insert order ok") {
+                viewContainer.innerHTML = "";
+                userInfo = result.record;
+                cartItems = result.record.content;
+                orderConfirmView.refresh(userInfo, cartItems, shipmentTypes);
+                viewContainer.appendChild(orderConfirmView);
             }
         });
     }
