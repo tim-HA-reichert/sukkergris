@@ -86,7 +86,8 @@ export class UserSettingsView extends HTMLElement {
             const emailCheck = formData.get("username");
 
         //Hvis testen er false, så viser vi en span med en beskjed.
-            if (!this.emailRegex.test(emailCheck)) {
+        //Sjekker om emailCheck er tom
+            if (emailCheck && !this.emailRegex.test(emailCheck)) {
                 this.errorSpan.style.display = "block";
                 return;
             }
@@ -97,7 +98,8 @@ export class UserSettingsView extends HTMLElement {
 
         this.shadowRoot.getElementById("username").addEventListener("input", (e) => {
             //Hvis testen er true, ikke vis span. 
-            if (this.emailRegex.test(e.target.value)) {
+            //Sjekker om email er tom. 
+            if (e.target.value && this.emailRegex.test(e.target.value)) {
                 this.errorSpan.style.display = "none";
             }
         });
