@@ -1091,7 +1091,7 @@ export async function rateUser(aToken, userToRate, amountOfBeenz) {
 
     try {
         const result = await fetchData(url, cfg);
-
+        messageHandler("Rated user!", "Thanks for contributing.")
         return result;
     } catch (error) {
         errorHandler(false, "You can't rate yourself");
