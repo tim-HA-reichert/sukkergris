@@ -34,7 +34,7 @@ export class ChocolateModel {
     //----------------------------------------
     update(obj) {
 
-        //check for valid values, santizing etc. can happen here.
+
 
         this.chocoID = obj.chocoID;
         this.categoryID = obj.categoryID;
@@ -66,7 +66,7 @@ export class ChocolateModel {
         }
     }
 
-} //End of class
+} //End of class (nice)
 
 
 //===========================================
@@ -97,12 +97,12 @@ export class OrderModel {
         const existingItem = this.cartArray.find(cartElement => cartElement.chocoID === item.chocoID);
 
         if (existingItem) {
-            // If existingItem exists, increase quantity
+            // Hvis existingItem finnes, gi +1 til quantity.
             existingItem.quantity += 1;
         } else {
-            // If existingItem doesn't exist, push new item
+            // Hvis ikke, push ny item.
             this.cartArray.push(item);
-            //Prevent quantity to start at 0 when adding new item.
+            //For å ikke starte på 0.
             item.quantity++;
         }
 
@@ -114,8 +114,8 @@ export class OrderModel {
     updateQuantity(index, newQuantity) {
         const item = this.cartArray[index];
         if (item) {
-            item.quantity = newQuantity; //Updates the quantity
-            item.totalPrice = item.price * newQuantity; //Updates the total price
+            item.quantity = newQuantity; //Oppdater quantity
+            item.totalPrice = item.price * newQuantity; //Oppdater pris
         }
         this._saveToLocalStorage();
     }
@@ -176,7 +176,7 @@ export class NewProductModel {
     //----------------------------------------
     update(newProduct) {
 
-        //Apply form values here
+        
         this.chocoID = newProduct.chocoID;
         this.categoryID = newProduct.categoryID;
         this.chocoName = newProduct.chocoName;
@@ -208,7 +208,7 @@ export class UserThreadModel {
         this.start_of_thread = true;
         this.thread = newThread.thread;
         this.user_id = newThread.user_id;
-        //Waiting to be filled by userModel.username.
+        //Venter på å bli fylt av userModel.username
         this.username = null;
     }
 
@@ -240,7 +240,7 @@ export class UserCommentModel {
         this.start_of_thread = false;
         this.thread = newComment.thread;
         this.user_id = newComment.user_id;
-        //Waiting to be filled by userModel.username.
+        //Venter på å bli fylt av userModel.username
         this.username = null;
     }
 
@@ -299,7 +299,7 @@ export class ReviewModel {
         this.date = reviewObject.date;
         this.id = reviewObject.id;
         this.product_id = reviewObject.product_id;
-        this.rating = reviewObject.rating //Waiting to be filled by userModel.username.
+        this.rating = reviewObject.rating
 
         this.user_id = reviewObject.user_id;
 

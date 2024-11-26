@@ -77,7 +77,7 @@ export class UserSettingsView extends HTMLElement {
         this.listComments = this.shadowRoot.getElementById("list-comment-container");
         this.errorSpan = this.shadowRoot.getElementById("username-error");
 
-
+        //ChatGPT genererte regexen.
         this.emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
         this.form.addEventListener("submit", evt => {
