@@ -453,7 +453,7 @@ export async function logIn(aForm, accountType) {
     const loginCred = {
         username: aForm.get("username"),
         password: aForm.get("password"),
-    }
+    };
 
     const authString = createBasicAuthString(loginCred.username, loginCred.password);
 
@@ -462,7 +462,7 @@ export async function logIn(aForm, accountType) {
         headers: {
             "authorization": authString
         }
-    }
+    };
 
     try {
 
@@ -485,11 +485,11 @@ export async function logIn(aForm, accountType) {
             };
             const loginData = new LoginDataModel(loginDataObj);
 
-            sessionStorage.setItem("authString", `${authString}`)
+            sessionStorage.setItem("authString", `${authString}`);
 
             if (loginData.superuser != true) {
                 messageHandler("Welcome back!", "Sweetness for your tastebuds await, " + result.logindata.username);
-            }
+            };
             
             return loginData;
         } else {
