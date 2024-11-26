@@ -37,7 +37,7 @@ const urlMap = {
 }
 
 //----------------------------------------------------------
-// return a list (array) of categories
+// Liste av kategorier
 //----------------------------------------------------------
 export async function getCategories() {
 
@@ -66,7 +66,7 @@ export async function getCategories() {
 }
 
 //----------------------------------------------------------
-// return a list (array) of dummy-products based on category
+// Lista av sjokolade ifra en kategory
 //----------------------------------------------------------
 export async function getChocolatesByCategory(category, aUser) {
     const url = urlMap.chosenCategoryURL + "?key=" + groupKey + "&category_id=" + category;
@@ -116,12 +116,11 @@ export async function getChocolatesByCategory(category, aUser) {
 
 
 //----------------------------------------------------------
-// return details about chosen chocolate
+// Liste over sjokolader vi kan forandre
 //----------------------------------------------------------
 
 export async function adjustableChocolateList(aToken) {
     const url = urlMap.chosenCategoryURL + "?key=" + groupKey;
-    //Category er et tall, som er lik categoryID til eventListener i category_list_view.js
     
     const cfg = {
         method: "GET",
@@ -159,7 +158,7 @@ export async function adjustableChocolateList(aToken) {
 }
 
 //----------------------------------------------------------
-// Adds comment to product
+// Anmeldelser på produkt
 //----------------------------------------------------------
 export async function addProductReview(aData, aToken) {
     const url = urlMap.productReviewsURL + "?key=" + groupKey;
@@ -193,7 +192,7 @@ export async function addProductReview(aData, aToken) {
 
 
 //----------------------------------------------------------
-// Show product reviews
+// Vis anmeldelser
 //----------------------------------------------------------
 export async function showReviews(productID, usernames, userModel) {
     const url = urlMap.productReviewsURL + "?key=" + groupKey + "&product_id=" + productID;
@@ -468,9 +467,7 @@ export async function logIn(aForm, accountType) {
 
         
         const result = await fetchData(url, cfg);      
-        //if-setning 451 skapte error for admin login. 
-        
-        //if(result.msg === "login OK") {
+\
             const loginDataObj = {
                 superuser: result.logindata.superuser,
                 thumb: result.logindata.thumb,
@@ -485,7 +482,7 @@ export async function logIn(aForm, accountType) {
             };
             const loginData = new LoginDataModel(loginDataObj);
        
-        //} 
+
        if(loginData.superuser != true) {
             messageHandler("Welcome back!", "Sweetness for your tastebuds await, " + result.logindata.username);
             }
@@ -667,6 +664,8 @@ export async function addUser (aForm) {
     }
 }
 
+//-------------------------------------------------------------------
+
 export async function getAllUsers(aToken, aUserID){
     let url;
 
@@ -842,7 +841,6 @@ export async function listThreads(aToken, postAll, usernames) {
 // Add a message
 //-----------------------------------------------
 
-//If no thread is provided, a new thread with a integer ID that comes after the last integer is created. 
 export async function addThreads(aToken, threadForm) {
 
     const url = urlMap.messageURL + "?key=" + groupKey + "&thread=";
@@ -878,7 +876,6 @@ export async function addThreads(aToken, threadForm) {
     }
 }
 
-//If no thread is provided, a new thread with a integer ID that comes after the last integer is created.
 //----------------------------------------------------------
 export async function addThreadComment(aToken, aThreadID, aCommentForm) {
 
