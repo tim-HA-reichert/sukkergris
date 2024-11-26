@@ -83,6 +83,12 @@ categoryListView.addEventListener('categoryselect', function (evt) {
     viewContainer.innerHTML = "";
     viewContainer.appendChild(chocolateListView);
 });
+//-----------------------------------------------
+navButtons.addEventListener('back-to-home', e => {
+    viewContainer.innerHTML = "";
+    viewContainer.appendChild(categoryListView);
+});
+
 
 //---------------------------------------------- Lytter etter Home-knapp
 btnShowCategoriesView.addEventListener('click', function (evt) {

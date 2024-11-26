@@ -486,6 +486,7 @@ export async function logIn(aForm, accountType) {
        if(loginData.superuser != true) {
             messageHandler("Welcome back!", "Sweetness for your tastebuds await, " + result.logindata.username);
             }
+            
             return loginData;
         
 

@@ -46,6 +46,14 @@ export class NavigationView extends HTMLElement {
 
         this.searchForm = this.shadowRoot.getElementById("search-form");
 
+        this.companyBtn = this.shadowRoot.getElementById("btn-company-name");
+
+        this.companyBtn.addEventListener("click", e => {
+            const homeEvent = new CustomEvent("back-to-home", {composed: true, bubbles:true, detail: e});
+            this.dispatchEvent(homeEvent);
+        })
+
+
         this.searchForm.addEventListener("submit", (e) =>{
             e.preventDefault();
 
