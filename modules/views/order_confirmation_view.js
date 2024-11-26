@@ -36,6 +36,7 @@ async refresh(userData, cartItems, shipment) {
 }
 
 //-------------------------------------------------------
+//CoPilot hjalp med å dele opp funksjonene.
 displayUserAndShipmentInfo(user, shipmentInfo) {
     // Match ID'er for å få tak i riktig type og pris.
     for (let shipments of shipmentInfo) {

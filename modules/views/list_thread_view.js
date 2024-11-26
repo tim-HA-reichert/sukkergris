@@ -48,9 +48,3 @@ export class ThreadListView extends HTMLElement {
 }
 
 customElements.define("thread-list-view", ThreadListView);
-
-
-
-
-
-

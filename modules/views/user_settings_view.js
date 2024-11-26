@@ -10,7 +10,8 @@ const html = `
             <label for="username">Username:</label>
             <input type="text" id="username" name="username"
             placeholder="Enter your Username">
-            <br>
+            <span id="username-error" style="color: red; display: none;">Please enter a valid email address</span>
+
             
             <label for="password">Password</label>
             <input type="password" id="password" name="password"
@@ -71,16 +72,42 @@ export class UserSettingsView extends HTMLElement {
         this.form = this.shadowRoot.getElementById("change-user-information-form");
         this.userInformationContainer = this.shadowRoot.getElementById("userInformationContainer");
         this.listComments = this.shadowRoot.getElementById("list-comment-container");
+        this.errorSpan = this.shadowRoot.getElementById("username-error");
+
+
+        this.emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
         this.form.addEventListener("submit", evt => {
             evt.preventDefault();
             
             const formData = new FormData(this.form);
             
+
+            const emailCheck = formData.get("username");
+
+        //Hvis testen er false, så viser vi en span med en beskjed.
+            if (!this.emailRegex.test(emailCheck)) {
+                this.errorSpan.style.display = "block";
+                return;
+            }
+
             const theEvent = new CustomEvent("changed-user-information", { composed: true, bubbles: true, detail: formData });
             this.dispatchEvent(theEvent);
         });
 
+        this.shadowRoot.getElementById("username").addEventListener("input", (e) => {
+            //Hvis testen er true, ikke vis span. 
+            if (this.emailRegex.test(e.target.value)) {
+                this.errorSpan.style.display = "none";
+            }
+        });
+
+        this.activeButtons();
+    }
+
+//-------------------------------------------------------   
+
+    activeButtons(){
         this.btnLogout = this.shadowRoot.getElementById("btnLogout");
         this.btnLogout.addEventListener("click", evt => {
             const theEvent = new CustomEvent("logout-user", { composed: true, bubbles: true });
@@ -92,9 +119,9 @@ export class UserSettingsView extends HTMLElement {
             const theEvent = new CustomEvent("delete-user", { composed: true, bubbles: true });
             this.dispatchEvent(theEvent);
         });
-   
     }
-    
+
+
 //-------------------------------------------------------   
     refresh(userModel) {
         this.userInformationContainer.innerHTML = "";
@@ -135,21 +162,14 @@ export class UserSettingsView extends HTMLElement {
 
         const deleteButton = commentDiv.querySelector(".btn-delete-comment");
             deleteButton.addEventListener("click", e => {
-                this.deleteEvent(comment.id);
+                const deleteEvent = new CustomEvent("delete-comment", 
+                    {composed: true, bubbles: true, detail:comment.id});
+        
+                this.dispatchEvent(deleteEvent);
             });            
         this.listComments.appendChild(commentDiv);
         }
     }
-
-//-------------------------------------------------------
-    async deleteEvent(aID){
-        const deleteEvent = new CustomEvent("delete-comment", 
-            {composed: true, bubbles: true, detail:aID});
-
-        this.dispatchEvent(deleteEvent);
-    }
-
-
 } //End of class
 
 customElements.define("user-settings-view", UserSettingsView);
