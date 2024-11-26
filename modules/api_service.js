@@ -47,17 +47,17 @@ export async function getCategories() {
 
         const data = await fetchData(url);
 
-        //convert from server API-data to app model-data
-        const categoryList = data.map(function (value) {
-            const catergoryObj = {
+        const categoryList = [];
+        for (const value of data) {
+            const categoryObj = {
                 categoryID: value.id,
                 categoryName: value.category_name,
                 description: value.description
             };
-            return new CategoryModel(catergoryObj);
-        });
+            categoryList.push(new CategoryModel(categoryObj));
+        }
 
-        return categoryList; //return the promise       
+        return categoryList;      
 
     } catch (error) {
         errorHandler(error);
@@ -1052,7 +1052,7 @@ export async function deleteOrder(aToken, aOrderID) {
 }
 
 //-----------------------------------------------------------
-//List shipment methods
+// Returnerer alle frakt alternativer
 //-----------------------------------------------------------
 export async function listShipmentMethods(){
     const url = urlMap.shipmentURL + "?key=" + groupKey;
