@@ -114,7 +114,7 @@ export class CheckoutView extends HTMLElement {
     
         const shipmentDiv = document.createElement("div");
 
-        //Lager forskjellige alternativ basert på shippingdata fra server.
+        //Lager forskjellige alternativ basert på shippingdata fra server. Lagrer pris.
         for(let shipment of shipmentType){
             const option = document.createElement("option");
             

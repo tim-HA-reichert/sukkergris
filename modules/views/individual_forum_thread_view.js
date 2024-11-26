@@ -138,7 +138,7 @@ export class IndividualThreadView extends HTMLElement{
         const starContainer = document.createElement("div");
         starContainer.id = "star-container";
     
-        // ChatGPT fra 144 -> 154
+        // ChatGPT fra 143 -> 156
         // Generer stjerner med for-loop
         for (let i = 1; i <= 5; i++) {
             const star = document.createElement("span");
@@ -162,6 +162,7 @@ export class IndividualThreadView extends HTMLElement{
     setRating(rating) {
         const stars = this.shadowRoot.querySelectorAll("#star-container span");
         
+        //ChatGPT fra 166 -> 180
         let index = 0;
         for (const star of stars) {
             // Om index er mindre enn rating, print stjerne

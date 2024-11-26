@@ -1,6 +1,8 @@
-import { fetchData, shortenDate, createBasicAuthString} from "./utilities.js";
-import { CategoryModel, ChocolateModel, LoginDataModel, 
-    UserThreadModel, UserCommentModel, userModel, ReviewModel } from "./models.js";
+import { fetchData, shortenDate, createBasicAuthString } from "./utilities.js";
+import {
+    CategoryModel, ChocolateModel, LoginDataModel,
+    UserThreadModel, UserCommentModel, userModel, ReviewModel
+} from "./models.js";
 import { errorHandler } from "./error_handler.js";
 import { messageHandler } from "./messageHandler.js";
 
@@ -25,9 +27,9 @@ const urlMap = {
     deleteUserURL: "https://sukkergris.onrender.com/users",
     userLoginURL: "https://sukkergris.onrender.com/users/login",
     userImageURL: "https://sukkergris.onrender.com/images/",
-    productReviewsURL: "https://sukkergris.onrender.com/webshop/comments", 
+    productReviewsURL: "https://sukkergris.onrender.com/webshop/comments",
     //Message URL's
-    messageURL: "https://sukkergris.onrender.com/msgboard/messages",  
+    messageURL: "https://sukkergris.onrender.com/msgboard/messages",
     //Shipment & Order URL's
     orderURL: "https://sukkergris.onrender.com/webshop/orders",
     shipmentURL: "https://sukkergris.onrender.com/logistics/shippingtypes",
@@ -57,7 +59,7 @@ export async function getCategories() {
             categoryList.push(new CategoryModel(categoryObj));
         }
 
-        return categoryList;      
+        return categoryList;
 
     } catch (error) {
         errorHandler(error);
@@ -74,9 +76,9 @@ export async function getChocolatesByCategory(category, aUser) {
 
     try {
         let data = null
-        
+
         const chosenCat = [];
-        
+
         if (aUser) {
             const cfg = {
                 method: "GET",
@@ -93,7 +95,7 @@ export async function getChocolatesByCategory(category, aUser) {
 
         for (let chocoCat of data) {
             if (chocoCat.category_id === category) {
-                    const imgKeyToUse = chocoCat.static ? imgKey : groupKey;
+                const imgKeyToUse = chocoCat.static ? imgKey : groupKey;
                 const chocoObj = {
                     chocoID: chocoCat.id,
                     chocoName: chocoCat.name,
@@ -149,7 +151,7 @@ export async function adjustableChocolateList(aToken) {
                 chocoDeleteList.push(new ChocolateModel(chocoObj));
             };
         };
-        
+
         return chocoDeleteList;
 
     } catch (error) {
@@ -162,7 +164,7 @@ export async function adjustableChocolateList(aToken) {
 //----------------------------------------------------------
 export async function addProductReview(aData, aToken) {
     const url = urlMap.productReviewsURL + "?key=" + groupKey;
-    const form = aData.formData     
+    const form = aData.formData
 
     try {
         const cfg = {
@@ -179,7 +181,7 @@ export async function addProductReview(aData, aToken) {
         }
         const data = await fetchData(url, cfg);
 
-        if(data.msg == "Insert/update comment ok") {
+        if (data.msg == "Insert/update comment ok") {
             messageHandler("Review", "Review added successfully");
         } else {
             messageHandler("Review", "Failed to add review, try again");
@@ -199,28 +201,28 @@ export async function showReviews(productID, usernames, userModel) {
 
     try {
         const data = await fetchData(url);
-        
 
-        if(data.length == 0 ) {
+
+        if (data.length == 0) {
             return false
         } else {
 
-            const threadList = [];            
+            const threadList = [];
 
-            for(let element of data) {
+            for (let element of data) {
                 const reviewObject = {
                     comment_text: element.comment_text,
-                    date: element.date, 
+                    date: element.date,
                     id: element.id,
                     product_id: element.product_id,
                     rating: element.rating,
                     user_id: element.user_id
                 }
-                
-                if(userModel) {
+
+                if (userModel) {
                     // Matcher user_id med brukerlisten for å generere username object key.
                     const userInList = usernames.find((user) => user.id === element.user_id);
-                    if(userInList){
+                    if (userInList) {
                         const threadItem = new ReviewModel(reviewObject);
                         threadItem.setUsername(userInList);
                         threadList.push(threadItem);
@@ -231,7 +233,7 @@ export async function showReviews(productID, usernames, userModel) {
                     threadList.push(threadItem)
                 }
             }
-            
+
             return threadList
         }
     } catch (error) {
@@ -254,13 +256,13 @@ export async function deleteReview(aToken, reviewID) {
 
     try {
         const result = await fetchData(url, cfg);
-        if(result.msg === "delete comment ok") {
+        if (result.msg === "delete comment ok") {
             messageHandler("Review Deleted", "Review ID: " + result.record.id);
             return true
         }
 
     } catch (error) {
-        errorHandler(error);  
+        errorHandler(error);
         return false
     }
 }
@@ -283,7 +285,7 @@ export async function getUserComments(aUserID) {
     try {
         const result = await fetchData(url, cfg);
         return result;
-    } catch(error) {
+    } catch (error) {
         errorHandler(error);
     }
 }
@@ -300,22 +302,22 @@ export async function adminShowReviews(aAdminToken, usernames) {
         headers: {
             "authorization": aAdminToken,
         }
-    }    
+    }
 
     try {
         const data = await fetchData(url, cfg);
 
-        if(data.length == 0 ) {
+        if (data.length == 0) {
             return false
-        } else {            
+        } else {
 
-            const threadList = [];            
+            const threadList = [];
 
-            for(let value of data) {
-                
+            for (let value of data) {
+
                 const reviewObject = {
                     comment_text: value.comment_text,
-                    date: shortenDate(value.date), 
+                    date: shortenDate(value.date),
                     id: value.id,
                     product_id: value.product_id,
                     rating: value.rating,
@@ -324,13 +326,13 @@ export async function adminShowReviews(aAdminToken, usernames) {
 
                 // Matcher user_id med brukerlisten for å generere username object key.
                 const userInList = usernames.find((user) => user.id === value.user_id);
-                
-                if(userInList){                    
-                    const threadItem = new ReviewModel(reviewObject);                
+
+                if (userInList) {
+                    const threadItem = new ReviewModel(reviewObject);
                     threadItem.setUsername(userInList);
                     threadList.push(threadItem)
-                } 
-            }                        
+                }
+            }
 
             return threadList
         }
@@ -379,7 +381,7 @@ export async function getChocolateDetails(chosenChocolateID, aUser) {
                 rating: chocoDet.rating,
                 number_of_ratings: chocoDet.number_of_ratings
             };
-            
+
             return new ChocolateModel(chocoObj);
         };
 
@@ -396,26 +398,26 @@ export async function getChocolateDetails(chosenChocolateID, aUser) {
 export async function getChocolateBySearch(searchValue) {
     //Bruker verdi fra søkefelt. 
     let searchFor = searchValue.get("searchBar");
-    
+
     if (searchFor.length <= 2) {
         messageHandler("Please give us more letters to work with.");
         return [];
     }
 
-    const url = urlMap.chosenCategoryURL + "?search=" + searchFor + "&key=" + groupKey;   
-        try {
-            const data = await fetchData(url);
-        
-            const chosenCat = [];
+    const url = urlMap.chosenCategoryURL + "?search=" + searchFor + "&key=" + groupKey;
+    try {
+        const data = await fetchData(url);
 
-            //"i" for at den ikke skal bry seg om store eller små bokstaver..
-            //new RegExp er en javaScript funksjon som lager regex utifra parameter.
-            //Tillater oss å bruke .test, som tester regex mot et objekt.
-            const regexSearchTest = new RegExp(searchFor, "i"); 
+        const chosenCat = [];
+
+        //"i" for at den ikke skal bry seg om store eller små bokstaver..
+        //new RegExp er en javaScript funksjon som lager regex utifra parameter.
+        //Tillater oss å bruke .test, som tester regex mot et objekt.
+        const regexSearchTest = new RegExp(searchFor, "i");
 
 
         for (let chocoCat of data) {
-            if(regexSearchTest.test(chocoCat.name) && searchFor.length > 2) {
+            if (regexSearchTest.test(chocoCat.name) && searchFor.length > 2) {
                 const chocoObj = {
                     chocoID: chocoCat.id,
                     chocoName: chocoCat.name,
@@ -431,7 +433,7 @@ export async function getChocolateBySearch(searchValue) {
 
         if (chosenCat.length === 0) {
             messageHandler("Nothing matches your search, please try again.");
-        }; 
+        };
         return chosenCat;
 
     } catch (error) {
@@ -451,23 +453,24 @@ export async function logIn(aForm, accountType) {
     const loginCred = {
         username: aForm.get("username"),
         password: aForm.get("password"),
-    }
+    };
 
     const authString = createBasicAuthString(loginCred.username, loginCred.password);
-    sessionStorage.setItem("authString", `${authString}`)    
 
     const cfg = {
         method: "POST",
         headers: {
             "authorization": authString
         }
-    }
+    };
 
     try {
 
-        
-        const result = await fetchData(url, cfg);      
 
+        const result = await fetchData(url, cfg);
+        //if-setning 451 skapte error for admin login. 
+
+        if (result.msg === "login OK" || result.msg === 'administrator login OK') {
             const loginDataObj = {
                 superuser: result.logindata.superuser,
                 thumb: result.logindata.thumb,
@@ -481,14 +484,19 @@ export async function logIn(aForm, accountType) {
                 zipcode: result.logindata.zipcode,
             };
             const loginData = new LoginDataModel(loginDataObj);
-       
 
-       if(loginData.superuser != true) {
-            messageHandler("Welcome back!", "Sweetness for your tastebuds await, " + result.logindata.username);
-            }
+            sessionStorage.setItem("authString", `${authString}`);
+
+            if (loginData.superuser != true) {
+                messageHandler("Welcome back!", "Sweetness for your tastebuds await, " + result.logindata.username);
+            };
             
             return loginData;
-        
+        } else {
+            return false
+        }
+
+
 
     } catch (error) {
         errorHandler(error);
@@ -501,7 +509,7 @@ export async function logIn(aForm, accountType) {
 
 export async function activeUser(aAuthString) {
 
-    const url = urlMap.userLoginURL + "?key=" + groupKey; 
+    const url = urlMap.userLoginURL + "?key=" + groupKey;
 
     const cfg = {
         method: "POST",
@@ -509,10 +517,10 @@ export async function activeUser(aAuthString) {
             "authorization": aAuthString
         }
     }
-    
+
     try {
-        const result = await fetchData(url, cfg);        
-        
+        const result = await fetchData(url, cfg);
+
         const loginDataObj = {
             superuser: result.logindata.superuser,
             thumb: result.logindata.thumb,
@@ -554,12 +562,12 @@ export async function changeUserInformation(aInformationForm, aToken) {
             body: formData
         }
 
-        const result = await fetchData(url, cfg);        
-        if(result.msg == "update user ok") {
-            messageHandler("User Info updated", "Refresh to see the changes!");
+        const result = await fetchData(url, cfg);
+        if (result.msg == "update user ok") {
+            messageHandler("User Info updated", "Log in again to see changes");
+            return result;
         }
 
-        return result;
 
 
     } catch (error) {
@@ -638,11 +646,11 @@ export async function deleteProduct(adminToken, productID) {
 // User functions
 //----------------------------------------------------------
 
-export async function addUser (aForm) {
+export async function addUser(aForm) {
 
     const url = urlMap.AddUserURL + "?key=" + groupKey;
 
-    const formData = aForm;    
+    const formData = aForm;
 
     try {
 
@@ -653,14 +661,14 @@ export async function addUser (aForm) {
 
         const result = await fetchData(url, cfg);
 
-        if(result.msg === "insert user ok") {
+        if (result.msg === "insert user ok") {
             messageHandler("Thank you for joining Sukkergris!", "Your username is: " + result.record.username);
             return result;
         } else {
             throw new Error("Error adding user", "Try again later");
         }
 
-    } catch(error) {
+    } catch (error) {
         errorHandler(error);
     }
 }
@@ -670,7 +678,7 @@ export async function addUser (aForm) {
 export async function getAllUsers(aToken, aUserID){
     let url;
 
-    if(aUserID) {
+    if (aUserID) {
         url = urlMap.listAllUsersURL + "?key=" + groupKey + "&userid=" + aUserID;
     } else {
         url = urlMap.listAllUsersURL + "?key=" + groupKey + "&userid=";
@@ -688,11 +696,11 @@ export async function getAllUsers(aToken, aUserID){
 
         const userList = [];
 
-        for(let value of result) {
+        for (let value of result) {
             const userObj = {
                 beenz: value.beenz,
                 city: value.city,
-                heading: value.country, 
+                heading: value.country,
                 full_name: value.full_name,
                 id: value.id,
                 street: value.street,
@@ -700,60 +708,60 @@ export async function getAllUsers(aToken, aUserID){
                 thumb: value.thumb,
                 username: value.username,
                 zipcode: value.zipcode
-                }         
-           userList.push(new userModel(userObj));        
-    }
+            }
+            userList.push(new userModel(userObj));
+        }
 
         return userList;
 
-    } catch(error) {
+    } catch (error) {
         errorHandler(error);
     }
 }
 
 
 export async function deleteUser(aUser, aToken, aUserId) {
-    if(aUser === "admin") {
+    if (aUser === "admin") {
         const url = urlMap.deleteUserURL + "?key=" + groupKey + "&id=" + aUserId;
-    
+
         const cfg = {
             method: "DELETE",
             headers: {
                 "authorization": aToken
             }
         }
-    
+
         try {
             const result = await fetchData(url, cfg);
 
             messageHandler("User Deleted", "Deleted user " + result.record.username);
             return result;
-    
-        }catch(error) {
+
+        } catch (error) {
             errorHandler(error);
         }
     }
 
-    else if(aUser === "user") {
-        const url = urlMap.deleteUserURL + "?key=" + groupKey;        
-    
+    else if (aUser === "user") {
+        const url = urlMap.deleteUserURL + "?key=" + groupKey;
+
         const cfg = {
             method: "DELETE",
             headers: {
                 "authorization": aToken
             }
         }
-    
+
         try {
             const result = await fetchData(url, cfg);
-    
-            if(result.msg === "delete user ok") {
+
+            if (result.msg === "delete user ok") {
                 messageHandler("User Deleted", "Deleted user " + result.record.username)
-            }            
+            }
 
             return result;
-    
-        } catch(error) {
+
+        } catch (error) {
             errorHandler(error);
         }
     }
@@ -762,7 +770,7 @@ export async function deleteUser(aUser, aToken, aUserId) {
 //----------------------------------------------------------
 // Product functions
 //----------------------------------------------------------
-export async function changeProduct (adminToken, aForm) {
+export async function changeProduct(adminToken, aForm) {
 
     const url = urlMap.changeProductURL + "?id=" + adminToken + "&key=" + groupKey;
 
@@ -794,7 +802,7 @@ export async function changeProduct (adminToken, aForm) {
 export async function listThreads(aToken, postAll, usernames) {
 
     const url = urlMap.messageURL + "?key=" + groupKey + "&all=" + postAll + "&asc=" + true;
-    
+
 
     const cfg = {
         method: "GET",
@@ -802,7 +810,7 @@ export async function listThreads(aToken, postAll, usernames) {
             "authorization": aToken
         }
     }
-    
+
     try {
         const result = await fetchData(url, cfg);
 
@@ -810,14 +818,14 @@ export async function listThreads(aToken, postAll, usernames) {
 
         for (let value of result) {
             if (value.start_of_thread === true) {
-            const threadObj = {
-                date: value.date,
-                heading: value.heading, 
-                id: value.id,
-                message: value.message,
-                thread: value.thread,
-                user_id: value.user_id
-            }
+                const threadObj = {
+                    date: value.date,
+                    heading: value.heading,
+                    id: value.id,
+                    message: value.message,
+                    thread: value.thread,
+                    user_id: value.user_id
+                }
 
                 // Matcher user_id med brukerlisten for å generere username object key.
                 const userInList = usernames.find((user) => user.id === value.user_id);
@@ -827,10 +835,10 @@ export async function listThreads(aToken, postAll, usernames) {
                     threadList.push(threadItem);
                 } else {
                     console.log("could not match user id.")
-                } 
+                }
 
+            }
         }
-    }
         return threadList;
 
     } catch (error) {
@@ -846,24 +854,24 @@ export async function addThreads(aToken, threadForm) {
 
     const url = urlMap.messageURL + "?key=" + groupKey + "&thread=";
 
-        const data = {
-            threadHeading: threadForm.get("thread-title"),
-            messageText: threadForm.get("thread-text"),
-        }
+    const data = {
+        threadHeading: threadForm.get("thread-title"),
+        messageText: threadForm.get("thread-text"),
+    }
 
-        const cfg = {
-            method: "POST",
-            headers: {
-                "authorization": aToken,
-                "content-type": "application/json",
-            },
-            body: JSON.stringify({
-                heading: data.threadHeading,
-                message_text: data.messageText
-            })
-        }
+    const cfg = {
+        method: "POST",
+        headers: {
+            "authorization": aToken,
+            "content-type": "application/json",
+        },
+        body: JSON.stringify({
+            heading: data.threadHeading,
+            message_text: data.messageText
+        })
+    }
 
-        try {
+    try {
 
         const result = await fetchData(url, cfg);
         result.start_of_thread = true;
@@ -882,30 +890,30 @@ export async function addThreadComment(aToken, aThreadID, aCommentForm) {
 
     const url = urlMap.messageURL + "?key=" + groupKey + "&thread=" + aThreadID;
 
-        const data = {
-            commentHeading: `A user comment in thread${aThreadID}`,
-            commentText: aCommentForm.get("comment-text"),
-        }
+    const data = {
+        commentHeading: `A user comment in thread${aThreadID}`,
+        commentText: aCommentForm.get("comment-text"),
+    }
 
-        const cfg = {
-            method: "POST",
-            headers: {
-                "authorization": aToken,
-                "content-type": "application/json",
-            },
-            body: JSON.stringify({
-                heading: data.commentHeading,
-                message_text: data.commentText
-            })
-        }
+    const cfg = {
+        method: "POST",
+        headers: {
+            "authorization": aToken,
+            "content-type": "application/json",
+        },
+        body: JSON.stringify({
+            heading: data.commentHeading,
+            message_text: data.commentText
+        })
+    }
 
-        try {
+    try {
 
         const result = await fetchData(url, cfg);
 
         messageHandler("Forum", "Thanks for furthering discussions about candy.");
-        
-       return result;
+
+        return result;
 
     } catch (error) {
         errorHandler(error);
@@ -926,28 +934,28 @@ export async function listComments(aToken, aThreadID, usernames) {
     try {
         const result = await fetchData(url, cfg);
 
-       const listOfComments = [];
+        const listOfComments = [];
 
-         for (let value of result) {
+        for (let value of result) {
             if (value.start_of_thread === false && value.thread === aThreadID) {
-            const commentObj = {
-                message: value.message,
-                thread: value.thread,
-                user_id: value.user_id,
+                const commentObj = {
+                    message: value.message,
+                    thread: value.thread,
+                    user_id: value.user_id,
 
+                }
+
+                // Matcher user_id med brukerlisten for å generere username object key.
+                const userInList = usernames.find((user) => user.id === value.user_id);
+                if (userInList) {
+                    const userComments = new UserCommentModel(commentObj);
+                    userComments.setUsername(userInList);
+                    listOfComments.push(userComments);
+                } else {
+                    console.log("Could not match userID.");
+                }
             }
 
-             // Matcher user_id med brukerlisten for å generere username object key.
-             const userInList = usernames.find((user) => user.id === value.user_id);
-             if (userInList) {
-               const userComments = new UserCommentModel(commentObj);
-               userComments.setUsername(userInList);
-               listOfComments.push(userComments);
-             } else {
-               console.log("Could not match userID.");
-             }
-        }
-            
         }
 
         return listOfComments;
@@ -978,11 +986,11 @@ export async function deleteThread(aMessageID, aToken) {
 }
 
 //----------------------------------------------------------
-export async function placeOrder(aToken, aOrderForm){
+export async function placeOrder(aToken, aOrderForm) {
     const url = urlMap.orderURL + "?key=" + groupKey;
 
     let formObject = Object.fromEntries(aOrderForm);
-   
+
 
     const headers = {
         "content-type": "application/json",
@@ -1000,7 +1008,7 @@ export async function placeOrder(aToken, aOrderForm){
 
     try {
         const result = await fetchData(url, cfg);
-        
+
         return result;
     } catch (error) {
         errorHandler(error);
@@ -1008,7 +1016,7 @@ export async function placeOrder(aToken, aOrderForm){
 }
 
 //----------------------------------------------------------
-export async function listOrders(aToken){
+export async function listOrders(aToken) {
     const url = urlMap.orderURL + "?key=" + groupKey;
 
     //Hvis adminToken blir brukt, blir alle ordrene listet
@@ -1052,7 +1060,7 @@ export async function deleteOrder(aToken, aOrderID) {
 //-----------------------------------------------------------
 // Returnerer alle frakt alternativer
 //-----------------------------------------------------------
-export async function listShipmentMethods(){
+export async function listShipmentMethods() {
     const url = urlMap.shipmentURL + "?key=" + groupKey;
 
     try {
@@ -1066,7 +1074,7 @@ export async function listShipmentMethods(){
 //------------------------------------------------------
 //Meow meow beenz API 
 //------------------------------------------------------
-export async function rateUser(aToken, userToRate, amountOfBeenz){
+export async function rateUser(aToken, userToRate, amountOfBeenz) {
     const url = urlMap.meowURL + "?key=" + groupKey;
 
     const cfg = {
@@ -1079,13 +1087,13 @@ export async function rateUser(aToken, userToRate, amountOfBeenz){
             userid: userToRate,
             beenz: amountOfBeenz
         })
-    }   
+    }
 
     try {
         const result = await fetchData(url, cfg);
 
         return result;
-    } catch(error) {
+    } catch (error) {
         errorHandler(false, "You can't rate yourself");
     }
 }
